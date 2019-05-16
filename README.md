@@ -1,6 +1,6 @@
 # Lush
 
-[![Build Status](https://dev.azure.com/markbates/buffalo/_apis/build/status/gobuffalo.lush?branchName=master)](https://dev.azure.com/markbates/buffalo/_build/latest?definitionId=49&branchName=master)[![GoDoc](https://godoc.org/github.com/gobuffalo/lush?status.svg)](https://godoc.org/github.com/gobuffalo/lush)
+[![Build Status](https://dev.azure.com/markbates/buffalo/_apis/build/status/gobuffalo.lush?branchName=master)](https://dev.azure.com/markbates/buffalo/_build/latest?definitionId=50&branchName=master)[![GoDoc](https://godoc.org/github.com/gobuffalo/lush?status.svg)](https://godoc.org/github.com/gobuffalo/lush)
 
 Lush is an embeddable scripting language for Go with minimal dependencies.
 

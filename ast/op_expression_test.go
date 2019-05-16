@@ -3,6 +3,7 @@ package ast_test
 import (
 	"testing"
 
+	"github.com/gobuffalo/lush/ast"
 	"github.com/stretchr/testify/require"
 )
 
@@ -14,6 +15,7 @@ func Test_OpExpression_Equal(t *testing.T) {
 	}{
 		{`if ("a" == "a") {return true} return false`, true, false},
 		{`if (42 == 42) {return true} return false`, true, false},
+		{`if (42 == magic) {return true} return false`, true, false},
 		{`if (3.14 == 3.14) {return true} return false`, true, false},
 		{`if (true == true) {return true} return false`, true, false},
 		{`if ([1,2,3] == [1,2,3]) {return true} return false`, true, false},
@@ -30,6 +32,7 @@ func Test_OpExpression_Equal(t *testing.T) {
 			r := require.New(st)
 
 			c := NewContext()
+			c.Set("magic", ast.Integer(42))
 			res, err := exec(tt.in, c)
 
 			if tt.err {

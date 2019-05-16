@@ -17,23 +17,27 @@ fmt.Println(time.Now())
 
 d := time.ParseDuration("3s")
 
-go func() {
+sleeper := func(max) {
 	let d = time.ParseDuration("1s")
 
 	i := 0
 
 	for {
-		fmt.Println("xxx")
+		fmt.Println(max, "xxx")
 
 		time.Sleep(d)
 
 		i = (i + 1)
 
-		if (i == 5) {
+		if (i == max) {
 			break
 		}
 	}
-}()
+}
+
+go sleeper(5)
+
+go sleeper(3)
 
 time.Sleep(d)
 

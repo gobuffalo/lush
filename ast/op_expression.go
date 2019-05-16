@@ -77,8 +77,14 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 	}
 
 	a, _ := exec(c, e.A)
+	if ia, ok := a.(interfacer); ok {
+		a = ia.Interface()
+	}
 
 	b, _ := exec(c, e.B)
+	if ib, ok := b.(interfacer); ok {
+		b = ib.Interface()
+	}
 
 	switch e.Op {
 	case "==":

@@ -6,7 +6,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/gobuffalo/lush/ast/builtins"
+	"github.com/gobuffalo/lush/builtins"
 )
 
 // type *Context interface {

@@ -22,10 +22,6 @@ type Var struct {
 	format string
 }
 
-func (b *Var) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (l Var) String() string {
 	return fmt.Sprintf("%s := %s", l.Name, l.Value)
 }

@@ -10,10 +10,6 @@ type Comment struct {
 	Meta Meta
 }
 
-func (b *Comment) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (c Comment) String() string {
 	return fmt.Sprintf("// %s", c.text)
 }

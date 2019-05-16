@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"log"
 	"reflect"
 	"strings"
 )
@@ -35,10 +36,6 @@ type Call struct {
 	Concurrent bool
 }
 
-func (b *Call) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (f Call) String() string {
 	bb := &bytes.Buffer{}
 	if f.Concurrent {
@@ -65,7 +62,10 @@ func (f Call) Exec(c *Context) (interface{}, error) {
 		c.wg.Add(1)
 		go func() {
 			defer c.wg.Done()
-			f.exec(c)
+			_, err := f.exec(c)
+			if err != nil {
+				log.Fatal(err)
+			}
 		}()
 		return nil, nil
 	}

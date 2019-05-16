@@ -24,10 +24,6 @@ type If struct {
 	Meta         Meta
 }
 
-func (b *If) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (i If) String() string {
 	bb := &bytes.Buffer{}
 

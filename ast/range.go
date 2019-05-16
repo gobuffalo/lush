@@ -21,10 +21,6 @@ type Range struct {
 	Meta Meta
 }
 
-func (b *Range) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (f Range) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("for ")

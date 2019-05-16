@@ -10,10 +10,6 @@ type Return struct {
 	Meta       Meta
 }
 
-func (b *Return) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (r Return) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("return ")

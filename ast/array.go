@@ -11,10 +11,6 @@ type Array struct {
 	Meta  Meta
 }
 
-func (a *Array) SetMeta(m Meta) {
-	a.Meta = m
-}
-
 func (a Array) Interface() interface{} {
 	return a.Value
 }

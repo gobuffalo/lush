@@ -9,10 +9,6 @@ type Else struct {
 	Meta  Meta
 }
 
-func (b *Else) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (i Else) String() string {
 	bb := &bytes.Buffer{}
 

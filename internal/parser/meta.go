@@ -4,18 +4,6 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-type metable interface {
-	SetMeta(ast.Meta)
-}
-
-func setMeta(s interface{}, c *current) {
-	m, ok := s.(metable)
-	if !ok {
-		return
-	}
-	m.SetMeta(meta(c))
-}
-
 func meta(c *current) ast.Meta {
 	var fn string
 	f, ok := c.globalStore["filename"]

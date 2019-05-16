@@ -20,10 +20,6 @@ type Let struct {
 	Meta  Meta
 }
 
-func (b *Let) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (l Let) String() string {
 	return fmt.Sprintf("let %s = %s", l.Name, l.Value)
 }

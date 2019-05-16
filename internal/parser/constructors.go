@@ -8,31 +8,48 @@ import (
 )
 
 func newAccess(c *current, i interface{}, k interface{}) (ret ast.Access, err error) {
-	defer setMeta(&ret, c)
 	id, err := toIdent(i)
 	if err != nil {
 		return ast.Access{}, err
 	}
-	return ast.NewAccess(id, k)
+
+	ret, err = ast.NewAccess(id, k)
+	if err != nil {
+		return ret, err
+	}
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newComment(c *current, b []byte) (ret ast.Comment, err error) {
-	defer setMeta(&ret, c)
-	return ast.NewComment(b)
+	ret, err = ast.NewComment(b)
+	if err != nil {
+		return ret, err
+	}
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newMap(c *current, vals interface{}) (ret ast.Map, err error) {
-	defer setMeta(&ret, c)
-	return ast.NewMap(vals)
+	ret, err = ast.NewMap(vals)
+	if err != nil {
+		return ret, err
+	}
+	// ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newBool(c *current, b []byte) (ret ast.Bool, err error) {
-	defer setMeta(&ret, c)
-	return ast.NewBool(b)
+	ret, err = ast.NewBool(b)
+	if err != nil {
+		return ret, err
+	}
+
+	// ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newCall(c *current, i interface{}, y interface{}, ax interface{}, b interface{}) (ret ast.Call, err error) {
-	defer setMeta(&ret, c)
 	s, err := toStatement(i)
 	if err != nil {
 		return ast.Call{}, err
@@ -48,20 +65,29 @@ func newCall(c *current, i interface{}, y interface{}, ax interface{}, b interfa
 		return ast.Call{}, err
 	}
 
-	return ast.NewCall(s, y, args, bl)
+	ret, err = ast.NewCall(s, y, args, bl)
+	if err != nil {
+		return ret, err
+	}
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newFunc(c *current, ax interface{}, b interface{}) (ret ast.Func, err error) {
-	defer setMeta(&ret, c)
 	bl, err := toBlock(b)
 	if err != nil {
 		return ast.Func{}, err
 	}
-	return ast.NewFunc(ax, bl)
+	ret, err = ast.NewFunc(ax, bl)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newRange(c *current, n interface{}, args interface{}, b interface{}) (ret ast.Range, err error) {
-	defer setMeta(&ret, c)
 	bl, err := toBlock(b)
 	if err != nil {
 		return ast.Range{}, err
@@ -70,11 +96,17 @@ func newRange(c *current, n interface{}, args interface{}, b interface{}) (ret a
 	if err != nil {
 		return ast.Range{}, err
 	}
-	return ast.NewRange(ni, args, bl)
+
+	ret, err = ast.NewRange(ni, args, bl)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newFor(c *current, n interface{}, args interface{}, b interface{}) (ret ast.For, err error) {
-	defer setMeta(&ret, c)
 	bl, err := toBlock(b)
 	if err != nil {
 		return ast.For{}, err
@@ -83,25 +115,39 @@ func newFor(c *current, n interface{}, args interface{}, b interface{}) (ret ast
 	if err != nil {
 		return ast.For{}, err
 	}
-	return ast.NewFor(ni, args, bl)
+	ret, err = ast.NewFor(ni, args, bl)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newIdent(c *current, b []byte) (ret ast.Ident, err error) {
-	defer setMeta(&ret, c)
-	return ast.NewIdent(b)
+	ret, err = ast.NewIdent(b)
+	if err != nil {
+		return ret, err
+	}
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newBlock(c *current, s interface{}) (ret *ast.Block, err error) {
-	defer setMeta(&ret, c)
 	states, err := toStatements(s)
 	if err != nil {
 		return nil, err
 	}
-	return ast.NewBlock(states)
+	ret, err = ast.NewBlock(states)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newIf(c *current, p interface{}, e interface{}, b interface{}, elsa interface{}) (ret ast.If, err error) {
-	defer setMeta(&ret, c)
 	var ps ast.Statement
 
 	if p != nil {
@@ -139,35 +185,49 @@ func newIf(c *current, p interface{}, e interface{}, b interface{}, elsa interfa
 		cl = cls[0]
 	}
 
-	return ast.NewIf(ps, es, bl, cl)
+	ret, err = ast.NewIf(ps, es, bl, cl)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newElseIf(c *current, i interface{}) (ret ast.ElseIf, err error) {
-	defer setMeta(&ret, c)
 	fi, err := toIf(i)
 	if err != nil {
 		return ast.ElseIf{}, err
 	}
-	return ast.NewElseIf(fi)
+	ret, err = ast.NewElseIf(fi)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newReturn(c *current, i interface{}) (ret ast.Return, err error) {
-	defer setMeta(&ret, c)
 	s, err := toStatements(i)
 	if err != nil {
 		return ast.Return{}, err
 	}
-	return ast.NewReturn(s)
+	ret, err = ast.NewReturn(s)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newFloat(c *current, b []byte) (ret ast.Float, err error) {
-	defer setMeta(&ret, c)
 	f, err := strconv.ParseFloat(string(b), 64)
 	return ast.Float(f), err
 }
 
 func newInteger(c *current, b []byte) (ret ast.Integer, err error) {
-	defer setMeta(&ret, c)
 	i, err := strconv.Atoi(string(b))
 	if err != nil {
 		return ast.Integer(i), err
@@ -176,7 +236,6 @@ func newInteger(c *current, b []byte) (ret ast.Integer, err error) {
 }
 
 func newLet(c *current, n, v interface{}) (ret *ast.Let, err error) {
-	defer setMeta(&ret, c)
 	in, ok := n.(ast.Ident)
 	if !ok {
 		return nil, fmt.Errorf("expected ast.Ident got %T", n)
@@ -186,11 +245,16 @@ func newLet(c *current, n, v interface{}) (ret *ast.Let, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return ast.NewLet(in, sv)
+	ret, err = ast.NewLet(in, sv)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newAssign(c *current, n, v interface{}) (ret *ast.Assign, err error) {
-	defer setMeta(&ret, c)
 	in, ok := n.(ast.Ident)
 	if !ok {
 		return nil, fmt.Errorf("expected ast.Ident got %T", n)
@@ -200,11 +264,16 @@ func newAssign(c *current, n, v interface{}) (ret *ast.Assign, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return ast.NewAssign(in, sv)
+	ret, err = ast.NewAssign(in, sv)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newVar(c *current, n, v interface{}) (ret *ast.Var, err error) {
-	defer setMeta(&ret, c)
 	in, ok := n.(ast.Ident)
 	if !ok {
 		return nil, fmt.Errorf("expected ast.Ident got %T", n)
@@ -214,11 +283,17 @@ func newVar(c *current, n, v interface{}) (ret *ast.Var, err error) {
 	if err != nil {
 		return nil, err
 	}
-	return ast.NewVar(in, sv)
+	ret, err = ast.NewVar(in, sv)
+	if err != nil {
+		return nil, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newOpExpression(c *current, a, op, b interface{}) (ret *ast.OpExpression, err error) {
-	defer setMeta(&ret, c)
+	// defer setMeta(&ret, c)
 	sa, ok := a.(ast.Statement)
 	if !ok {
 		return nil, fmt.Errorf("expected ast.Statement got %T", a)
@@ -231,32 +306,54 @@ func newOpExpression(c *current, a, op, b interface{}) (ret *ast.OpExpression, e
 	if !ok {
 		return nil, fmt.Errorf("expected string got %T", op)
 	}
-	return ast.NewOpExpression(sa, sop, sb)
+	ret, err = ast.NewOpExpression(sa, sop, sb)
+	if err != nil {
+		return nil, err
+	}
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newPopExpression(c *current, a, op, b interface{}) (ret *ast.OpExpression, err error) {
-	defer setMeta(&ret, c)
 	ope, err := newOpExpression(c, a, op, b)
 	if err != nil {
 		return nil, err
 	}
-	return ast.NewPopExpression(ope.A, ope.Op, ope.B)
+
+	ret, err = ast.NewPopExpression(ope.A, ope.Op, ope.B)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newElse(c *current, i interface{}) (ret ast.Else, err error) {
-	defer setMeta(&ret, c)
 	b, err := toBlock(i)
 	if err != nil {
 		return ast.Else{}, err
 	}
-	return ast.NewElse(b)
+	ret, err = ast.NewElse(b)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }
 
 func newArray(c *current, i interface{}) (ret ast.Array, err error) {
-	defer setMeta(&ret, c)
 	ii, err := toII(i)
 	if err != nil {
 		return ast.Array{}, err
 	}
-	return ast.NewArray(ii)
+
+	ret, err = ast.NewArray(ii)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Meta = meta(c)
+	return ret, nil
 }

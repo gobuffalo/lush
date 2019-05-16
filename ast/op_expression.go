@@ -32,10 +32,6 @@ type OpExpression struct {
 	format string
 }
 
-func (b *OpExpression) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (e OpExpression) String() string {
 	return fmt.Sprintf("(%s %s %s)", e.A, e.Op, e.B)
 }

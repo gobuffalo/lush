@@ -12,10 +12,6 @@ type Block struct {
 	Meta Meta
 }
 
-func (b *Block) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (b Block) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("{")

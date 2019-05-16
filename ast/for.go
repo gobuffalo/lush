@@ -46,10 +46,6 @@ type For struct {
 	normalSingle bool
 }
 
-func (b *For) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (f For) String() string {
 	if f.Name == nil {
 		bb := &bytes.Buffer{}

@@ -28,10 +28,6 @@ type Func struct {
 	Meta      Meta
 }
 
-func (b *Func) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (f Func) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("func(")

@@ -14,10 +14,6 @@ type Ident struct {
 	Meta Meta
 }
 
-func (b *Ident) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (i Ident) IsZero() bool {
 	return i == Ident{}
 }

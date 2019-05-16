@@ -10,10 +10,6 @@ type Assign struct {
 	Meta  Meta
 }
 
-func (a *Assign) SetMeta(m Meta) {
-	a.Meta = m
-}
-
 func (l Assign) String() string {
 	return fmt.Sprintf("%s = %s", l.Name, l.Value)
 }

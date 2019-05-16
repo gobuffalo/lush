@@ -35,10 +35,6 @@ type String struct {
 	format   string
 }
 
-func (b *String) SetMeta(m Meta) {
-	b.Meta = m
-}
-
 func (s String) String() string {
 	return fmt.Sprintf(s.format, s.Original)
 }

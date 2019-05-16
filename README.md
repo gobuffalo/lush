@@ -27,6 +27,7 @@ Lush will provide the basis for [https://github.com/gobuffalo/plush](https://git
 * [Custom Helpers](#custom-helpers)
 * [Errors](#errors)
 * [Calling](#calling)
+* [Built-ins](#builtins)
 
 ## [Comments](#comments)
 
@@ -455,3 +456,7 @@ return error("stop %s", "dragging my heart around")
 ```
 
 ## [Calling](#calling)
+
+## [Built-ins](#builtins)
+
+The [`github.com/gobuffalo/lush/builtins`](https://godoc.org/github.com/gobuffalo/lush/builtins) package provides implementations of a small set of the Go standard library.

@@ -27,11 +27,12 @@ func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error
 }
 
 type Call struct {
-	Name      Statement
-	FName     Ident
-	Arguments Statements
-	Block     *Block
-	Meta      Meta
+	Name       Statement
+	FName      Ident
+	Arguments  Statements
+	Block      *Block
+	Meta       Meta
+	Concurrent bool
 }
 
 func (b *Call) SetMeta(m Meta) {
@@ -40,6 +41,9 @@ func (b *Call) SetMeta(m Meta) {
 
 func (f Call) String() string {
 	bb := &bytes.Buffer{}
+	if f.Concurrent {
+		bb.WriteString("go ")
+	}
 	bb.WriteString(f.Name.String())
 	if (f.FName != Ident{}) {
 		bb.WriteString(".")
@@ -57,6 +61,18 @@ func (f Call) String() string {
 }
 
 func (f Call) Exec(c *Context) (interface{}, error) {
+	if f.Concurrent {
+		c.wg.Add(1)
+		go func() {
+			defer c.wg.Done()
+			f.exec(c)
+		}()
+		return nil, nil
+	}
+	return f.exec(c)
+}
+
+func (f Call) exec(c *Context) (interface{}, error) {
 	n, err := exec(c, f.Name)
 	if err != nil {
 		return nil, err

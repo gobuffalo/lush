@@ -26,6 +26,7 @@ Lush will provide the basis for [https://github.com/gobuffalo/plush](https://git
 * [Scope](#scope)
 * [Custom Helpers](#custom-helpers)
 * [Errors](#errors)
+* [Goroutines](#goroutines)
 * [Calling](#calling)
 * [Built-ins](#builtins)
 
@@ -332,7 +333,7 @@ The `range` keyword supports an `Iterator` interface.
 
 ```go
 type Iterator interface {
-	Next() interface{}
+  Next() interface{}
 }
 ```
 
@@ -453,6 +454,31 @@ This is set by default when creating a new `Context`. It is a function mapped to
 
 ```lush
 return error("stop %s", "dragging my heart around")
+```
+
+## [Goroutines](#goroutines)
+
+When using Goroutines within a Lush script, Lush will wait until all Goroutines have completed before exiting.
+
+```lush
+go func() {
+  let d = time.ParseDuration("1s")
+
+  i := 0
+
+  for {
+    fmt.Println("xxx")
+
+    time.Sleep(d)
+
+    i = (i + 1)
+
+    if (i == 5) {
+      break
+    }
+  }
+}()
+
 ```
 
 ## [Calling](#calling)

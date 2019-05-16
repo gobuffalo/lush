@@ -12,7 +12,7 @@ DOC <- stmts:(_ STATEMENT _)+ EOF {
   return ast.Script{Statements: s}, err
 }
 
-STATEMENT <- s:( COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE /  FCALL / RETURN / CALL ) ";"? {
+STATEMENT <- s:( GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
   return s, nil
 }
 
@@ -114,6 +114,15 @@ FUNC <- _ "func" LP ax:FARG* RP _ s:BLOCK {
 
 FCALL <- f:FUNC LP ax:ARG* RP _ b:(BLOCK)? {
   return newCall(c, f, nil, ax, b)
+}
+
+GO <- _ "go" _ s:( FCALL / CALL) _ {
+  ca, ok := s.(ast.Call)
+  if !ok {
+    return nil, fmt.Errorf("expected ast.Call got %T", s)
+  }
+  ca.Concurrent = true
+  return ca, nil
 }
 
 CALL <- _ i:( IDENT ) ("."?) y:(IDENT)? LP ax:ARG* RP _ b:(BLOCK)? {

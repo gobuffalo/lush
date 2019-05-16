@@ -43,10 +43,12 @@ type Context struct {
 	io.Writer
 	data  sync.Map
 	Block *Block
+	wg    sync.WaitGroup
 }
 
 func (c *Context) Clone() *Context {
 	fhc := NewContext(c, c.Writer)
+	fhc.wg = c.wg
 	fhc.Context = c
 	fhc.Block = c.Block
 	c.data.Range(func(k, v interface{}) bool {

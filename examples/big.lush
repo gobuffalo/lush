@@ -17,6 +17,24 @@ fmt.Println(time.Now())
 
 d := time.ParseDuration("3s")
 
+go func() {
+	let d = time.ParseDuration("1s")
+
+	i := 0
+
+	for {
+		fmt.Println("xxx")
+
+		time.Sleep(d)
+
+		i = (i + 1)
+
+		if (i == 5) {
+			break
+		}
+	}
+}()
+
 time.Sleep(d)
 
 zf := "Zoo Farm!"

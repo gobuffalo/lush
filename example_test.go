@@ -74,7 +74,7 @@ func ExampleExec_arrays() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 
 	in := `
-	a := [1, "a", true, [4, 5, nil], {"x": "y", "z": "Z"}]
+	a := [1, "a", true, [4, 5, nil]]
 	for i, v := range a {
 		fmt.Println(i, v)
 	}
@@ -90,7 +90,6 @@ func ExampleExec_arrays() {
 	// 1 a
 	// 2 true
 	// 3 4 5
-	// 4 map[x:y z:Z]
 }
 
 func ExampleExec_maps() {

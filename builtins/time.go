@@ -20,12 +20,12 @@ type Time struct {
 	StampMilli  string
 	StampMicro  string
 	StampNano   string
-	Nanosecond  time.Duration
-	Microsecond time.Duration
-	Millisecond time.Duration
-	Second      time.Duration
-	Minute      time.Duration
-	Hour        time.Duration
+	Nanosecond  int
+	Microsecond int
+	Millisecond int
+	Second      int
+	Minute      int
+	Hour        int
 }
 
 func NewTime() Time {
@@ -45,12 +45,12 @@ func NewTime() Time {
 		StampMilli:  time.StampMilli,
 		StampMicro:  time.StampMicro,
 		StampNano:   time.StampNano,
-		Nanosecond:  time.Nanosecond,
-		Microsecond: time.Microsecond,
-		Millisecond: time.Millisecond,
-		Second:      time.Second,
-		Minute:      time.Minute,
-		Hour:        time.Hour,
+		Nanosecond:  int(time.Nanosecond),
+		Microsecond: int(time.Microsecond),
+		Millisecond: int(time.Millisecond),
+		Second:      int(time.Second),
+		Minute:      int(time.Minute),
+		Hour:        int(time.Hour),
 	}
 }
 
@@ -102,6 +102,6 @@ func (Time) ParseInLocation(layout, value string, loc *time.Location) (time.Time
 func (Time) Unix(sec int64, nsec int64) time.Time {
 	return time.Unix(sec, nsec)
 }
-func (Time) NewTimer(d time.Duration) *time.Timer {
-	return time.NewTimer(d)
+func (Time) NewTimer(d int) *time.Timer {
+	return time.NewTimer(time.Duration(d))
 }

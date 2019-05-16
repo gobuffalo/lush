@@ -1,0 +1,11 @@
+x := 0
+
+func() {
+	if true {
+		x = 42
+	}
+}()
+
+// hopefully 42!
+return "what do you get?", x
+

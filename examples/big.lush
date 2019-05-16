@@ -1,0 +1,227 @@
+// 
+// return x
+// // this is a comment
+// // there are many like it
+// // but this is mine
+if false {
+	fmt.Println("in if")
+} else if (1 == 2) {
+	fmt.Println("in else")
+} else if true {
+	fmt.Println("2 == 2")
+} else {
+	fmt.Println("in other else")
+}
+
+fmt.Println(time.Now())
+
+d := time.ParseDuration("3s")
+
+time.Sleep(d)
+
+zf := "Zoo Farm!"
+
+qz := func(z) {
+	zf = "foo"
+
+	return "fubar"
+}(zf)
+
+a := {"foo": "bar"}
+
+x := `
+asdf
+asd
+fasd
+fasdf
+asdasdf
+asdf
+asd
+fa
+s
+asdfjJ:w
+
+`
+
+fmt.Println(strings.ToUpper(x))
+
+for x := range [1, 2, 3] {
+	fmt.Println(x)
+
+	fmt.Println(x)
+}
+
+for i, x := range [1, 2, 3] {
+	fmt.Println(i)
+
+	fmt.Println(x)
+}
+
+if abc := "ABC"; (abc ~= "^A") {
+	return "feel alright"
+}
+
+let is = "IS"
+
+if true {
+	return 42
+}
+
+let sf = 1
+
+xyz := func(x) {
+	return "foo"
+}
+
+if ("yes" == ("yes" == "yes")) {
+	fmt.Println("yes!")
+}
+
+if ("yes" != "no") {
+	fmt.Println("no!")
+}
+
+let a = 42
+
+fmt.Println(a)
+
+let b = 3.14
+
+fmt.Println(b)
+
+let c = func() {}
+
+fmt.Println(c)
+
+let x = 1
+
+let d = func(x, a, b, c) {
+	let dd = "taking away my breath"
+
+	return dd, "something"
+}
+
+d(1, 2, 3, 4)
+
+fmt.Println(d)
+
+let e = true
+
+let f = "tyhis is my string. \"don't\" ask me about it. :)"
+
+let h = -42
+
+let i = ["foo", "bar", 1, "this is i"]
+
+let j = {"a": "b", "foo": "bar", "h": 1, "y": func(x) {}}
+
+for (x, y) in i {
+	fmt.Println("array")
+
+	fmt.Println(x, y)
+}
+
+for (y) in i {
+	fmt.Println("array - single var")
+
+	fmt.Println(y)
+}
+
+for (x, y) in j {
+	fmt.Println("map")
+
+	fmt.Println(x, y)
+}
+
+for (x) in i {
+	fmt.Println("map - single var")
+
+	fmt.Println(x)
+}
+
+for (x, y) in j {
+	fmt.Println("break map")
+
+	break
+
+	fmt.Println(x, y)
+}
+
+for (x, y) in j {
+	fmt.Println("continue map")
+
+	continue
+
+	fmt.Println(x, y)
+}
+
+for (x, y) in i {
+	fmt.Println("break array")
+
+	break
+
+	fmt.Println(x, y)
+}
+
+for (x, y) in i {
+	fmt.Println("continue array")
+
+	continue
+
+	fmt.Println(x, y)
+}
+
+let someFunc = func(age, greeting) {
+	fmt.Println(age)
+
+	fmt.Println(greeting)
+
+	return age, greeting, "another value"
+}
+
+let k = someFunc(42, "hi")
+
+let l = foo.Bar(func(c, d, x) {
+	let xyz = 3.14
+
+	doWork(xyz)
+
+	let zyx = func(arg1, arg2) {
+		doWork(arg1)
+
+		doWork(arg2)
+	}
+
+	return 1
+})
+
+let myFunc = func(a, b, c) {}
+
+myFunc(a, b, c)
+
+another(3.14, "foo", true)
+
+user.Save()
+
+yes := "yes"
+
+match := (yes ~= `s$`)
+
+fmt.Printf("--match %s %t\n", yes, match)
+
+mat := (yes ~= yes)
+
+fmt.Println("--mat")
+
+fmt.Println(mat)
+
+fmt.Println((5 + 10))
+
+fmt.Println((5 - 10))
+
+fmt.Println((5 * 10))
+
+fmt.Println((5 / 10))
+
+fmt.Println((10 % 6))
+

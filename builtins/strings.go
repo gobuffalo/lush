@@ -62,9 +62,7 @@ func (Strings) Repeat(s string, count int) string {
 func (Strings) Replace(s, old, new string, n int) string {
 	return strings.Replace(s, old, new, n)
 }
-func (Strings) ReplaceAll(s, old, new string) string {
-	return strings.ReplaceAll(s, old, new)
-}
+
 func (Strings) Split(s, sep string) []string {
 	return strings.Split(s, sep)
 }

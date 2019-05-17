@@ -89,7 +89,7 @@ func ExampleExec_arrays() {
 	// 0 1
 	// 1 a
 	// 2 true
-	// 3 4 5
+	// 3 [4 5]
 }
 
 func ExampleExec_maps() {

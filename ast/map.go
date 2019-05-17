@@ -65,7 +65,7 @@ func (m Map) Exec(c *Context) (interface{}, error) {
 
 		key, err = exec(c, k)
 		if err != nil {
-			return nil, err
+			key = k
 		}
 
 		mm[key] = value
@@ -117,4 +117,8 @@ func (m Map) Interface() interface{} {
 
 func (m Map) Bool(c *Context) (bool, error) {
 	return len(m) > 0, nil
+}
+
+func (m Map) Equal(m2 Map) bool {
+	return fmt.Sprint(m.Interface()) == fmt.Sprint(m.Interface())
 }

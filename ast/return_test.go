@@ -20,7 +20,10 @@ func Test_Return(t *testing.T) {
 			"a": "b",
 			"c": 3,
 		}},
-		{in: `return func() {return 1}()`, out: 1},
+		{in: `
+return func() {
+	return 1
+}()`, out: 1},
 	}
 
 	for _, tt := range table {

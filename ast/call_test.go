@@ -60,12 +60,12 @@ func Test_Call_Helper_Let(t *testing.T) {
 	}
 	x(42)
 	`
-
 	var ind []int
 	c := NewContext()
 	c.Set("print", func(i int) {
 		ind = append(ind, i)
 	})
+
 	_, err := exec(in, c)
 	r.NoError(err)
 	r.Equal([]int{42}, ind)
@@ -158,16 +158,11 @@ func Test_Call_External_Func(t *testing.T) {
 	c := NewContext()
 	c.Set("foo", foo{})
 
-	var res string
-	c.Set("capture", func(s string) {
-		res = s
-	})
+	in := `return foo.Bar(1, "hi")`
 
-	in := `capture(foo.Bar(1, "hi"))`
-
-	_, err := exec(in, c)
+	ret, err := exec(in, c)
 	r.NoError(err)
-	r.Equal(res, "got 1/hi")
+	r.Equal("got 1/hi", ret.Value)
 }
 
 func Test_Call_External_Func_Variadic(t *testing.T) {
@@ -245,7 +240,7 @@ func Test_Call_Helper_Context_Block(t *testing.T) {
 	})
 
 	in := `
-		return foo("a") {
+return foo("a") {
 			return "B"
 		}
 	`

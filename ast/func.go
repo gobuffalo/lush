@@ -49,7 +49,11 @@ func (f Func) mExec(c *Context, args ...Statement) (interface{}, error) {
 		return nil, f.Meta.Errorf("expected %d arguments; received %d", len(f.Arguments), len(args))
 	}
 	for x, i := range f.Arguments {
-		c.Set(i.Name, args[x])
+		v, err := exec(c, args[x])
+		if err != nil {
+			return nil, err
+		}
+		c.Set(i.Name, v)
 	}
 	if f.Block != nil {
 		s, err := f.Block.Exec(c)

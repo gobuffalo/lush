@@ -76,14 +76,20 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 		return e.Or(c)
 	}
 
-	a, _ := exec(c, e.A)
-	if ia, ok := a.(interfacer); ok {
-		a = ia.Interface()
+	var a interface{} = e.A
+	if _, ok := e.A.(Map); !ok {
+		a, _ = exec(c, e.A)
+		if ia, ok := a.(interfacer); ok {
+			a = ia.Interface()
+		}
 	}
 
-	b, _ := exec(c, e.B)
-	if ib, ok := b.(interfacer); ok {
-		b = ib.Interface()
+	var b interface{} = e.B
+	if _, ok := e.B.(Map); !ok {
+		b, _ = exec(c, e.B)
+		if ib, ok := b.(interfacer); ok {
+			b = ib.Interface()
+		}
 	}
 
 	switch e.Op {

@@ -49,20 +49,31 @@ func Test_Array(t *testing.T) {
 
 func Test_Array_String(t *testing.T) {
 	table := []struct {
-		in  []interface{}
+		in  string
 		out string
 	}{
-		{[]interface{}{1, 2, 3}, "[1, 2, 3]"},
-		{[]interface{}{newString("a"), newString("b")}, `["a", "b"]`},
-		{[]interface{}{newString("a"), ast.Float(3.14), ast.Bool(true)}, `["a", 3.14, true]`},
+		{"return [1,2,3]", "[1, 2, 3]"},
+		{`return ["a","b"]`, `["a", "b"]`},
+		{`return [  "a"   ,   3.14,true   ]`, `["a", 3.14, true]`},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.out, func(st *testing.T) {
 			r := require.New(st)
-			a, err := ast.NewArray(tt.in)
+
+			p, err := parse(tt.in)
 			r.NoError(err)
+			r.Len(p.Statements, 1)
+
+			ret, ok := p.Statements[0].(ast.Return)
+			r.True(ok)
+
+			r.Len(ret.Statements, 1)
+
+			a, ok := ret.Statements[0].(ast.Array)
+			r.True(ok)
 			r.Equal(tt.out, a.String())
+
 		})
 	}
 }

@@ -4,47 +4,45 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 )
 
-func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error) {
+type value struct {
+	value interface{}
+}
+
+func (v value) String() string {
+	return fmt.Sprint(v.value)
+}
+
+func NewCall(name Statement, with Statement, args Statements, next Statements, block *Block) (Call, error) {
 	c := Call{
-		Name:      n,
+		Name:      name,
+		With:      with,
 		Arguments: args,
-		Block:     b,
+		Next:      next,
+		Block:     block,
 	}
-
-	if y != nil {
-		in, ok := y.(Ident)
-		if !ok {
-			return Call{}, fmt.Errorf("expected %T to be Ident", y)
-		}
-		c.FName = in
-	}
-
 	return c, nil
 }
 
 type Call struct {
 	Name       Statement
-	FName      Ident
+	With       Statement
 	Arguments  Statements
+	Next       Statements
 	Block      *Block
-	Meta       Meta
 	Concurrent bool
+	Meta       Meta
 }
 
 func (f Call) String() string {
 	bb := &bytes.Buffer{}
-	if f.Concurrent {
-		bb.WriteString("go ")
-	}
 	bb.WriteString(f.Name.String())
-	if (f.FName != Ident{}) {
+	if f.Next != nil {
 		bb.WriteString(".")
-		bb.WriteString(f.FName.String())
+		bb.WriteString(f.Next.String())
 	}
 	bb.WriteString("(")
 	var args []string
@@ -58,60 +56,109 @@ func (f Call) String() string {
 }
 
 func (f Call) Exec(c *Context) (interface{}, error) {
-	if f.Concurrent {
-		c.wg.Add(1)
-		go func() {
-			defer c.wg.Done()
-			_, err := f.exec(c)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}()
-		return nil, nil
-	}
-	return f.exec(c)
-}
-
-func (f Call) exec(c *Context) (interface{}, error) {
-	n, err := exec(c, f.Name)
+	start, err := exec(c, f.Name)
 	if err != nil {
 		return nil, err
 	}
-	rv := reflect.Indirect(reflect.ValueOf(n))
-	if !f.FName.IsZero() {
-		m := rv.MethodByName(f.FName.String())
-		return f.mExec(m, c)
+	if fn, ok := f.Name.(Func); ok {
+		start, err = fn.mExec(c, f.Arguments...)
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	return f.mExec(rv, c)
+	if fn, ok := start.(Func); ok {
+		start, err = fn.mExec(c, f.Arguments...)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	switch t := f.With.(type) {
+	case Call:
+		rv := reflect.ValueOf(start)
+		m := rv.MethodByName(t.Name.String())
+		start, err = t.callFunc(c, m)
+		if err != nil {
+			return nil, err
+		}
+	case Func:
+		panic(t)
+	case Ident:
+		panic(t)
+	}
+
+	var args []interface{}
+	for _, a := range f.Arguments {
+		i, err := exec(c, a)
+		if err != nil {
+			return nil, err
+		}
+		if s, ok := i.(interfacer); ok {
+			args = append(args, s.Interface())
+			continue
+		}
+		args = append(args, i)
+	}
+	rv := reflect.ValueOf(start)
+	switch rv.Kind() {
+	case reflect.Func:
+		start, err = f.callFunc(c, rv)
+		if err != nil {
+			return nil, err
+		}
+	case reflect.Struct:
+	default:
+	}
+	return start, nil
 }
 
-func (f Call) mExec(m reflect.Value, c *Context) (interface{}, error) {
+func (f Call) callFunc(c *Context, m reflect.Value) (interface{}, error) {
 	if !m.IsValid() {
 		return nil, f.Meta.Wrap(errors.New("invalid method call"))
 	}
 
-	if fun, ok := m.Interface().(Func); ok {
-		c = c.Clone()
-		return fun.mExec(c, f.Arguments...)
-	}
-
-	var args []reflect.Value
 	mt := m.Type()
+
 	var err error
+	var args []reflect.Value
 	if mt.IsVariadic() {
 		for i := 0; i < len(f.Arguments); i++ {
 			v := f.Arguments[i].(interface{})
-			if args, err = app(args, mt, 0, c, v); err != nil {
-				return nil, err
+			if ex, ok := v.(Execable); ok {
+				v, err = ex.Exec(c)
+				if err != nil {
+					return nil, err
+				}
 			}
+			if ii, ok := v.(interfacer); ok {
+				v = ii.Interface()
+			}
+			args = append(args, reflect.ValueOf(v))
 		}
 	} else {
 		for i := 0; i < mt.NumIn(); i++ {
 			if i < len(f.Arguments) {
 				v := f.Arguments[i].(interface{})
-				if args, err = app(args, mt, i, c, v); err != nil {
+				var err error
+				v, err = exec(c, v)
+				if err != nil {
 					return nil, err
+				}
+				ar := flatten([]interface{}{v})
+				for _, a := range ar {
+					if m, ok := a.(map[interface{}]interface{}); ok {
+						mm := map[string]interface{}{}
+						for k, v := range m {
+							var key = fmt.Sprint(k)
+							mm[key] = v
+						}
+						a = mm
+					}
+					if ii, ok := a.(interfacer); ok {
+						a = ii.Interface()
+					}
+					args = append(args, reflect.ValueOf(a))
 				}
 				continue
 			}
@@ -121,6 +168,7 @@ func (f Call) mExec(m reflect.Value, c *Context) (interface{}, error) {
 			if _, ok := rv.Interface().(*Context); ok {
 				ctx := c.Clone()
 				ctx.Block = f.Block
+
 				args = append(args, reflect.ValueOf(ctx))
 				continue
 			}
@@ -128,10 +176,8 @@ func (f Call) mExec(m reflect.Value, c *Context) (interface{}, error) {
 			if _, ok := rv.Interface().(map[string]interface{}); ok {
 				args = append(args, reflect.ValueOf(map[string]interface{}{}))
 			}
-			continue
 		}
 	}
-
 	res := m.Call(args)
 	if len(res) == 0 {
 		return nil, nil
@@ -140,51 +186,20 @@ func (f Call) mExec(m reflect.Value, c *Context) (interface{}, error) {
 		if e, ok := res[len(res)-1].Interface().(error); ok {
 			return nil, e
 		}
-		return res[0].Interface(), nil
+		i := res[0].Interface()
+		if ii, ok := i.(interfacer); ok {
+			i = ii.Interface()
+		}
+		return i, nil
 	}
 
 	var ins []interface{}
 	for _, v := range res {
-		ins = append(ins, v.Interface())
+		i := v.Interface()
+		if ii, ok := i.(interfacer); ok {
+			i = ii.Interface()
+		}
+		ins = append(ins, i)
 	}
 	return ins, nil
-}
-
-func app(args []reflect.Value, mt reflect.Type, i int, c *Context, v interface{}) ([]reflect.Value, error) {
-	if m, ok := v.(Map); ok {
-		args = append(args, reflect.ValueOf(m.Interface()))
-		return args, nil
-	}
-	if ex, ok := v.(Execable); ok {
-		x, err := ex.Exec(c)
-		if err != nil {
-			return args, err
-		}
-		v = x
-	}
-	if vi, ok := v.(interfacer); ok {
-		v = vi.Interface()
-	}
-
-	app := func(v interface{}) {
-		var ar reflect.Value
-		expectedT := mt.In(i)
-		if v != nil {
-			ar = reflect.ValueOf(v)
-		} else {
-			ar = reflect.New(expectedT).Elem()
-		}
-
-		args = append(args, ar)
-	}
-
-	if ii, err := toII(v); err == nil {
-		for _, x := range ii {
-			app(x)
-		}
-		return args, err
-	}
-
-	app(v)
-	return args, nil
 }

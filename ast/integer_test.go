@@ -30,6 +30,8 @@ func Test_Integer(t *testing.T) {
 		{`return 60 * 2`, 120},
 		{`return 60 * -2`, -120},
 		{`return 60 * -2`, -120.0},
+		{`return 4 * 2 + 2 * 1 + 50 / 10`, 15},
+		{`return 3 * (2 + 1)`, 9},
 	}
 
 	for _, tt := range table {

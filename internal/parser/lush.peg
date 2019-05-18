@@ -64,9 +64,40 @@ IDENT <- [a-zA-Z]+ ( [0-9a-zA-Z_])* {
 
 NUMBER <- (FLOAT / INTEGER)
 
-LETV <- ( ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )
+/*LETV <- ( ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )*/
 
-LET <- _ "let" _ name:IDENT _ "=" _ value:LETV {
+// Operators
+
+COMPARATOR <- "&&" / "||" / "<=" / ">=" / "==" / "!=" / "~=" {
+  return string(c.text), nil
+}
+
+OPADD <- ( "+" / "-" ) {
+  return string(c.text), nil
+}
+OPMUL <- ( "*" / "/" ) {
+  return string(c.text), nil
+}
+
+EXPR <- head:ADDITIVE tail:( _ COMPARATOR _ ADDITIVE )* {
+  return newBinaryExpr(head, tail)
+}
+
+ADDITIVE <- head:MULTITIVE tail:( _ OPADD _ MULTITIVE )* {
+  return newBinaryExpr(head, tail)
+}
+
+MULTITIVE <- head:UNARY tail:( _ OPMUL _ UNARY )* {
+  return newBinaryExpr(head, tail)
+}
+
+UNARY <- num:NUMBER {
+  return num, nil
+} / "(" expr:EXPR ")" {
+  return expr, nil
+}
+
+LET <- _ "let" _ name:IDENT _ "=" _ value:EXPR {
   return newLet(c, name, value)
 }
 
@@ -78,7 +109,7 @@ ASSIGN <- _ name:(ACCESS/IDENT) _ "=" _ value:LETV {
   return newAssign(c, name, value)
 }
 
-ARG <- _ i:LETV _ ","? {
+ARG <- _ i:EXPR _ ","? {
   return i, nil
 }
 
@@ -106,7 +137,7 @@ ACCESS <- i:(IDENT) LB key:(NUMBER/IDENT/STRING) RB {
   return newAccess(c, i, key)
 }
 
-RETURN <- _ "return" _ s:ARG* {
+RETURN <- _ "return" _ s:EXPR {
   return newReturn(c, s)
 }
 

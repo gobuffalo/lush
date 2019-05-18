@@ -31,6 +31,33 @@ func newString(c *current) (ast.String, error) {
 	return s, nil
 }
 
+func toIfaceSlice(v interface{}) []interface{} {
+	if v == nil {
+		return nil
+	}
+	return v.([]interface{})
+}
+
+func newBinaryExpr(head, tail interface{}) (ast.Execable, error) {
+	cur := &ast.BinaryExpr{
+		LHS: head.(ast.Execable),
+	}
+	var next *ast.BinaryExpr
+	restSl := toIfaceSlice(tail)
+	for _, v := range restSl {
+		tailParts := toIfaceSlice(v)
+		cur.Op = tailParts[1].(string)
+		cur.RHS = tailParts[3].(ast.Execable)
+		next = cur
+		cur = &ast.BinaryExpr{
+			LHS: next,
+		}
+	}
+
+	// this will always overcount, so cut off the top BinaryExpr:
+	return cur.LHS, nil
+}
+
 func newAccess(c *current, i interface{}, k interface{}) (ret ast.Access, err error) {
 	id, err := toIdent(i)
 	if err != nil {
@@ -233,11 +260,7 @@ func newElseIf(c *current, i interface{}) (ret ast.ElseIf, err error) {
 }
 
 func newReturn(c *current, i interface{}) (ret ast.Return, err error) {
-	s, err := toStatements(i)
-	if err != nil {
-		return ast.Return{}, err
-	}
-	ret, err = ast.NewReturn(s)
+	ret, err = ast.NewReturn(i.(ast.Execable))
 	if err != nil {
 		return ret, err
 	}

@@ -7,7 +7,7 @@ import (
 )
 
 type Return struct {
-	Statements Statements
+	Statements Execable
 	Meta       Meta
 }
 
@@ -15,9 +15,7 @@ func (r Return) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("return ")
 	var lines []string
-	for _, s := range r.Statements {
-		lines = append(lines, s.String())
-	}
+	bb.WriteString("xxx")
 	bb.WriteString(strings.Join(lines, ", "))
 	return bb.String()
 }
@@ -30,7 +28,7 @@ func (r Return) Exec(c *Context) (interface{}, error) {
 	return NewReturned(st), err
 }
 
-func NewReturn(s Statements) (Return, error) {
+func NewReturn(s Execable) (Return, error) {
 	return Return{
 		Statements: s,
 	}, nil

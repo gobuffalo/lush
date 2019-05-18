@@ -114,7 +114,7 @@ func NewOpExpression(a ast.Statement, op string, b ast.Statement) *ast.OpExpress
 }
 
 func NewReturn(s ...ast.Statement) ast.Return {
-	r, _ := ast.NewReturn(s)
+	r, _ := ast.NewReturn(ast.Statements(s))
 	return r
 }
 

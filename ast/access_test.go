@@ -1,8 +1,10 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/gobuffalo/lush/ast"
 	"github.com/stretchr/testify/require"
 )
 
@@ -76,3 +78,54 @@ func Test_Access_Map(t *testing.T) {
 		})
 	}
 }
+
+func Test_Access_Format(t *testing.T) {
+	table := []struct {
+		in     string
+		format string
+		out    string
+	}{
+		{`foo[1]`, `%s`, `foo[1]`},
+		{`foo[1]`, `%q`, `"foo[1]"`},
+		{`foo[1]`, `%+v`, accessv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s_%s", tt.in, tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			id, err := ast.NewIdent([]byte(`foo`))
+			r.NoError(err)
+
+			s, err := ast.NewAccess(id, 1)
+			r.NoError(err)
+
+			ft := fmt.Sprintf(tt.format, s)
+
+			r.Equal(tt.out, ft)
+		})
+	}
+}
+
+const accessv = `{
+  "ast.Access": {
+    "Name": {
+      "Name": "foo",
+      "Meta": {
+        "Filename": "",
+        "Line": 0,
+        "Col": 0,
+        "Offset": 0,
+        "Original": ""
+      }
+    },
+    "Key": 1,
+    "Meta": {
+      "Filename": "",
+      "Line": 0,
+      "Col": 0,
+      "Offset": 0,
+      "Original": ""
+    }
+  }
+}`

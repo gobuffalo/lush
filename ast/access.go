@@ -2,6 +2,8 @@ package ast
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"reflect"
 	"strconv"
 )
@@ -21,6 +23,26 @@ type Access struct {
 
 func (a Access) String() string {
 	return fmt.Sprintf("%s[%v]", a.Name, a.Key)
+}
+
+func (s Access) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('+') {
+			b, err := toJSON(s)
+			if err != nil {
+				fmt.Fprint(os.Stderr, err)
+				return
+			}
+			io.WriteString(st, b)
+			return
+		}
+		fallthrough
+	case 's':
+		io.WriteString(st, s.String())
+	case 'q':
+		fmt.Fprintf(st, "%q", s.String())
+	}
 }
 
 func (a Access) Exec(c *Context) (interface{}, error) {

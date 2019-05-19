@@ -2,6 +2,8 @@ package ast
 
 import (
 	"fmt"
+	"io"
+	"os"
 	"strconv"
 	"strings"
 )
@@ -9,14 +11,14 @@ import (
 func NewString(b []byte) (String, error) {
 	t := string(b)
 	st := String{
-		Original: t,
-		format:   "%q",
+		Original:    t,
+		QuoteFormat: "%q",
 	}
 	if strings.HasPrefix(t, "`") {
 		t = strings.TrimPrefix(t, "`")
 		t = strings.TrimSuffix(t, "`")
 		st.Original = t
-		st.format = "`%s`"
+		st.QuoteFormat = "`%s`"
 		return st, nil
 	}
 	s, err := strconv.Unquote(t)
@@ -30,13 +32,33 @@ func NewString(b []byte) (String, error) {
 }
 
 type String struct {
-	Original string
-	Meta     Meta
-	format   string
+	Original    string
+	QuoteFormat string
+	Meta        Meta
 }
 
 func (s String) String() string {
-	return fmt.Sprintf(s.format, s.Original)
+	return fmt.Sprintf(s.QuoteFormat, s.Original)
+}
+
+func (s String) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('+') {
+			b, err := toJSON(s)
+			if err != nil {
+				fmt.Fprint(os.Stderr, err)
+				return
+			}
+			io.WriteString(st, b)
+			return
+		}
+		fallthrough
+	case 's':
+		io.WriteString(st, s.String())
+	case 'q':
+		fmt.Fprintf(st, "`%q`", s.Original)
+	}
 }
 
 func (s String) Interface() interface{} {

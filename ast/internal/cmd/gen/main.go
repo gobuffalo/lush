@@ -42,6 +42,9 @@ func main() {
 	write(cmt, nil)
 
 	write(ast.True, nil)
+
+	ctn := ast.Continue{}
+	write(ctn, nil)
 }
 
 func write(s interface{}, err error) {

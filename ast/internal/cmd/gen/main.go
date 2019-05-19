@@ -35,6 +35,9 @@ func main() {
 	br := ast.Break{}
 	write(br, nil)
 
+	nl := ast.Nil{}
+	write(nl, nil)
+
 	write(ast.True, nil)
 }
 

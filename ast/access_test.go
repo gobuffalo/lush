@@ -80,21 +80,24 @@ func Test_Access_Map(t *testing.T) {
 }
 
 func Test_Access_Format(t *testing.T) {
+	accessv, err := jsonFixture("Access")
+	if err != nil {
+		t.Fatal(err)
+	}
 	table := []struct {
-		in     string
 		format string
 		out    string
 	}{
-		{`foo[1]`, `%s`, `foo[1]`},
-		{`foo[1]`, `%q`, `"foo[1]"`},
-		{`foo[1]`, `%+v`, accessv},
+		{`%s`, `x[1]`},
+		{`%q`, `"x[1]"`},
+		{`%+v`, accessv},
 	}
 
 	for _, tt := range table {
-		t.Run(fmt.Sprintf("%s_%s_%s", tt.in, tt.format, tt.out), func(st *testing.T) {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
 
-			id, err := ast.NewIdent([]byte(`foo`))
+			id, err := ast.NewIdent([]byte(`x`))
 			r.NoError(err)
 
 			s, err := ast.NewAccess(id, 1)
@@ -105,32 +108,3 @@ func Test_Access_Format(t *testing.T) {
 		})
 	}
 }
-
-const accessv = `{
-  "ast.Access": {
-    "Key": {
-      "int": 1
-    },
-    "Meta": {
-      "Filename": "",
-      "Line": 0,
-      "Col": 0,
-      "Offset": 0,
-      "Original": ""
-    },
-    "Name": {
-      "ast.Ident": {
-        "Meta": {
-          "Filename": "",
-          "Line": 0,
-          "Col": 0,
-          "Offset": 0,
-          "Original": ""
-        },
-        "Name": {
-          "string": "foo"
-        }
-      }
-    }
-  }
-}`

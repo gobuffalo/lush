@@ -57,6 +57,10 @@ return x`
 }
 
 func Test_Assign_Format(t *testing.T) {
+	assignv, err := jsonFixture("Assign")
+	if err != nil {
+		t.Fatal(err)
+	}
 	table := []struct {
 		format string
 		out    string
@@ -85,30 +89,3 @@ func Test_Assign_Format(t *testing.T) {
 		})
 	}
 }
-
-const assignv = `{
-  "ast.Assign": {
-    "Meta": {
-      "Filename": "",
-      "Line": 0,
-      "Col": 0,
-      "Offset": 0,
-      "Original": ""
-    },
-    "Name": {
-      "ast.Ident": {
-        "Meta": {
-          "Filename": "",
-          "Line": 0,
-          "Col": 0,
-          "Offset": 0,
-          "Original": ""
-        },
-        "Name": {
-          "string": "x"
-        }
-      }
-    },
-    "Value": 1
-  }
-}`

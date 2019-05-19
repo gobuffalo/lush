@@ -49,13 +49,15 @@ func Test_Array(t *testing.T) {
 }
 
 func Test_Array_String(t *testing.T) {
+	s1, _ := ast.NewString([]byte("a"))
+	s2, _ := ast.NewString([]byte("b"))
 	table := []struct {
 		in  []interface{}
 		out string
 	}{
 		{[]interface{}{1, 2, 3}, "[1, 2, 3]"},
-		{[]interface{}{newString("a"), newString("b")}, `["a", "b"]`},
-		{[]interface{}{newString("a"), ast.Float(3.14), ast.Bool(true)}, `["a", 3.14, true]`},
+		{[]interface{}{s1, s2}, `["a", "b"]`},
+		{[]interface{}{s1, ast.Float(3.14), ast.Bool(true)}, `["a", 3.14, true]`},
 	}
 
 	for _, tt := range table {
@@ -69,6 +71,10 @@ func Test_Array_String(t *testing.T) {
 }
 
 func Test_Array_Format(t *testing.T) {
+	arrayv, err := jsonFixture("Array")
+	if err != nil {
+		t.Fatal(err)
+	}
 	table := []struct {
 		in     []interface{}
 		format string
@@ -92,22 +98,3 @@ func Test_Array_Format(t *testing.T) {
 		})
 	}
 }
-
-const arrayv = `{
-  "ast.Array": {
-    "Meta": {
-      "Filename": "",
-      "Line": 0,
-      "Col": 0,
-      "Offset": 0,
-      "Original": ""
-    },
-    "Value": {
-      "[]interface {}": [
-        1,
-        2,
-        3
-      ]
-    }
-  }
-}`

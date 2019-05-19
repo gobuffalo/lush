@@ -3,9 +3,9 @@ package ast_test
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
 	"testing"
 
@@ -51,10 +51,11 @@ func parse(in string) (ast.Script, error) {
 	return n, nil
 }
 
-func newString(in string) ast.String {
-	s, err := ast.NewString([]byte(in))
+func jsonFixture(name string) (string, error) {
+	b, err := ioutil.ReadFile(fmt.Sprintf("./testdata/%s.json", name))
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
-	return s
+
+	return string(b), nil
 }

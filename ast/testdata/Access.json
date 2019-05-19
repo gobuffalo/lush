@@ -1,0 +1,32 @@
+{
+  "ast.Access": {
+    "Key": {
+      "int": 1
+    },
+    "Meta": {
+      "ast.Meta": {
+        "Col": 0,
+        "Filename": "",
+        "Line": 0,
+        "Offset": 0,
+        "Original": ""
+      }
+    },
+    "Name": {
+      "ast.Ident": {
+        "Meta": {
+          "ast.Meta": {
+            "Col": 0,
+            "Filename": "",
+            "Line": 0,
+            "Offset": 0,
+            "Original": ""
+          }
+        },
+        "Name": {
+          "string": "x"
+        }
+      }
+    }
+  }
+}

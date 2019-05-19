@@ -1,0 +1,20 @@
+{
+  "ast.Array": {
+    "Meta": {
+      "ast.Meta": {
+        "Col": 0,
+        "Filename": "",
+        "Line": 0,
+        "Offset": 0,
+        "Original": ""
+      }
+    },
+    "Value": {
+      "[]interface {}": [
+        1,
+        2,
+        3
+      ]
+    }
+  }
+}

@@ -7,6 +7,16 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
+func newString(c *current) (ast.String, error) {
+	s, err := ast.NewString(c.text)
+	if err != nil {
+		return s, err
+	}
+	s.Meta = meta(c)
+
+	return s, nil
+}
+
 func newAccess(c *current, i interface{}, k interface{}) (ret ast.Access, err error) {
 	id, err := toIdent(i)
 	if err != nil {

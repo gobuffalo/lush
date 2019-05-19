@@ -4,6 +4,7 @@ GO_BIN ?= go
 gen:
 	pigeon -o internal/parser/parse.go internal/parser/lush.peg
 	go install -v ./cmd/lush
+	go run ast/internal/cmd/gen/main.go
 
 install: gen
 	$(GO_BIN) install -tags ${TAGS} -v ./cmd/lush

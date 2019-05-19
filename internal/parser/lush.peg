@@ -138,11 +138,11 @@ STRING <- s:(MLSTRING / DQSTRING ) {
 }
 
 MLSTRING <- "`" [^`]+ "`" {
-  return ast.NewString(c.text)
+  return newString(c)
 }
 
 DQSTRING <- '"' ( !DQEscapeChar . / '\\' DQEscapeSequence )* '"' {
-  return ast.NewString(c.text)
+  return newString(c)
 }
 
 BREAK <- _ "break" _ {

@@ -55,6 +55,10 @@ func Test_NewString(t *testing.T) {
 }
 
 func Test_String_Format(t *testing.T) {
+	stringv, err := jsonFixture("String")
+	if err != nil {
+		t.Fatal(err)
+	}
 	table := []struct {
 		in     string
 		format string
@@ -79,21 +83,3 @@ func Test_String_Format(t *testing.T) {
 		})
 	}
 }
-
-const stringv = `{
-  "ast.String": {
-    "Meta": {
-      "Filename": "",
-      "Line": 0,
-      "Col": 0,
-      "Offset": 0,
-      "Original": ""
-    },
-    "Original": {
-      "string": "hi"
-    },
-    "QuoteFormat": {
-      "string": "%q"
-    }
-  }
-}`

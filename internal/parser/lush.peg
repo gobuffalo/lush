@@ -146,15 +146,15 @@ DQSTRING <- '"' ( !DQEscapeChar . / '\\' DQEscapeSequence )* '"' {
 }
 
 BREAK <- _ "break" _ {
-  return ast.Break{}, nil
+  return ast.Break{Meta: meta(c)}, nil
 }
 
 CONTINUE <- _ "continue" _ {
-  return ast.Continue{}, nil
+  return ast.Continue{Meta: meta(c)}, nil
 }
 
 NULL ← ( "nil" ) {
-  return ast.Nil{}, nil
+  return ast.Nil{Meta: meta(c)}, nil
 }
 
 MAP <- LC _ vals:( (IDENT/STRING) _ ':' _ (ARG) _ (',')* _ )*  _ RC {

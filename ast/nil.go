@@ -1,6 +1,8 @@
 package ast
 
-type Nil struct{}
+type Nil struct {
+	Meta Meta
+}
 
 func (i Nil) IsZero() bool {
 	return true

@@ -21,7 +21,7 @@ func main() {
 	write(id, err)
 
 	num, err := ast.NewInteger(1)
-	write(id, err)
+	write(num, err)
 
 	an, err := ast.NewAssign(id, num)
 	write(an, err)

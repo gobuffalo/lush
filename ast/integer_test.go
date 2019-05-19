@@ -46,3 +46,32 @@ func Test_Integer(t *testing.T) {
 		})
 	}
 }
+
+func Test_Integer_Format(t *testing.T) {
+	intv, err := jsonFixture("Integer")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, `1`},
+		{`%q`, `"1"`},
+		{`%v`, `1`},
+		{`%+v`, intv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			s, err := ast.NewInteger(1)
+			r.NoError(err)
+
+			ft := fmt.Sprintf(tt.format, s)
+
+			r.Equal(tt.out, ft)
+		})
+	}
+}

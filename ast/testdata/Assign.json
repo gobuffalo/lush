@@ -25,6 +25,12 @@
         }
       }
     },
-    "Value": 1
+    "Value": {
+      "ast.Integer": {
+        "Value": {
+          "int": 1
+        }
+      }
+    }
   }
 }

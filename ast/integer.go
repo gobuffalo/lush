@@ -1,6 +1,8 @@
 package ast
 
 import (
+	"fmt"
+	"io"
 	"strconv"
 )
 
@@ -24,4 +26,22 @@ func (d Integer) Bool(c *Context) (bool, error) {
 
 func NewInteger(i int) (Integer, error) {
 	return Integer(i), nil
+}
+
+func (a Integer) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		printV(st, a)
+	case 's':
+		io.WriteString(st, a.String())
+	case 'q':
+		fmt.Fprintf(st, "%q", a.String())
+	}
+}
+
+func (a Integer) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Value": genericJSON(int(a)),
+	}
+	return toJSON("ast.Integer", m)
 }

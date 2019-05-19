@@ -45,6 +45,13 @@ func main() {
 
 	ctn := ast.Continue{}
 	write(ctn, nil)
+
+	mp := ast.Map{
+		Values: map[ast.Statement]interface{}{
+			id: num,
+		},
+	}
+	write(mp, nil)
 }
 
 func write(s interface{}, err error) {

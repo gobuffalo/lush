@@ -8,14 +8,17 @@ import (
 	"strings"
 )
 
-type Map map[Statement]interface{}
+type Map struct {
+	Values map[Statement]interface{}
+	Meta   Meta
+}
 
 type Keyable interface {
 	MapKey() string
 }
 
 func NewMap(vals interface{}) (Map, error) {
-	m := Map{}
+	m := Map{Values: map[Statement]interface{}{}}
 
 	sl, err := toII(vals)
 	if err != nil {
@@ -39,7 +42,7 @@ func NewMap(vals interface{}) (Map, error) {
 		if !ok {
 			return m, fmt.Errorf("expected Statement got %T", k)
 		}
-		m[sk] = v
+		m.Values[sk] = v
 	}
 
 	return m, nil
@@ -47,7 +50,7 @@ func NewMap(vals interface{}) (Map, error) {
 
 func (m Map) Exec(c *Context) (interface{}, error) {
 	mm := map[interface{}]interface{}{}
-	for k, v := range m {
+	for k, v := range m.Values {
 		var key interface{}
 		var value interface{}
 
@@ -77,7 +80,7 @@ func (m Map) Exec(c *Context) (interface{}, error) {
 func (m Map) String() string {
 	var keys []Statement
 
-	for k := range m {
+	for k := range m.Values {
 		keys = append(keys, k)
 	}
 	sort.Slice(keys, func(a, b int) bool {
@@ -88,7 +91,7 @@ func (m Map) String() string {
 	bb.WriteString("{")
 	var lines []string
 	for _, k := range keys {
-		v := m[k]
+		v := m.Values[k]
 		mk := strings.TrimSpace(k.String())
 		mv := strings.TrimSpace(fmt.Sprint(v))
 		lines = append(lines, fmt.Sprintf("%s: %s", mk, mv))
@@ -102,7 +105,7 @@ func (m Map) String() string {
 func (m Map) Interface() interface{} {
 	mm := map[string]interface{}{}
 
-	for k, v := range m {
+	for k, v := range m.Values {
 		ks := k.String()
 		if kv, ok := k.(interfacer); ok {
 			ks = fmt.Sprint(kv.Interface())
@@ -117,7 +120,7 @@ func (m Map) Interface() interface{} {
 }
 
 func (m Map) Bool(c *Context) (bool, error) {
-	return len(m) > 0, nil
+	return len(m.Values) > 0, nil
 }
 
 func (a Map) Format(st fmt.State, verb rune) {

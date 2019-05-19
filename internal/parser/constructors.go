@@ -45,7 +45,7 @@ func newMap(c *current, vals interface{}) (ret ast.Map, err error) {
 	if err != nil {
 		return ret, err
 	}
-	// ret.Meta = meta(c)
+	ret.Meta = meta(c)
 	return ret, nil
 }
 

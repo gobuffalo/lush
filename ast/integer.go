@@ -6,18 +6,21 @@ import (
 	"strconv"
 )
 
-type Integer int
+type Integer struct {
+	Value int
+	Meta  Meta
+}
 
 func (d Integer) Interface() interface{} {
-	return int(d)
+	return d.Value
 }
 
 func (d Integer) String() string {
-	return strconv.Itoa(int(d))
+	return strconv.Itoa(d.Value)
 }
 
 func (d Integer) Exec(c *Context) (interface{}, error) {
-	return int(d), nil
+	return d.Value, nil
 }
 
 func (d Integer) Bool(c *Context) (bool, error) {
@@ -25,7 +28,9 @@ func (d Integer) Bool(c *Context) (bool, error) {
 }
 
 func NewInteger(i int) (Integer, error) {
-	return Integer(i), nil
+	return Integer{
+		Value: i,
+	}, nil
 }
 
 func (a Integer) Format(st fmt.State, verb rune) {
@@ -41,7 +46,8 @@ func (a Integer) Format(st fmt.State, verb rune) {
 
 func (a Integer) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Value": genericJSON(int(a)),
+		"Value":    genericJSON(a.Value),
+		"ast.Meta": a.Meta,
 	}
 	return toJSON("ast.Integer", m)
 }

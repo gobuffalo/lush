@@ -41,8 +41,8 @@ func (s Array) Format(st fmt.State, verb rune) {
 
 func (a Array) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Value": genericJSON(a.Value),
-		"Meta":  a.Meta,
+		"Value":    genericJSON(a.Value),
+		"ast.Meta": a.Meta,
 	}
 	return toJSON("ast.Array", m)
 }

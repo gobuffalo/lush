@@ -1,19 +1,17 @@
 {
   "ast.String": {
-    "Meta": {
-      "ast.Meta": {
-        "Col": 0,
-        "Filename": "",
-        "Line": 0,
-        "Offset": 0,
-        "Original": ""
-      }
-    },
     "Original": {
       "string": "hi"
     },
     "QuoteFormat": {
       "string": "%q"
+    },
+    "ast.Meta": {
+      "Filename": "",
+      "Line": 0,
+      "Col": 0,
+      "Offset": 0,
+      "Original": ""
     }
   }
 }

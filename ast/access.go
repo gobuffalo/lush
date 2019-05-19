@@ -38,9 +38,9 @@ func (a Access) Format(st fmt.State, verb rune) {
 
 func (a Access) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Name": a.Name,
-		"Key":  genericJSON(a.Key),
-		"Meta": a.Meta,
+		"Name":     a.Name,
+		"Key":      genericJSON(a.Key),
+		"ast.Meta": a.Meta,
 	}
 	return toJSON("ast.Access", m)
 }

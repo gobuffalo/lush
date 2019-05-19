@@ -55,7 +55,7 @@ func (a String) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Original":    genericJSON(a.Original),
 		"QuoteFormat": genericJSON(a.QuoteFormat),
-		"Meta":        a.Meta,
+		"ast.Meta":    a.Meta,
 	}
 	return toJSON("ast.String", m)
 }

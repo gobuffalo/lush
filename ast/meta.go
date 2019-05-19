@@ -38,14 +38,3 @@ func (a Meta) Format(st fmt.State, verb rune) {
 		fmt.Fprintf(st, "`%q`", a.Original)
 	}
 }
-
-func (a Meta) MarshalJSON() ([]byte, error) {
-	m := map[string]interface{}{
-		"Filename": a.Filename,
-		"Line":     a.Line,
-		"Col":      a.Col,
-		"Offset":   a.Offset,
-		"Original": a.Original,
-	}
-	return toJSON("ast.Meta", m)
-}

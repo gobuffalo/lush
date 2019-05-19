@@ -38,8 +38,8 @@ func (a Ident) Format(st fmt.State, verb rune) {
 
 func (a Ident) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Name": genericJSON(a.Name),
-		"Meta": a.Meta,
+		"Name":     genericJSON(a.Name),
+		"ast.Meta": a.Meta,
 	}
 	return toJSON("ast.Ident", m)
 }

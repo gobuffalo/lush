@@ -44,14 +44,6 @@ func (b Bool) Interface() interface{} {
 func (a Bool) Format(st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
-		// m := map[string]interface{}{
-		// 	"Value": genericJSON(a.Value),
-		// }
-		// d, err := toJSON("ast.Bool", m)
-		// if err != nil {
-		// 	fmt.Fprint(os.Stderr, err)
-		// 	return
-		// }
 		printV(st, a)
 	case 's':
 		io.WriteString(st, a.String())

@@ -55,7 +55,7 @@ func newBool(c *current, b []byte) (ret ast.Bool, err error) {
 		return ret, err
 	}
 
-	// ret.Meta = meta(c)
+	ret.Meta = meta(c)
 	return ret, nil
 }
 
@@ -240,9 +240,15 @@ func newFloat(c *current, b []byte) (ret ast.Float, err error) {
 func newInteger(c *current, b []byte) (ret ast.Integer, err error) {
 	i, err := strconv.Atoi(string(b))
 	if err != nil {
-		return ast.Integer(i), err
+		return ast.Integer{}, err
 	}
-	return ast.Integer(i), nil
+
+	in, err := ast.NewInteger(i)
+	if err != nil {
+		return ast.Integer{}, err
+	}
+	in.Meta = meta(c)
+	return in, nil
 }
 
 func newLet(c *current, n, v interface{}) (ret *ast.Let, err error) {

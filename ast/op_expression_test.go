@@ -32,7 +32,7 @@ func Test_OpExpression_Equal(t *testing.T) {
 			r := require.New(st)
 
 			c := NewContext()
-			c.Set("magic", ast.Integer(42))
+			c.Set("magic", ast.Integer{Value: 42})
 			res, err := exec(tt.in, c)
 
 			if tt.err {

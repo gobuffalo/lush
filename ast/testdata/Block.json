@@ -1,39 +1,19 @@
 {
   "ast.Block": {
-    "Meta": {
-      "ast.Meta": {
-        "Col": 0,
-        "Filename": "",
-        "Line": 0,
-        "Offset": 0,
-        "Original": ""
-      }
-    },
     "Statements": [
       {
         "ast.Assign": {
-          "Meta": {
-            "ast.Meta": {
-              "Col": 0,
-              "Filename": "",
-              "Line": 0,
-              "Offset": 0,
-              "Original": ""
-            }
-          },
           "Name": {
             "ast.Ident": {
-              "Meta": {
-                "ast.Meta": {
-                  "Col": 0,
-                  "Filename": "",
-                  "Line": 0,
-                  "Offset": 0,
-                  "Original": ""
-                }
-              },
               "Name": {
                 "string": "x"
+              },
+              "ast.Meta": {
+                "Filename": "",
+                "Line": 0,
+                "Col": 0,
+                "Offset": 0,
+                "Original": ""
               }
             }
           },
@@ -41,11 +21,32 @@
             "ast.Integer": {
               "Value": {
                 "int": 1
+              },
+              "ast.Meta": {
+                "Filename": "",
+                "Line": 0,
+                "Col": 0,
+                "Offset": 0,
+                "Original": ""
               }
             }
+          },
+          "ast.Meta": {
+            "Filename": "",
+            "Line": 0,
+            "Col": 0,
+            "Offset": 0,
+            "Original": ""
           }
         }
       }
-    ]
+    ],
+    "ast.Meta": {
+      "Filename": "",
+      "Line": 0,
+      "Col": 0,
+      "Offset": 0,
+      "Original": ""
+    }
   }
 }

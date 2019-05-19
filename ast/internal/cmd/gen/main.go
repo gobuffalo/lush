@@ -38,6 +38,9 @@ func main() {
 	nl := ast.Nil{}
 	write(nl, nil)
 
+	cmt := ast.Comment{Value: "hello"}
+	write(cmt, nil)
+
 	write(ast.True, nil)
 }
 

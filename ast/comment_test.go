@@ -1,6 +1,7 @@
 package ast_test
 
 import (
+	"fmt"
 	"strings"
 	"testing"
 
@@ -47,4 +48,30 @@ func Test_Comment_MultiLine(t *testing.T) {
 	c, err := ast.NewComment([]byte(in))
 	r.NoError(err)
 	r.Equal(in, c.String())
+}
+
+func Test_Comment_Format(t *testing.T) {
+	ctv, err := jsonFixture("Comment")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, `// hello`},
+		{`%q`, `"// hello"`},
+		{`%v`, `// hello`},
+		{`%+v`, ctv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, ast.Comment{Value: "hello"})
+
+			r.Equal(tt.out, ft)
+		})
+	}
 }

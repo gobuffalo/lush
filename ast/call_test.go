@@ -63,6 +63,7 @@ func Test_Call_Helper_Let(t *testing.T) {
 	var ind []int
 	c := NewContext()
 	c.Set("print", func(i int) {
+		panic(i)
 		ind = append(ind, i)
 	})
 
@@ -150,6 +151,14 @@ func (f foo) Vary(i int, s ...string) string {
 
 func (f foo) WithFunc(fn func(i int, s string) string) string {
 	return fn(42, "hello")
+}
+
+func (f foo) A() foo {
+	return f
+}
+
+func (f foo) B() foo {
+	return f
 }
 
 func Test_Call_External_Func(t *testing.T) {
@@ -350,4 +359,17 @@ func Test_Call_Helper_Options_Context(t *testing.T) {
 	_, err := exec(in, c)
 	r.NoError(err)
 	r.Equal([]interface{}{"a", "nose", true, 42, "nose", "prize", 3.14, "nose"}, res)
+}
+
+func Test_Call_External_Func_Inception(t *testing.T) {
+	r := require.New(t)
+
+	c := NewContext()
+	c.Set("foo", foo{})
+
+	in := `return foo.A().B().Bar(1, "hi")`
+
+	res, err := exec(in, c)
+	r.NoError(err)
+	r.Equal("got 1/hi", res.Value)
 }

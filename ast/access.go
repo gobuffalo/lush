@@ -48,7 +48,7 @@ func (a Access) Exec(c *Context) (interface{}, error) {
 		}
 		x := rv.MapIndex(reflect.ValueOf(k))
 		if !x.IsValid() {
-			return nil, a.Meta.Errorf("could not find value for key %v", k)
+			return nil, a.Meta.Errorf("could not find Holder for key %v", k)
 		}
 		return x.Interface(), nil
 	}

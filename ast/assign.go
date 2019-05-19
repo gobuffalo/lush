@@ -39,7 +39,7 @@ func (l *Assign) Exec(c *Context) (interface{}, error) {
 
 func NewAssign(name Ident, value Statement) (*Assign, error) {
 	if name.String() == "nil" {
-		return nil, name.Meta.Errorf("can not set value for nil")
+		return nil, name.Meta.Errorf("can not set Holder for nil")
 	}
 	return &Assign{
 		Name:  name,

@@ -114,7 +114,7 @@ FUNC <- _ "func" LP ax:FARG* RP _ s:BLOCK {
 
 FCALL <- f:FUNC LP ax:ARG* RP _ b:(BLOCK)? {
   /* return newCall(c, f, nil, ax, b) */
-  return newCall(c, f, nil, ax, nil, b)
+  return newCall(c, nil, f, ax, nil, b)
 }
 
 GO <- _ "go" _ s:( FCALL / CALL) _ {
@@ -127,19 +127,18 @@ GO <- _ "go" _ s:( FCALL / CALL) _ {
 }
 
 SCALL <-  i:IDENT LP ax:ARG* RP _ b:(BLOCK)? _ {
-  /* fmt.Println("SCALL", string(c.text)) */
-  /* fmt.Println("SCALL i", i) */
-  /* fmt.Println("SCALL ax", ax) */
-  /* return ast.NewCall(i, ax, nil, b) */
-  return newCall(c, i, nil, ax, nil, b)
+  // fmt.Println("SCALL", string(c.text))
+  // fmt.Println("SCALL i", i)
+  // fmt.Println("SCALL ax", ax)
+  return newCall(c, nil, i, ax, nil, b)
 }
 
 CALL <- _ i:( IDENT ) "." s:SCALL next:("." (SCALL))* _ b:(BLOCK)? {
-  /* fmt.Println("CALL", string(c.text)) */
-  /* fmt.Println("CALL ident",i) */
-  /* fmt.Println("CALL s",s) */
-  /* fmt.Println("CALL next ",next) */
-  /* fmt.Println("CALL block",b) */
+  // fmt.Println("CALL", string(c.text))
+  // fmt.Println("CALL ident",i)
+  // fmt.Println("CALL s",s)
+  // fmt.Println("CALL next ",next)
+  // fmt.Println("CALL block",b)
   return newCall(c, i, s, nil, next, b)
 }
 

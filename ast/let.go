@@ -6,7 +6,7 @@ import (
 
 func NewLet(name Ident, value Statement) (*Let, error) {
 	if name.String() == "nil" {
-		return nil, name.Meta.Errorf("can not set value for nil")
+		return nil, name.Meta.Errorf("can not set Holder for nil")
 	}
 	return &Let{
 		Name:  name,

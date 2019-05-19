@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"encoding/json"
 	"reflect"
 )
 
@@ -12,6 +13,22 @@ func NewIdent(b []byte) (Ident, error) {
 type Ident struct {
 	Name string
 	Meta Meta
+}
+
+func (i Ident) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"ast.Ident": map[string]interface{}{
+			"Name": i.Name,
+			"Meta": i.Meta,
+		},
+	}
+
+	return json.MarshalIndent(m, "", "  ")
+}
+
+func (f Ident) withMeta(m Meta) Statement {
+	f.Meta = m
+	return f
 }
 
 func (i Ident) IsZero() bool {

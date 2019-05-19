@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -41,6 +42,23 @@ func (f Func) String() string {
 		bb.WriteString(f.Block.String())
 	}
 	return bb.String()
+}
+
+func (f Func) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"ast.Func": map[string]interface{}{
+			"Arguments": f.Arguments,
+			"Block":     f.Block,
+			"Meta":      f.Meta,
+		},
+	}
+
+	return json.MarshalIndent(m, "", "  ")
+}
+
+func (f Func) withMeta(m Meta) Statement {
+	f.Meta = m
+	return f
 }
 
 func (f Func) mExec(c *Context, args ...Statement) (interface{}, error) {

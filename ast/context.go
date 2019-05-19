@@ -13,7 +13,7 @@ import (
 // 	context.Context
 // 	Clone() *Context
 // 	Has(key string) bool
-// 	Set(key string, value interface{})
+// 	Set(key string, Holder interface{})
 // }
 
 //

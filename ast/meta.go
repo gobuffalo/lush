@@ -26,3 +26,7 @@ func (m Meta) Wrap(err error) error {
 func (m Meta) Errorf(format string, args ...interface{}) error {
 	return m.Wrap(fmt.Errorf(format, args...))
 }
+
+type withMeta interface {
+	withMeta(Meta) Statement
+}

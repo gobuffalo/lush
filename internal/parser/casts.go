@@ -86,11 +86,9 @@ func toStatements(i interface{}) (ast.Statements, error) {
 	var states ast.Statements
 
 	for _, s := range ii {
-		st, err := toStatement(s)
-		if err != nil {
-			return nil, err
+		if st, ok := s.(ast.Statement); ok {
+			states = append(states, st)
 		}
-		states = append(states, st)
 	}
 	return states, nil
 }

@@ -49,40 +49,54 @@ func newBool(c *current, b []byte) (ret ast.Bool, err error) {
 	return ret, nil
 }
 
-func newCall(c *current, name, with, args, next, block interface{}) (ret ast.Call, err error) {
-	n, err := toStatement(name)
+func newCall(c *current, root, accessor, args, next, block interface{}) (ret ast.Call, err error) {
+	n, err := toStatement(root)
 
 	var a ast.Statements
 	if args != nil {
 		if ii, ok := args.([]interface{}); ok {
-			a, _ = toStatements(ii)
+			a, _ = toStatements(flatten(ii))
 		} else {
 			a = ast.Statements{args.(ast.Statement)}
 		}
 	}
 
+	for _, x := range a {
+		ast.Debug(x)
+	}
+
 	var w ast.Statement
-	if with != nil {
-		if ii, ok := with.([]interface{}); ok {
+	if accessor != nil {
+		if ii, ok := accessor.([]interface{}); ok {
 			w, _ = toStatement(ii)
 		} else {
-			w = with.(ast.Statement)
+			w = accessor.(ast.Statement)
 		}
 	}
+	ast.Debug(w)
 
 	var nx ast.Statements
 	if next != nil {
+		var err error
 		if ii, ok := next.([]interface{}); ok {
-			nx, _ = toStatements(ii)
+			nx, err = toStatements(flatten(ii))
+			if err != nil {
+				return ast.Call{}, err
+			}
 		} else {
 			nx = ast.Statements{next.(ast.Statement)}
 		}
+	}
+
+	for _, x := range nx {
+		ast.Debug(x)
 	}
 
 	var b *ast.Block
 	if block != nil {
 		b, _ = toBlock(block)
 	}
+	ast.Debug(b)
 
 	call, err := ast.NewCall(n, w, a, nx, b)
 	call.Meta = meta(c)
@@ -373,4 +387,22 @@ func newArray(c *current, i interface{}) (ret ast.Array, err error) {
 
 	ret.Meta = meta(c)
 	return ret, nil
+}
+
+func flatten(ii []interface{}) []interface{} {
+	var res []interface{}
+	for _, i := range ii {
+		if i == nil {
+			continue
+		}
+		switch t := i.(type) {
+		case []interface{}:
+			res = append(res, flatten(t)...)
+		case ast.Noop:
+		default:
+			res = append(res, i)
+		}
+	}
+
+	return res
 }

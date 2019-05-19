@@ -2,24 +2,19 @@ package ast
 
 import (
 	"bytes"
-	"errors"
+	"encoding/json"
 	"fmt"
 	"reflect"
 	"strings"
 )
 
-type value struct {
-	value interface{}
-}
-
-func (v value) String() string {
-	return fmt.Sprint(v.value)
-}
-
-func NewCall(name Statement, with Statement, args Statements, next Statements, block *Block) (Call, error) {
+func NewCall(root Statement, accessor Statement, args Statements, next Statements, block *Block) (Call, error) {
+	if accessor == nil {
+		fmt.Println("no with")
+	}
 	c := Call{
-		Name:      name,
-		With:      with,
+		Root:      root,
+		Accessor:  accessor,
 		Arguments: args,
 		Next:      next,
 		Block:     block,
@@ -28,8 +23,8 @@ func NewCall(name Statement, with Statement, args Statements, next Statements, b
 }
 
 type Call struct {
-	Name       Statement
-	With       Statement
+	Root       Statement
+	Accessor   Statement
 	Arguments  Statements
 	Next       Statements
 	Block      *Block
@@ -37,59 +32,131 @@ type Call struct {
 	Meta       Meta
 }
 
+func (f Call) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"ast.Call": map[string]interface{}{
+			// "Root": f.Root,
+			"Accessor":   f.Accessor,
+			"Arguments":  f.Arguments,
+			"Next":       f.Next,
+			"Block":      f.Block,
+			"Concurrent": f.Concurrent,
+			"Meta":       f.Meta,
+		},
+	}
+
+	return json.MarshalIndent(m, "", "  ")
+}
+
+func (f Call) withMeta(m Meta) Statement {
+	f.Meta = m
+	return f
+}
+
 func (f Call) String() string {
 	bb := &bytes.Buffer{}
-	bb.WriteString(f.Name.String())
-	if f.Next != nil {
+	if f.Root != nil {
+		bb.WriteString(f.Root.String())
+	}
+
+	if f.Accessor != nil {
+		if f.Root != nil {
+			bb.WriteString(".")
+		}
+		bb.WriteString(f.Accessor.String())
+	}
+
+	if f.Arguments != nil {
+		bb.WriteString("(")
+		var args []string
+		for _, a := range f.Arguments {
+			st := a.(fmt.Stringer)
+			args = append(args, strings.TrimSpace(st.String()))
+		}
+		bb.WriteString(strings.Join(args, ", "))
+		bb.WriteString(")")
+	}
+
+	if len(f.Next) > 0 {
 		bb.WriteString(".")
-		bb.WriteString(f.Next.String())
 	}
-	bb.WriteString("(")
-	var args []string
-	for _, a := range f.Arguments {
-		st := a.(fmt.Stringer)
-		args = append(args, strings.TrimSpace(st.String()))
+
+	var next []string
+
+	for _, n := range f.Next {
+		next = append(next, n.String())
 	}
-	bb.WriteString(strings.Join(args, ", "))
-	bb.WriteString(")")
+
+	bb.WriteString(strings.Join(next, "."))
+
+	if f.Block != nil {
+		bb.WriteString(f.Block.String())
+	}
+
 	return bb.String()
 }
 
 func (f Call) Exec(c *Context) (interface{}, error) {
-	start, err := exec(c, f.Name)
-	if err != nil {
-		return nil, err
-	}
-	if fn, ok := f.Name.(Func); ok {
-		start, err = fn.mExec(c, f.Arguments...)
+	Debug(f)
+	var err error
+	var start interface{}
+
+	if f.Root != nil {
+		start, err = exec(c, f.Root)
 		if err != nil {
 			return nil, err
 		}
-	}
+		if fn, ok := f.Root.(Func); ok {
+			start, err = fn.mExec(c, f.Arguments...)
+			if err != nil {
+				return nil, err
+			}
+		}
 
-	if fn, ok := start.(Func); ok {
-		start, err = fn.mExec(c, f.Arguments...)
-		if err != nil {
-			return nil, err
+		if fn, ok := start.(Func); ok {
+			start, err = fn.mExec(c, f.Arguments...)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
-	switch t := f.With.(type) {
+	rv := reflect.ValueOf(start)
+	switch t := f.Accessor.(type) {
 	case Call:
-		rv := reflect.ValueOf(start)
-		m := rv.MethodByName(t.Name.String())
+		t.Root = Holder{Value: start}
+		m := rv.MethodByName(t.Accessor.String())
 		start, err = t.callFunc(c, m)
 		if err != nil {
 			return nil, err
 		}
 	case Func:
-		panic(t)
+		start, err = t.mExec(c, f.Arguments...)
+		if err != nil {
+			return nil, err
+		}
 	case Ident:
-		panic(t)
+		if !rv.IsValid() || rv.IsNil() {
+			start, err = t.Exec(c)
+			if err != nil {
+				return nil, err
+			}
+			break
+		}
+		m := rv.MethodByName(t.Name)
+		start, err = f.callFunc(c, m)
+		if err != nil {
+			return nil, err
+		}
 	}
+	rv = reflect.ValueOf(start)
 
 	var args []interface{}
 	for _, a := range f.Arguments {
+		if cl, ok := a.(Call); ok {
+			cl.Root = Holder{Value: start}
+			a = cl
+		}
 		i, err := exec(c, a)
 		if err != nil {
 			return nil, err
@@ -100,7 +167,6 @@ func (f Call) Exec(c *Context) (interface{}, error) {
 		}
 		args = append(args, i)
 	}
-	rv := reflect.ValueOf(start)
 	switch rv.Kind() {
 	case reflect.Func:
 		start, err = f.callFunc(c, rv)
@@ -110,12 +176,31 @@ func (f Call) Exec(c *Context) (interface{}, error) {
 	case reflect.Struct:
 	default:
 	}
+
+	for _, n := range f.Next {
+		if vv, ok := start.(Holder); ok {
+			start = vv.Value
+		}
+		switch t := n.(type) {
+		case Call:
+			t.Accessor = t.Root
+			t.Root = Holder{Value: start}
+			start, err = t.Exec(c)
+			if err != nil {
+				return nil, err
+			}
+		}
+		if vv, ok := start.(Holder); ok {
+			start = vv.Value
+		}
+	}
 	return start, nil
 }
 
 func (f Call) callFunc(c *Context, m reflect.Value) (interface{}, error) {
 	if !m.IsValid() {
-		return nil, f.Meta.Wrap(errors.New("invalid method call"))
+		// return nil, f.Meta.Wrap(errors.New("invalid method call"))
+		return nil, nil
 	}
 
 	mt := m.Type()
@@ -158,7 +243,8 @@ func (f Call) callFunc(c *Context, m reflect.Value) (interface{}, error) {
 					if ii, ok := a.(interfacer); ok {
 						a = ii.Interface()
 					}
-					args = append(args, reflect.ValueOf(a))
+					av := reflect.ValueOf(a)
+					args = append(args, av)
 				}
 				continue
 			}
@@ -177,6 +263,10 @@ func (f Call) callFunc(c *Context, m reflect.Value) (interface{}, error) {
 				args = append(args, reflect.ValueOf(map[string]interface{}{}))
 			}
 		}
+	}
+	if len(args) != mt.NumIn() {
+		mi := m.Interface()
+		return nil, f.Meta.Errorf("%T expects %d arguments, got %d", mi, mt.NumIn(), len(args))
 	}
 	res := m.Call(args)
 	if len(res) == 0 {

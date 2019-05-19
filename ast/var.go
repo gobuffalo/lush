@@ -7,7 +7,7 @@ import (
 
 func NewVar(name Ident, value Statement) (*Var, error) {
 	if name.String() == "nil" {
-		return nil, errors.New("can not set value for nil")
+		return nil, errors.New("can not set Holder for nil")
 	}
 	return &Var{
 		Name:  name,

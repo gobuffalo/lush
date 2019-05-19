@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"io"
 	"strings"
 )
 
@@ -38,4 +39,23 @@ func NewBlock(stmts Statements) (*Block, error) {
 		Statements: stmts,
 	}
 	return t, nil
+}
+
+func (a Block) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		printV(st, a)
+	case 's':
+		io.WriteString(st, a.String())
+	case 'q':
+		fmt.Fprintf(st, "%q", a.String())
+	}
+}
+
+func (a Block) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Statements": a.Statements,
+		"Meta":       a.Meta,
+	}
+	return toJSON("ast.Block", m)
 }

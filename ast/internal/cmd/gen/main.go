@@ -28,6 +28,9 @@ func main() {
 
 	acc, err := ast.NewAccess(id, 1)
 	write(acc, err)
+
+	bl, err := ast.NewBlock(ast.Statements{an})
+	write(bl, err)
 }
 
 func write(s interface{}, err error) {

@@ -1,7 +1,10 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/gobuffalo/lush/ast"
 
 	"github.com/stretchr/testify/require"
 )
@@ -35,6 +38,32 @@ func Test_Ident(t *testing.T) {
 				return
 			}
 			r.NoError(err)
+		})
+	}
+}
+
+func Test_Ident_Format(t *testing.T) {
+	brv, err := jsonFixture("Ident")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, `x`},
+		{`%q`, `"x"`},
+		{`%v`, `x`},
+		{`%+v`, brv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, ast.Ident{Name: "x"})
+
+			r.Equal(tt.out, ft)
 		})
 	}
 }

@@ -57,7 +57,7 @@ func Test_Array_String(t *testing.T) {
 	}{
 		{[]interface{}{1, 2, 3}, "[1, 2, 3]"},
 		{[]interface{}{s1, s2}, `["a", "b"]`},
-		{[]interface{}{s1, ast.Float(3.14), ast.Bool(true)}, `["a", 3.14, true]`},
+		{[]interface{}{s1, ast.Float(3.14), ast.True}, `["a", 3.14, true]`},
 	}
 
 	for _, tt := range table {

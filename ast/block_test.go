@@ -61,7 +61,6 @@ func Test_Block_format(t *testing.T) {
 			r.NoError(err)
 
 			s, err := ast.NewBlock(ast.Statements{an})
-			fmt.Printf("### ast/block_test.go:64 s (%T) -> %q %+v\n", s, s, s)
 			r.NoError(err)
 
 			ft := fmt.Sprintf(tt.format, s)

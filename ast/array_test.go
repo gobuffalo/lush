@@ -1,6 +1,7 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
@@ -66,3 +67,45 @@ func Test_Array_String(t *testing.T) {
 		})
 	}
 }
+
+func Test_Array_Format(t *testing.T) {
+	table := []struct {
+		in     []interface{}
+		format string
+		out    string
+	}{
+		{[]interface{}{1, 2, 3}, "%s", `[1, 2, 3]`},
+		{[]interface{}{1, 2, 3}, "%q", `"[1, 2, 3]"`},
+		{[]interface{}{1, 2, 3}, "%+v", arrayv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s_%s", tt.in, tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			s, err := ast.NewArray(tt.in)
+			r.NoError(err)
+
+			ft := fmt.Sprintf(tt.format, s)
+
+			r.Equal(tt.out, ft)
+		})
+	}
+}
+
+const arrayv = `{
+  "ast.Array": {
+    "Value": [
+      1,
+      2,
+      3
+    ],
+    "Meta": {
+      "Filename": "",
+      "Line": 0,
+      "Col": 0,
+      "Offset": 0,
+      "Original": ""
+    }
+  }
+}`

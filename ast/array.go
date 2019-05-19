@@ -3,6 +3,8 @@ package ast
 import (
 	"bytes"
 	"fmt"
+	"io"
+	"os"
 	"strings"
 )
 
@@ -25,6 +27,26 @@ func (a Array) String() string {
 	bb.WriteString(strings.Join(args, ", "))
 	bb.WriteString("]")
 	return bb.String()
+}
+
+func (s Array) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('+') {
+			b, err := toJSON(s)
+			if err != nil {
+				fmt.Fprint(os.Stderr, err)
+				return
+			}
+			io.WriteString(st, b)
+			return
+		}
+		fallthrough
+	case 's':
+		io.WriteString(st, s.String())
+	case 'q':
+		fmt.Fprintf(st, "%q", s.String())
+	}
 }
 
 func (a Array) Exec(c *Context) (interface{}, error) {

@@ -3,7 +3,6 @@ package ast
 import (
 	"fmt"
 	"io"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -44,16 +43,8 @@ func (s String) String() string {
 func (s String) Format(st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
-		if st.Flag('+') {
-			b, err := toJSON(s)
-			if err != nil {
-				fmt.Fprint(os.Stderr, err)
-				return
-			}
-			io.WriteString(st, b)
-			return
-		}
-		fallthrough
+		printV(st, s)
+		return
 	case 's':
 		io.WriteString(st, s.String())
 	case 'q':

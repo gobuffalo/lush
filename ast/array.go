@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"os"
 	"strings"
 )
 
@@ -32,16 +31,8 @@ func (a Array) String() string {
 func (s Array) Format(st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
-		if st.Flag('+') {
-			b, err := toJSON(s)
-			if err != nil {
-				fmt.Fprint(os.Stderr, err)
-				return
-			}
-			io.WriteString(st, b)
-			return
-		}
-		fallthrough
+		printV(st, s)
+		return
 	case 's':
 		io.WriteString(st, s.String())
 	case 'q':

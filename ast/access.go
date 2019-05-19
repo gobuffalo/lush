@@ -3,7 +3,6 @@ package ast
 import (
 	"fmt"
 	"io"
-	"os"
 	"reflect"
 	"strconv"
 )
@@ -28,16 +27,8 @@ func (a Access) String() string {
 func (s Access) Format(st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
-		if st.Flag('+') {
-			b, err := toJSON(s)
-			if err != nil {
-				fmt.Fprint(os.Stderr, err)
-				return
-			}
-			io.WriteString(st, b)
-			return
-		}
-		fallthrough
+		printV(st, s)
+		return
 	case 's':
 		io.WriteString(st, s.String())
 	case 'q':

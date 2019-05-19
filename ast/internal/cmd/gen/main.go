@@ -32,6 +32,9 @@ func main() {
 	block, err := ast.NewBlock(ast.Statements{an})
 	write(block, err)
 
+	br := ast.Break{}
+	write(br, nil)
+
 	write(ast.True, nil)
 }
 

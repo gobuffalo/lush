@@ -32,12 +32,19 @@ func (s Array) Format(st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
 		printV(st, s)
-		return
 	case 's':
 		io.WriteString(st, s.String())
 	case 'q':
 		fmt.Fprintf(st, "%q", s.String())
 	}
+}
+
+func (a Array) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Value": genericJSON(a.Value),
+		"Meta":  a.Meta,
+	}
+	return toJSON("ast.Array", m)
 }
 
 func (a Array) Exec(c *Context) (interface{}, error) {

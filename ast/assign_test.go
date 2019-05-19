@@ -1,8 +1,10 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/gobuffalo/lush/ast"
 	"github.com/stretchr/testify/require"
 )
 
@@ -53,3 +55,60 @@ return x`
 	r.NoError(err)
 	r.Equal(42, res.Value)
 }
+
+func Test_Assign_Format(t *testing.T) {
+	table := []struct {
+		format string
+		out    string
+	}{
+		{"%s", `x = 1`},
+		{"%q", `"x = 1"`},
+		{"%+v", assignv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			id, err := ast.NewIdent([]byte("x"))
+			r.NoError(err)
+
+			v, err := ast.NewInteger(1)
+			r.NoError(err)
+
+			s, err := ast.NewAssign(id, v)
+			r.NoError(err)
+
+			ft := fmt.Sprintf(tt.format, s)
+
+			r.Equal(tt.out, ft)
+		})
+	}
+}
+
+const assignv = `{
+  "ast.Assign": {
+    "Meta": {
+      "Filename": "",
+      "Line": 0,
+      "Col": 0,
+      "Offset": 0,
+      "Original": ""
+    },
+    "Name": {
+      "ast.Ident": {
+        "Meta": {
+          "Filename": "",
+          "Line": 0,
+          "Col": 0,
+          "Offset": 0,
+          "Original": ""
+        },
+        "Name": {
+          "string": "x"
+        }
+      }
+    },
+    "Value": 1
+  }
+}`

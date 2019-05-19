@@ -99,7 +99,6 @@ func Test_Access_Format(t *testing.T) {
 
 			s, err := ast.NewAccess(id, 1)
 			r.NoError(err)
-
 			ft := fmt.Sprintf(tt.format, s)
 
 			r.Equal(tt.out, ft)
@@ -109,23 +108,29 @@ func Test_Access_Format(t *testing.T) {
 
 const accessv = `{
   "ast.Access": {
-    "Name": {
-      "Name": "foo",
-      "Meta": {
-        "Filename": "",
-        "Line": 0,
-        "Col": 0,
-        "Offset": 0,
-        "Original": ""
-      }
+    "Key": {
+      "int": 1
     },
-    "Key": 1,
     "Meta": {
       "Filename": "",
       "Line": 0,
       "Col": 0,
       "Offset": 0,
       "Original": ""
+    },
+    "Name": {
+      "ast.Ident": {
+        "Meta": {
+          "Filename": "",
+          "Line": 0,
+          "Col": 0,
+          "Offset": 0,
+          "Original": ""
+        },
+        "Name": {
+          "string": "foo"
+        }
+      }
     }
   }
 }`

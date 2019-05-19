@@ -40,16 +40,24 @@ func (s String) String() string {
 	return fmt.Sprintf(s.QuoteFormat, s.Original)
 }
 
-func (s String) Format(st fmt.State, verb rune) {
+func (a String) Format(st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
-		printV(st, s)
-		return
+		printV(st, a)
 	case 's':
-		io.WriteString(st, s.String())
+		io.WriteString(st, a.String())
 	case 'q':
-		fmt.Fprintf(st, "`%q`", s.Original)
+		fmt.Fprintf(st, "`%q`", a.Original)
 	}
+}
+
+func (a String) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Original":    genericJSON(a.Original),
+		"QuoteFormat": genericJSON(a.QuoteFormat),
+		"Meta":        a.Meta,
+	}
+	return toJSON("ast.String", m)
 }
 
 func (s String) Interface() interface{} {

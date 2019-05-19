@@ -95,17 +95,19 @@ func Test_Array_Format(t *testing.T) {
 
 const arrayv = `{
   "ast.Array": {
-    "Value": [
-      1,
-      2,
-      3
-    ],
     "Meta": {
       "Filename": "",
       "Line": 0,
       "Col": 0,
       "Offset": 0,
       "Original": ""
+    },
+    "Value": {
+      "[]interface {}": [
+        1,
+        2,
+        3
+      ]
     }
   }
 }`

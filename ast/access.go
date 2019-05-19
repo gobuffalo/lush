@@ -24,16 +24,25 @@ func (a Access) String() string {
 	return fmt.Sprintf("%s[%v]", a.Name, a.Key)
 }
 
-func (s Access) Format(st fmt.State, verb rune) {
+func (a Access) Format(st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
-		printV(st, s)
+		printV(st, a)
 		return
 	case 's':
-		io.WriteString(st, s.String())
+		io.WriteString(st, a.String())
 	case 'q':
-		fmt.Fprintf(st, "%q", s.String())
+		fmt.Fprintf(st, "%q", a.String())
 	}
+}
+
+func (a Access) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name": a.Name,
+		"Key":  genericJSON(a.Key),
+		"Meta": a.Meta,
+	}
+	return toJSON("ast.Access", m)
 }
 
 func (a Access) Exec(c *Context) (interface{}, error) {

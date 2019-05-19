@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"io"
 )
 
 type Assign struct {
@@ -12,6 +13,26 @@ type Assign struct {
 
 func (l Assign) String() string {
 	return fmt.Sprintf("%s = %s", l.Name, l.Value)
+}
+
+func (a Assign) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		printV(st, a)
+	case 's':
+		io.WriteString(st, a.String())
+	case 'q':
+		fmt.Fprintf(st, "%q", a.String())
+	}
+}
+
+func (a Assign) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name":  a.Name,
+		"Value": a.Value,
+		"Meta":  a.Meta,
+	}
+	return toJSON("ast.Assign", m)
 }
 
 func (l *Assign) Exec(c *Context) (interface{}, error) {

@@ -7,14 +7,22 @@ import (
 	"os"
 )
 
-func toJSON(i interface{}) (string, error) {
-	m := map[string]interface{}{}
-	m[fmt.Sprintf("%T", i)] = i
+func genericJSON(i interface{}) map[string]interface{} {
+	t := fmt.Sprintf("%T", i)
+	return map[string]interface{}{
+		t: i,
+	}
+}
+
+func toJSON(t string, i interface{}) ([]byte, error) {
+	m := map[string]interface{}{
+		t: i,
+	}
 	b, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return string(b), nil
+	return b, nil
 }
 
 func printV(st fmt.State, i interface{}) {
@@ -25,10 +33,10 @@ func printV(st fmt.State, i interface{}) {
 		return
 	}
 
-	b, err := toJSON(i)
+	b, err := json.MarshalIndent(i, "", "  ")
 	if err != nil {
 		fmt.Fprint(os.Stderr, err)
 		return
 	}
-	io.WriteString(st, b)
+	st.Write(b)
 }

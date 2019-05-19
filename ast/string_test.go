@@ -82,14 +82,18 @@ func Test_String_Format(t *testing.T) {
 
 const stringv = `{
   "ast.String": {
-    "Original": "hi",
-    "QuoteFormat": "%q",
     "Meta": {
       "Filename": "",
       "Line": 0,
       "Col": 0,
       "Offset": 0,
       "Original": ""
+    },
+    "Original": {
+      "string": "hi"
+    },
+    "QuoteFormat": {
+      "string": "%q"
     }
   }
 }`

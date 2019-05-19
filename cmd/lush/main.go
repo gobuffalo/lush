@@ -21,6 +21,7 @@ func main() {
 
 		// fmt
 		format(a, script)
+		// fmt.Printf("%+v", script)
 		// fmt
 
 		res, err := script.Exec(c)

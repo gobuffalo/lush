@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -43,8 +43,8 @@ func Test_Var_Format(t *testing.T) {
 		format string
 		out    string
 	}{
-		{"%s", `x := 1`},
-		{"%q", `"x := 1"`},
+		{"%s", `foo := 42`},
+		{"%q", `"foo := 42"`},
 		{"%+v", assignv},
 	}
 
@@ -52,14 +52,7 @@ func Test_Var_Format(t *testing.T) {
 		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
 
-			id, err := ast.NewIdent([]byte("x"))
-			r.NoError(err)
-
-			v, err := ast.NewInteger(1)
-			r.NoError(err)
-
-			s, err := ast.NewVar(id, v)
-			r.NoError(err)
+			s := quick.VAR
 
 			ft := fmt.Sprintf(tt.format, s)
 

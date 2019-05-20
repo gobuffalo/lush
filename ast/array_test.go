@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -57,7 +58,7 @@ func Test_Array_String(t *testing.T) {
 	}{
 		{[]interface{}{1, 2, 3}, "[1, 2, 3]"},
 		{[]interface{}{s1, s2}, `["a", "b"]`},
-		{[]interface{}{s1, ast.Float(3.14), ast.True}, `["a", 3.14, true]`},
+		{[]interface{}{s1, quick.FLOAT, ast.True}, `["a", 3.14, true]`},
 	}
 
 	for _, tt := range table {
@@ -88,10 +89,7 @@ func Test_Array_Format(t *testing.T) {
 		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
 
-			s, err := ast.NewArray([]interface{}{1, 2, 3})
-			r.NoError(err)
-
-			ft := fmt.Sprintf(tt.format, s)
+			ft := fmt.Sprintf(tt.format, quick.ARRAY)
 
 			r.Equal(tt.out, ft)
 		})

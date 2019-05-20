@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/gobuffalo/lush/ast"
-
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -51,8 +50,8 @@ func Test_Ident_Format(t *testing.T) {
 		format string
 		out    string
 	}{
-		{`%s`, `x`},
-		{`%q`, `"x"`},
+		{`%s`, `foo`},
+		{`%q`, `"foo"`},
 		{`%+v`, brv},
 	}
 
@@ -60,7 +59,7 @@ func Test_Ident_Format(t *testing.T) {
 		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
 
-			ft := fmt.Sprintf(tt.format, ast.Ident{Name: "x"})
+			ft := fmt.Sprintf(tt.format, quick.IDENT)
 
 			r.Equal(tt.out, ft)
 		})

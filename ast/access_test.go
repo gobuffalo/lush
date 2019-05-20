@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -88,21 +88,15 @@ func Test_Access_Format(t *testing.T) {
 		format string
 		out    string
 	}{
-		{`%s`, `x[1]`},
-		{`%q`, `"x[1]"`},
+		{`%s`, `foo[42]`},
+		{`%q`, `"foo[42]"`},
 		{`%+v`, accessv},
 	}
 
 	for _, tt := range table {
 		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
-
-			id, err := ast.NewIdent([]byte(`x`))
-			r.NoError(err)
-
-			s, err := ast.NewAccess(id, 1)
-			r.NoError(err)
-			ft := fmt.Sprintf(tt.format, s)
+			ft := fmt.Sprintf(tt.format, quick.ACCESS)
 
 			r.Equal(tt.out, ft)
 		})

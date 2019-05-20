@@ -41,7 +41,7 @@ func Test_Float(t *testing.T) {
 			r.NoError(err)
 			r.Equal(tt.exp, res.Value)
 
-			f, err := ast.NewFloat([]byte(fmt.Sprint(tt.exp)))
+			f, err := ast.NewFloat(tt.exp)
 			r.NoError(err)
 			r.Equal(fmt.Sprint(tt.exp), f.String())
 		})

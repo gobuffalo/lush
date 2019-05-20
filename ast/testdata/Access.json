@@ -1,12 +1,12 @@
 {
   "ast.Access": {
     "Key": {
-      "int": 1
+      "int": 42
     },
     "Name": {
       "ast.Ident": {
         "Name": {
-          "string": "x"
+          "string": "foo"
         },
         "ast.Meta": {
           "Filename": "",

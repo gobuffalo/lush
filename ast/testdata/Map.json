@@ -5,7 +5,7 @@
         {
           "ast.Ident": {
             "Name": {
-              "string": "x"
+              "string": "foo"
             },
             "ast.Meta": {
               "Filename": "",
@@ -19,7 +19,7 @@
         {
           "ast.Integer": {
             "Value": {
-              "int": 1
+              "int": 42
             },
             "ast.Meta": {
               "Filename": "",

@@ -1,8 +1,6 @@
 {
-  "ast.Comment": {
-    "Value": {
-      "string": "i've got blisters on my fingers"
-    },
+  "ast.Float": {
+    "Value": 3.14,
     "ast.Meta": {
       "Filename": "",
       "Line": 0,

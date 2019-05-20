@@ -1,7 +1,7 @@
 {
   "ast.Integer": {
     "Value": {
-      "int": 1
+      "int": 42
     },
     "ast.Meta": {
       "Filename": "",

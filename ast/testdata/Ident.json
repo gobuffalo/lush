@@ -1,7 +1,7 @@
 {
   "ast.Ident": {
     "Name": {
-      "string": "x"
+      "string": "foo"
     },
     "ast.Meta": {
       "Filename": "",

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -56,8 +57,8 @@ func Test_Integer_Format(t *testing.T) {
 		format string
 		out    string
 	}{
-		{`%s`, `1`},
-		{`%q`, `"1"`},
+		{`%s`, `42`},
+		{`%q`, `"42"`},
 		{`%+v`, intv},
 	}
 
@@ -65,10 +66,7 @@ func Test_Integer_Format(t *testing.T) {
 		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
 
-			s, err := ast.NewInteger(1)
-			r.NoError(err)
-
-			ft := fmt.Sprintf(tt.format, s)
+			ft := fmt.Sprintf(tt.format, quick.INT)
 
 			r.Equal(tt.out, ft)
 		})

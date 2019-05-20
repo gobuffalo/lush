@@ -36,6 +36,19 @@ type Call struct {
 	Concurrent bool
 }
 
+func (f Call) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name":       f.Name,
+		"FName":      f.FName,
+		"Arguments":  f.Arguments,
+		"Block":      f.Block,
+		"Meta":       f.Meta,
+		"Concurrent": genericJSON(f.Concurrent),
+	}
+
+	return toJSON("ast.Call", m)
+}
+
 func (f Call) String() string {
 	bb := &bytes.Buffer{}
 	if f.Concurrent {
@@ -187,4 +200,8 @@ func app(args []reflect.Value, mt reflect.Type, i int, c *Context, v interface{}
 
 	app(v)
 	return args, nil
+}
+
+func (f Call) Format(st fmt.State, verb rune) {
+	format(f, st, verb)
 }

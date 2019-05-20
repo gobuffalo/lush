@@ -234,7 +234,10 @@ func newReturn(c *current, i interface{}) (ret ast.Return, err error) {
 
 func newFloat(c *current, b []byte) (ret ast.Float, err error) {
 	f, err := strconv.ParseFloat(string(b), 64)
-	return ast.Float(f), err
+	fl, err := ast.NewFloat(f)
+	fl.Meta = meta(c)
+
+	return fl, err
 }
 
 func newInteger(c *current, b []byte) (ret ast.Integer, err error) {

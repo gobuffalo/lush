@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -41,8 +41,8 @@ func Test_Block_format(t *testing.T) {
 		format string
 		out    string
 	}{
-		{`%s`, "{\n\tx = 1\n}"},
-		{`%q`, "\"{\\n\\tx = 1\\n}\""},
+		{`%s`, "{\n\tfoo[42]\n\n\tfoo := 42\n}"},
+		{`%q`, "\"{\\n\\tfoo[42]\\n\\n\\tfoo := 42\\n}\""},
 		{`%+v`, blv},
 	}
 
@@ -50,19 +50,7 @@ func Test_Block_format(t *testing.T) {
 		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
 
-			id, err := ast.NewIdent([]byte("x"))
-			r.NoError(err)
-
-			v, err := ast.NewInteger(1)
-			r.NoError(err)
-
-			an, err := ast.NewAssign(id, v)
-			r.NoError(err)
-
-			s, err := ast.NewBlock(ast.Statements{an})
-			r.NoError(err)
-
-			ft := fmt.Sprintf(tt.format, s)
+			ft := fmt.Sprintf(tt.format, quick.BLOCK)
 
 			r.Equal(tt.out, ft)
 		})

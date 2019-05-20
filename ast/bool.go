@@ -52,7 +52,7 @@ func (a Bool) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a Bool) MarshalJSON() ([]byte, error) {
+func (a Bool) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"Value": genericJSON(a.Value),
 	}

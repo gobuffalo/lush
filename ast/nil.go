@@ -40,7 +40,7 @@ func (a Nil) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a Nil) MarshalJSON() ([]byte, error) {
+func (a Nil) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"ast.Meta": a.Meta,
 	}

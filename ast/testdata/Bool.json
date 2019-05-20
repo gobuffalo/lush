@@ -1,7 +1,10 @@
 {
-  "ast.Bool": {
-    "Value": {
-      "bool": true
-    }
+  "Value": true,
+  "Meta": {
+    "Filename": "",
+    "Line": 0,
+    "Col": 0,
+    "Offset": 0,
+    "Original": ""
   }
 }

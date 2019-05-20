@@ -1,8 +1,10 @@
 TAGS ?= "sqlite"
 GO_BIN ?= go
 
-gen:
-	pigeon -o internal/parser/parse.go internal/parser/lush.peg
+peg:
+	pigeon internal/parser/lush.peg | goimports > internal/parser/parse.go
+
+gen: peg
 	go install -v ./cmd/lush
 	go run ast/internal/cmd/gen/main.go
 
@@ -26,7 +28,7 @@ build: gen
 	$(GO_BIN) build -v .
 	make tidy
 
-test: gen
+test: peg
 	$(GO_BIN) test -cover -tags ${TAGS} ./...
 	make tidy
 

@@ -51,7 +51,7 @@ func (a String) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a String) MarshalJSON() ([]byte, error) {
+func (a String) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"Original":    genericJSON(a.Original),
 		"QuoteFormat": genericJSON(a.QuoteFormat),

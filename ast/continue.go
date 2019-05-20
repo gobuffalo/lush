@@ -23,7 +23,7 @@ func (a Continue) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a Continue) MarshalJSON() ([]byte, error) {
+func (a Continue) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"ast.Meta": a.Meta,
 	}

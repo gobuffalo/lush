@@ -1,9 +1,3 @@
 {
-  "ast.Map": {
-    "Values": {
-      "map[string]interface {}": {
-        "x": 1
-      }
-    }
-  }
+  "x": 1
 }

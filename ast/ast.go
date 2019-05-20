@@ -8,6 +8,7 @@ import (
 )
 
 func genericJSON(i interface{}) map[string]interface{} {
+	fmt.Printf("### ast/ast.go:11 i (%T) -> %q %+v\n", i, i, i)
 	t := fmt.Sprintf("%T", i)
 	return map[string]interface{}{
 		t: i,

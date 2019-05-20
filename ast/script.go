@@ -35,7 +35,7 @@ func (a Script) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a Script) MarshalJSON() ([]byte, error) {
+func (a Script) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"Statements": a.Statements,
 	}

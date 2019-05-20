@@ -44,7 +44,7 @@ func (a Integer) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a Integer) MarshalJSON() ([]byte, error) {
+func (a Integer) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"Value":    genericJSON(a.Value),
 		"ast.Meta": a.Meta,

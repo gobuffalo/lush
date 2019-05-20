@@ -26,7 +26,7 @@ func (a Assign) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a Assign) MarshalJSON() ([]byte, error) {
+func (a Assign) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"Name":     a.Name,
 		"Value":    a.Value,

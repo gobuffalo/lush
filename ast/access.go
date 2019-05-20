@@ -36,7 +36,7 @@ func (a Access) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a Access) MarshalJSON() ([]byte, error) {
+func (a Access) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"Name":     a.Name,
 		"Key":      genericJSON(a.Key),

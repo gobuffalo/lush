@@ -1,14 +1,10 @@
 {
-  "ast.Integer": {
-    "Value": {
-      "int": 1
-    },
-    "ast.Meta": {
-      "Filename": "",
-      "Line": 0,
-      "Col": 0,
-      "Offset": 0,
-      "Original": ""
-    }
+  "Value": 1,
+  "Meta": {
+    "Filename": "",
+    "Line": 0,
+    "Col": 0,
+    "Offset": 0,
+    "Original": ""
   }
 }

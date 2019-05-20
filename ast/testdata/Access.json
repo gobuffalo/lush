@@ -1,28 +1,20 @@
 {
-  "ast.Access": {
-    "Key": {
-      "int": 1
-    },
-    "Name": {
-      "ast.Ident": {
-        "Name": {
-          "string": "x"
-        },
-        "ast.Meta": {
-          "Filename": "",
-          "Line": 0,
-          "Col": 0,
-          "Offset": 0,
-          "Original": ""
-        }
-      }
-    },
-    "ast.Meta": {
+  "Name": {
+    "Name": "x",
+    "Meta": {
       "Filename": "",
       "Line": 0,
       "Col": 0,
       "Offset": 0,
       "Original": ""
     }
+  },
+  "Key": 1,
+  "Meta": {
+    "Filename": "",
+    "Line": 0,
+    "Col": 0,
+    "Offset": 0,
+    "Original": ""
   }
 }

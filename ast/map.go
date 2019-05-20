@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"sort"
@@ -119,6 +120,11 @@ func (m Map) Interface() interface{} {
 	return mm
 }
 
+func (m Map) MarshalJSON() ([]byte, error) {
+	i := m.Interface()
+	return json.Marshal(i)
+}
+
 func (m Map) Bool(c *Context) (bool, error) {
 	return len(m.Values) > 0, nil
 }
@@ -134,7 +140,7 @@ func (a Map) Format(st fmt.State, verb rune) {
 	}
 }
 
-func (a Map) MarshalJSON() ([]byte, error) {
+func (a Map) MarshalAST() ([]byte, error) {
 	m := map[string]interface{}{
 		"Values": genericJSON(a.Interface()),
 	}

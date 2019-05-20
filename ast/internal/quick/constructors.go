@@ -72,3 +72,14 @@ func NewElse(b *ast.Block) ast.Else {
 	el, _ := ast.NewElse(b)
 	return el
 }
+
+func NewElseIf(fi ast.If) ast.ElseIf {
+	el, _ := ast.NewElseIf(fi)
+	return el
+}
+
+func NewIf(p ast.Statement, e ast.Expression, b *ast.Block, elsa ast.Statement) ast.If {
+	i, _ := ast.NewIf(p, e, b, elsa)
+
+	return i
+}

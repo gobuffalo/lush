@@ -13,6 +13,10 @@ import (
 )
 
 func main() {
+	write(ast.Nil{})
+	write(ast.Continue{})
+	write(ast.Break{})
+	write(ast.True)
 	write(quick.STRING)
 	write(quick.ARRAY)
 	write(quick.IDENT)
@@ -25,11 +29,9 @@ func main() {
 	write(quick.COMMENT)
 	write(quick.MAP)
 	write(quick.CALL)
+	write(quick.IF)
 	write(quick.ELSE)
-	write(ast.Nil{})
-	write(ast.Continue{})
-	write(ast.Break{})
-	write(ast.True)
+	write(quick.ELSEIF)
 }
 
 func write(s interface{}) {

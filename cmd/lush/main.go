@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -12,6 +13,31 @@ import (
 
 func main() {
 	args := os.Args[1:]
+	if len(args) >= 1 {
+		switch args[0] {
+		case "debug":
+			debug(args[1:])
+			return
+		}
+	}
+	run(args)
+}
+
+func debug(args []string) {
+	for _, a := range args {
+		script, err := pig.ParseFile(a)
+		if err != nil {
+			log.Fatal(err)
+		}
+		b, err := json.MarshalIndent(script, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(string(b))
+	}
+}
+
+func run(args []string) {
 	for _, a := range args {
 		script, err := pig.ParseFile(a)
 		if err != nil {

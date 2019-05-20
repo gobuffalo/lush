@@ -46,8 +46,8 @@ func (a Block) Format(st fmt.State, verb rune) {
 
 func (a Block) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"ast.Statements": a.Statements,
-		"ast.Meta":       a.Meta,
+		"Statements": a.Statements,
+		"ast.Meta":   a.Meta,
 	}
 	return toJSON("ast.Block", m)
 }

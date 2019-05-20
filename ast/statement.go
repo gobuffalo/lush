@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -64,35 +63,6 @@ func (i Statements) Format(st fmt.State, verb rune) {
 	format(i, st, verb)
 }
 
-func (i Statements) MarshalJSON() ([]byte, error) {
-	var st [][]byte
-	for _, s := range i {
-		// fmt.Printf("### ast/statement.go:70 s (%T) -> %q %+v\n", s, s, s)
-		var b []byte
-		var err error
-
-		switch as := s.(type) {
-		case ASTMarshaler:
-			b, err = as.MarshalJSON()
-		case json.Marshaler:
-			b, err = as.MarshalJSON()
-		default:
-			b = []byte(fmt.Sprint(s))
-		}
-
-		if err != nil {
-			return nil, err
-		}
-		st = append(st, b)
-	}
-	bb := &bytes.Buffer{}
-	// bb.Write([]byte("["))
-	res := bytes.Join(st, []byte(",\n"))
-	bb.Write(res)
-	// bb.Write([]byte("["))
-	return bb.Bytes(), nil
-}
-
 func (st Statements) Exec(c *Context) (interface{}, error) {
 	var stmts []interface{}
 	for _, s := range st {
@@ -125,4 +95,16 @@ func (st Statements) Exec(c *Context) (interface{}, error) {
 		}
 	}
 	return stmts, nil
+}
+
+func (st Statements) MarshalJSON() ([]byte, error) {
+	var a []interface{}
+	for _, s := range st {
+		a = append(a, s)
+	}
+	m := map[string]interface{}{
+		"ast.Statements": a,
+	}
+
+	return json.Marshal(m)
 }

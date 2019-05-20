@@ -4,44 +4,44 @@
       "ast.Statements": [
         {
           "ast.Integer": {
-            "Value": {
-              "int": 42
-            },
-            "ast.Meta": {
+            "Meta": {
               "Filename": "",
               "Line": 0,
               "Col": 0,
               "Offset": 0,
               "Original": ""
+            },
+            "Value": {
+              "int": 42
             }
           }
         },
         {
           "ast.Float": {
-            "Value": 3.14,
-            "ast.Meta": {
+            "Meta": {
               "Filename": "",
               "Line": 0,
               "Col": 0,
               "Offset": 0,
               "Original": ""
-            }
+            },
+            "Value": 3.14
           }
         },
         {
           "ast.String": {
+            "Meta": {
+              "Filename": "",
+              "Line": 0,
+              "Col": 0,
+              "Offset": 0,
+              "Original": ""
+            },
             "Original": {
               "string": "hi"
             },
             "QuoteFormat": {
               "string": "%q"
-            },
-            "ast.Meta": {
-              "Filename": "",
-              "Line": 0,
-              "Col": 0,
-              "Offset": 0,
-              "Original": ""
             }
           }
         }
@@ -49,96 +49,94 @@
     },
     "Block": {
       "ast.Block": {
-        "Statements": {
-          "ast.Statements": [
-            {
-              "ast.Access": {
-                "Key": {
-                  "ast.Integer": {
-                    "ast.Integer": {
-                      "Value": {
-                        "int": 42
-                      },
-                      "ast.Meta": {
-                        "Filename": "",
-                        "Line": 0,
-                        "Col": 0,
-                        "Offset": 0,
-                        "Original": ""
-                      }
-                    }
-                  }
-                },
-                "Name": {
-                  "ast.Ident": {
-                    "Name": {
-                      "string": "foo"
-                    },
-                    "ast.Meta": {
-                      "Filename": "",
-                      "Line": 0,
-                      "Col": 0,
-                      "Offset": 0,
-                      "Original": ""
-                    }
-                  }
-                },
-                "ast.Meta": {
-                  "Filename": "",
-                  "Line": 0,
-                  "Col": 0,
-                  "Offset": 0,
-                  "Original": ""
-                }
-              }
-            },
-            {
-              "ast.Var": {
-                "Name": {
-                  "ast.Ident": {
-                    "Name": {
-                      "string": "foo"
-                    },
-                    "ast.Meta": {
-                      "Filename": "",
-                      "Line": 0,
-                      "Col": 0,
-                      "Offset": 0,
-                      "Original": ""
-                    }
-                  }
-                },
-                "Value": {
-                  "ast.Integer": {
-                    "Value": {
-                      "int": 42
-                    },
-                    "ast.Meta": {
-                      "Filename": "",
-                      "Line": 0,
-                      "Col": 0,
-                      "Offset": 0,
-                      "Original": ""
-                    }
-                  }
-                },
-                "ast.Meta": {
-                  "Filename": "",
-                  "Line": 0,
-                  "Col": 0,
-                  "Offset": 0,
-                  "Original": ""
-                }
-              }
-            }
-          ]
-        },
-        "ast.Meta": {
+        "Meta": {
           "Filename": "",
           "Line": 0,
           "Col": 0,
           "Offset": 0,
           "Original": ""
+        },
+        "Statements": {
+          "ast.Statements": [
+            {
+              "ast.Assign": {
+                "Meta": {
+                  "Filename": "",
+                  "Line": 0,
+                  "Col": 0,
+                  "Offset": 0,
+                  "Original": ""
+                },
+                "Name": {
+                  "ast.Ident": {
+                    "Meta": {
+                      "Filename": "",
+                      "Line": 0,
+                      "Col": 0,
+                      "Offset": 0,
+                      "Original": ""
+                    },
+                    "Name": {
+                      "string": "foo"
+                    }
+                  }
+                },
+                "Value": {
+                  "ast.Integer": {
+                    "Meta": {
+                      "Filename": "",
+                      "Line": 0,
+                      "Col": 0,
+                      "Offset": 0,
+                      "Original": ""
+                    },
+                    "Value": {
+                      "int": 42
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "ast.Var": {
+                "Meta": {
+                  "Filename": "",
+                  "Line": 0,
+                  "Col": 0,
+                  "Offset": 0,
+                  "Original": ""
+                },
+                "Name": {
+                  "ast.Ident": {
+                    "Meta": {
+                      "Filename": "",
+                      "Line": 0,
+                      "Col": 0,
+                      "Offset": 0,
+                      "Original": ""
+                    },
+                    "Name": {
+                      "string": "foo"
+                    }
+                  }
+                },
+                "Value": {
+                  "ast.Integer": {
+                    "Meta": {
+                      "Filename": "",
+                      "Line": 0,
+                      "Col": 0,
+                      "Offset": 0,
+                      "Original": ""
+                    },
+                    "Value": {
+                      "int": 42
+                    }
+                  }
+                }
+              }
+            }
+          ]
         }
       }
     },
@@ -147,15 +145,15 @@
     },
     "FName": {
       "ast.Ident": {
-        "Name": {
-          "string": "Bar"
-        },
-        "ast.Meta": {
+        "Meta": {
           "Filename": "",
           "Line": 0,
           "Col": 0,
           "Offset": 0,
           "Original": ""
+        },
+        "Name": {
+          "string": "Bar"
         }
       }
     },
@@ -168,15 +166,15 @@
     },
     "Name": {
       "ast.Ident": {
-        "Name": {
-          "string": "foo"
-        },
-        "ast.Meta": {
+        "Meta": {
           "Filename": "",
           "Line": 0,
           "Col": 0,
           "Offset": 0,
           "Original": ""
+        },
+        "Name": {
+          "string": "foo"
         }
       }
     }

@@ -1,31 +1,31 @@
 {
   "ast.Array": {
-    "Value": {
-      "[]interface {}": [
-        1,
-        {
-          "ast.Integer": {
-            "Value": {
-              "int": 2
-            },
-            "ast.Meta": {
-              "Filename": "",
-              "Line": 0,
-              "Col": 0,
-              "Offset": 0,
-              "Original": ""
-            }
-          }
-        },
-        "3"
-      ]
-    },
-    "ast.Meta": {
+    "Meta": {
       "Filename": "",
       "Line": 0,
       "Col": 0,
       "Offset": 0,
       "Original": ""
+    },
+    "Value": {
+      "[]interface {}": [
+        1,
+        {
+          "ast.Integer": {
+            "Meta": {
+              "Filename": "",
+              "Line": 0,
+              "Col": 0,
+              "Offset": 0,
+              "Original": ""
+            },
+            "Value": {
+              "int": 2
+            }
+          }
+        },
+        "3"
+      ]
     }
   }
 }

@@ -1,14 +1,14 @@
 {
   "ast.Comment": {
-    "Value": {
-      "string": "i've got blisters on my fingers"
-    },
-    "ast.Meta": {
+    "Meta": {
       "Filename": "",
       "Line": 0,
       "Col": 0,
       "Offset": 0,
       "Original": ""
+    },
+    "Value": {
+      "string": "i've got blisters on my fingers"
     }
   }
 }

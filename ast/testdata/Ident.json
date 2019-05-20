@@ -1,14 +1,14 @@
 {
   "ast.Ident": {
-    "Name": {
-      "string": "foo"
-    },
-    "ast.Meta": {
+    "Meta": {
       "Filename": "",
       "Line": 0,
       "Col": 0,
       "Offset": 0,
       "Original": ""
+    },
+    "Name": {
+      "string": "foo"
     }
   }
 }

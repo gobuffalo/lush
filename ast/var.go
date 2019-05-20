@@ -23,9 +23,9 @@ type Var struct {
 
 func (l Var) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Name":     l.Name,
-		"Value":    l.Value,
-		"ast.Meta": l.Meta,
+		"Name":  l.Name,
+		"Value": l.Value,
+		"Meta":  l.Meta,
 	}
 	return toJSON("ast.Var", m)
 }

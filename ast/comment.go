@@ -31,8 +31,8 @@ func (a Comment) Format(st fmt.State, verb rune) {
 
 func (a Comment) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Value":    genericJSON(a.Value),
-		"ast.Meta": a.Meta,
+		"Value": genericJSON(a.Value),
+		"Meta":  a.Meta,
 	}
 	return toJSON("ast.Comment", m)
 }

@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/ast/internal/quick"
 )
 
@@ -25,6 +26,10 @@ func main() {
 	write(quick.MAP)
 	write(quick.CALL)
 	write(quick.ELSE)
+	write(ast.Nil{})
+	write(ast.Continue{})
+	write(ast.Break{})
+	write(ast.True)
 }
 
 func write(s interface{}) {

@@ -18,7 +18,7 @@ func (a Break) Format(st fmt.State, verb rune) {
 
 func (a Break) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"ast.Meta": a.Meta,
+		"Meta": a.Meta,
 	}
 	return toJSON("ast.Break", m)
 }

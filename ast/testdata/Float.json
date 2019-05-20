@@ -1,12 +1,12 @@
 {
   "ast.Float": {
-    "Value": 3.14,
-    "ast.Meta": {
+    "Meta": {
       "Filename": "",
       "Line": 0,
       "Col": 0,
       "Offset": 0,
       "Original": ""
-    }
+    },
+    "Value": 3.14
   }
 }

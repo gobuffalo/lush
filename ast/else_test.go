@@ -17,7 +17,7 @@ func Test_Else_Format(t *testing.T) {
 		format string
 		out    string
 	}{
-		{`%s`, " else {\n\tfoo[42]\n\n\tfoo := 42\n}"},
+		{`%s`, " else {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%+v`, stringv},
 	}
 

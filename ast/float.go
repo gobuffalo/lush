@@ -34,8 +34,8 @@ func (n Float) Format(st fmt.State, verb rune) {
 
 func (n Float) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Value":    n.Value,
-		"ast.Meta": n.Meta,
+		"Value": n.Value,
+		"Meta":  n.Meta,
 	}
 	return toJSON("ast.Float", m)
 }

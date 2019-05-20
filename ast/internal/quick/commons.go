@@ -8,7 +8,7 @@ var (
 	IDENT   = NewIdent("foo")
 	INT     = NewInteger(42)
 	FLOAT   = NewFloat(3.14)
-	ASSIGN  = NewAccess(IDENT, INT)
+	ASSIGN  = NewAssign(IDENT, INT)
 	VAR     = NewVar(IDENT, INT)
 	ACCESS  = NewAccess(IDENT, 42)
 	BLOCK   = NewBlock(ASSIGN, VAR)

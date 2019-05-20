@@ -34,7 +34,7 @@ func (a Nil) Format(st fmt.State, verb rune) {
 
 func (a Nil) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"ast.Meta": a.Meta,
+		"Meta": a.Meta,
 	}
 	return toJSON("ast.Nil", m)
 }

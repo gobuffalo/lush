@@ -41,8 +41,8 @@ func Test_Block_format(t *testing.T) {
 		format string
 		out    string
 	}{
-		{`%s`, "{\n\tfoo[42]\n\n\tfoo := 42\n}"},
-		{`%q`, "\"{\\n\\tfoo[42]\\n\\n\\tfoo := 42\\n}\""},
+		{`%s`, "{\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%q`, "\"{\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 		{`%+v`, blv},
 	}
 

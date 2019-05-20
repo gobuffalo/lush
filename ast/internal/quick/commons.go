@@ -17,4 +17,5 @@ var (
 		IDENT: INT,
 	})
 	CALL = NewCall(IDENT, NewIdent("Bar"), ast.Statements{INT, FLOAT, STRING}, BLOCK)
+	ELSE = NewElse(BLOCK)
 )

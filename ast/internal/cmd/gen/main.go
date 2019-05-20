@@ -24,6 +24,7 @@ func main() {
 	write(quick.COMMENT)
 	write(quick.MAP)
 	write(quick.CALL)
+	write(quick.ELSE)
 }
 
 func write(s interface{}) {

@@ -67,3 +67,8 @@ func NewCall(n ast.Statement, y interface{}, args ast.Statements, b *ast.Block) 
 	c, _ := ast.NewCall(n, y, args, b)
 	return c
 }
+
+func NewElse(b *ast.Block) ast.Else {
+	el, _ := ast.NewElse(b)
+	return el
+}

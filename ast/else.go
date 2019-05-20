@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 )
 
 type Else struct {
@@ -35,4 +36,16 @@ func NewElse(b *Block) (Else, error) {
 	return Else{
 		Block: b,
 	}, nil
+}
+
+func (i Else) Format(st fmt.State, verb rune) {
+	format(i, st, verb)
+}
+
+func (i Else) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Block": i.Block,
+		"Meta":  i.Meta,
+	}
+	return toJSON("ast.Else", m)
 }

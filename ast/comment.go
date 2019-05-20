@@ -2,7 +2,6 @@ package ast
 
 import (
 	"fmt"
-	"io"
 	"strings"
 )
 
@@ -27,20 +26,13 @@ func NewComment(b []byte) (Comment, error) {
 }
 
 func (a Comment) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "%q", a.String())
-	}
+	format(a, st, verb)
 }
 
-func (a Comment) MarshalAST() ([]byte, error) {
+func (a Comment) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Value":    genericJSON(a.Value),
 		"ast.Meta": a.Meta,
 	}
-	return toJSON("ast.Nil", m)
+	return toJSON("ast.Comment", m)
 }

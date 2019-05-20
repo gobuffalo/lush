@@ -1,10 +1,14 @@
 {
-  "Value": true,
-  "Meta": {
-    "Filename": "",
-    "Line": 0,
-    "Col": 0,
-    "Offset": 0,
-    "Original": ""
+  "ast.Bool": {
+    "Value": {
+      "bool": true
+    },
+    "ast.Meta": {
+      "Filename": "",
+      "Line": 0,
+      "Col": 0,
+      "Offset": 0,
+      "Original": ""
+    }
   }
 }

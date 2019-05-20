@@ -2,7 +2,6 @@ package ast
 
 import (
 	"fmt"
-	"io"
 	"reflect"
 )
 
@@ -25,18 +24,10 @@ func (i Ident) String() string {
 }
 
 func (a Ident) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-		return
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "%q", a.String())
-	}
+	format(a, st, verb)
 }
 
-func (a Ident) MarshalAST() ([]byte, error) {
+func (a Ident) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Name":     genericJSON(a.Name),
 		"ast.Meta": a.Meta,

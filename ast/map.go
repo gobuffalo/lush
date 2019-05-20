@@ -2,9 +2,7 @@ package ast
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
-	"io"
 	"sort"
 	"strings"
 )
@@ -94,8 +92,7 @@ func (m Map) String() string {
 	for _, k := range keys {
 		v := m.Values[k]
 		mk := strings.TrimSpace(k.String())
-		mv := strings.TrimSpace(fmt.Sprint(v))
-		lines = append(lines, fmt.Sprintf("%s: %s", mk, mv))
+		lines = append(lines, fmt.Sprintf("%s: %s", mk, v))
 	}
 	sort.Strings(lines)
 	bb.WriteString(strings.Join(lines, ", "))
@@ -121,8 +118,16 @@ func (m Map) Interface() interface{} {
 }
 
 func (m Map) MarshalJSON() ([]byte, error) {
-	i := m.Interface()
-	return json.Marshal(i)
+	var vals [][]interface{}
+
+	for k, v := range m.Values {
+		vals = append(vals, []interface{}{k, v})
+	}
+
+	mm := map[string]interface{}{
+		"Values": vals,
+	}
+	return toJSON("ast.Map", mm)
 }
 
 func (m Map) Bool(c *Context) (bool, error) {
@@ -130,19 +135,5 @@ func (m Map) Bool(c *Context) (bool, error) {
 }
 
 func (a Map) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "`%q`", a.Interface())
-	}
-}
-
-func (a Map) MarshalAST() ([]byte, error) {
-	m := map[string]interface{}{
-		"Values": genericJSON(a.Interface()),
-	}
-	return toJSON("ast.Map", m)
+	format(a, st, verb)
 }

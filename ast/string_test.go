@@ -60,21 +60,18 @@ func Test_String_Format(t *testing.T) {
 		t.Fatal(err)
 	}
 	table := []struct {
-		in     string
 		format string
 		out    string
 	}{
-		{`"hi"`, `%s`, `"hi"`},
-		{`"hi"`, `%q`, "`\"hi\"`"},
-		{`"hi"`, `%v`, `"hi"`},
-		{`"hi"`, `%+v`, stringv},
+		{`%s`, `"hi"`},
+		{`%+v`, stringv},
 	}
 
 	for _, tt := range table {
-		t.Run(fmt.Sprintf("%s_%s_%s", tt.in, tt.format, tt.out), func(st *testing.T) {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
 
-			s, err := ast.NewString([]byte(tt.in))
+			s, err := ast.NewString([]byte("hi"))
 			r.NoError(err)
 
 			ft := fmt.Sprintf(tt.format, s)

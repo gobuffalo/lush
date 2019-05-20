@@ -76,20 +76,19 @@ func Test_Array_Format(t *testing.T) {
 		t.Fatal(err)
 	}
 	table := []struct {
-		in     []interface{}
 		format string
 		out    string
 	}{
-		{[]interface{}{1, 2, 3}, "%s", `[1, 2, 3]`},
-		{[]interface{}{1, 2, 3}, "%q", `"[1, 2, 3]"`},
-		{[]interface{}{1, 2, 3}, "%+v", arrayv},
+		{"%s", `[1, 2, 3]`},
+		{"%q", `"[1, 2, 3]"`},
+		{"%+v", arrayv},
 	}
 
 	for _, tt := range table {
-		t.Run(fmt.Sprintf("%s_%s_%s", tt.in, tt.format, tt.out), func(st *testing.T) {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
 			r := require.New(st)
 
-			s, err := ast.NewArray(tt.in)
+			s, err := ast.NewArray([]interface{}{1, 2, 3})
 			r.NoError(err)
 
 			ft := fmt.Sprintf(tt.format, s)

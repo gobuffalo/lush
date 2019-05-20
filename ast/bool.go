@@ -2,7 +2,6 @@ package ast
 
 import (
 	"fmt"
-	"io"
 )
 
 type Boolable interface {
@@ -42,19 +41,13 @@ func (b Bool) Interface() interface{} {
 }
 
 func (a Bool) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "%q", a.String())
-	}
+	format(a, st, verb)
 }
 
-func (a Bool) MarshalAST() ([]byte, error) {
+func (a Bool) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Value": genericJSON(a.Value),
+		"Value":    genericJSON(a.Value),
+		"ast.Meta": a.Meta,
 	}
 	return toJSON("ast.Bool", m)
 }

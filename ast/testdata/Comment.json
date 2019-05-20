@@ -1,10 +1,14 @@
 {
-  "Value": "hello",
-  "Meta": {
-    "Filename": "",
-    "Line": 0,
-    "Col": 0,
-    "Offset": 0,
-    "Original": ""
+  "ast.Comment": {
+    "Value": {
+      "string": "hello"
+    },
+    "ast.Meta": {
+      "Filename": "",
+      "Line": 0,
+      "Col": 0,
+      "Offset": 0,
+      "Original": ""
+    }
   }
 }

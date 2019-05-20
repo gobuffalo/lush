@@ -1,3 +1,36 @@
 {
-  "x": 1
+  "ast.Map": {
+    "Values": [
+      [
+        {
+          "ast.Ident": {
+            "Name": {
+              "string": "x"
+            },
+            "ast.Meta": {
+              "Filename": "",
+              "Line": 0,
+              "Col": 0,
+              "Offset": 0,
+              "Original": ""
+            }
+          }
+        },
+        {
+          "ast.Integer": {
+            "Value": {
+              "int": 1
+            },
+            "ast.Meta": {
+              "Filename": "",
+              "Line": 0,
+              "Col": 0,
+              "Offset": 0,
+              "Original": ""
+            }
+          }
+        }
+      ]
+    ]
+  }
 }

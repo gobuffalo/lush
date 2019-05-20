@@ -2,7 +2,6 @@ package ast
 
 import (
 	"fmt"
-	"io"
 )
 
 type Meta struct {
@@ -29,12 +28,5 @@ func (m Meta) Errorf(format string, args ...interface{}) error {
 }
 
 func (a Meta) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "`%q`", a.Original)
-	}
+	format(a, st, verb)
 }

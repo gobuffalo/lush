@@ -2,7 +2,6 @@ package ast
 
 import (
 	"fmt"
-	"io"
 	"reflect"
 	"strconv"
 )
@@ -25,18 +24,10 @@ func (a Access) String() string {
 }
 
 func (a Access) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-		return
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "%q", a.String())
-	}
+	format(a, st, verb)
 }
 
-func (a Access) MarshalAST() ([]byte, error) {
+func (a Access) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Name":     a.Name,
 		"Key":      genericJSON(a.Key),
@@ -54,7 +45,11 @@ func (a Access) Exec(c *Context) (interface{}, error) {
 	rv := reflect.Indirect(reflect.ValueOf(v))
 	switch rv.Kind() {
 	case reflect.Array, reflect.Slice:
-		i, err := strconv.Atoi(fmt.Sprint(a.Key))
+		k := fmt.Sprint(a.Key)
+		if sk, ok := a.Key.(fmt.Stringer); ok {
+			k = sk.String()
+		}
+		i, err := strconv.Atoi(k)
 		if err != nil {
 			return nil, err
 		}

@@ -70,9 +70,19 @@ func write(s interface{}, err error) {
 	}
 	defer f.Close()
 
-	b, err := json.MarshalIndent(s, "", "  ")
-	if err != nil {
-		log.Fatal(err)
+	var b []byte
+	if a, ok := s.(ast.ASTMarshaler); ok {
+		b, err = a.MarshalJSON()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if b == nil {
+		b, err = json.MarshalIndent(s, "", "  ")
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	_, err = f.Write(b)

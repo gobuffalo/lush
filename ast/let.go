@@ -40,3 +40,16 @@ func (l *Let) Exec(c *Context) (interface{}, error) {
 	c.Set(l.Name.String(), i)
 	return nil, nil
 }
+
+func (l Let) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name":     l.Name,
+		"Value":    l.Value,
+		"ast.Meta": l.Meta,
+	}
+	return toJSON("ast.Let", m)
+}
+
+func (l Let) Format(st fmt.State, verb rune) {
+	format(l, st, verb)
+}

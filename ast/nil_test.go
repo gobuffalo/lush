@@ -30,7 +30,6 @@ func Test_Nil_Format(t *testing.T) {
 	}{
 		{`%s`, `nil`},
 		{`%q`, `"nil"`},
-		{`%v`, `nil`},
 		{`%+v`, nlv},
 	}
 

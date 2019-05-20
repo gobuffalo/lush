@@ -61,7 +61,6 @@ func Test_Comment_Format(t *testing.T) {
 	}{
 		{`%s`, `// hello`},
 		{`%q`, `"// hello"`},
-		{`%v`, `// hello`},
 		{`%+v`, ctv},
 	}
 

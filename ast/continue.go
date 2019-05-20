@@ -2,7 +2,6 @@ package ast
 
 import (
 	"fmt"
-	"io"
 )
 
 type Continue struct {
@@ -12,18 +11,12 @@ type Continue struct {
 func (Continue) String() string {
 	return "continue"
 }
+
 func (a Continue) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "%q", a.String())
-	}
+	format(a, st, verb)
 }
 
-func (a Continue) MarshalAST() ([]byte, error) {
+func (a Continue) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"ast.Meta": a.Meta,
 	}

@@ -19,7 +19,6 @@ func Test_Bool_Format(t *testing.T) {
 	}{
 		{`%s`, `true`},
 		{`%q`, `"true"`},
-		{`%v`, `true`},
 		{`%+v`, boolv},
 	}
 

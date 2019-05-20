@@ -58,7 +58,6 @@ func Test_Integer_Format(t *testing.T) {
 	}{
 		{`%s`, `1`},
 		{`%q`, `"1"`},
-		{`%v`, `1`},
 		{`%+v`, intv},
 	}
 

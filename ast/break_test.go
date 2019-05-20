@@ -19,7 +19,6 @@ func Test_Break_Format(t *testing.T) {
 	}{
 		{`%s`, `break`},
 		{`%q`, `"break"`},
-		{`%v`, `break`},
 		{`%+v`, brv},
 	}
 

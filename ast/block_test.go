@@ -43,7 +43,6 @@ func Test_Block_format(t *testing.T) {
 	}{
 		{`%s`, "{\n\tx = 1\n}"},
 		{`%q`, "\"{\\n\\tx = 1\\n}\""},
-		{`%v`, "{\n\tx = 1\n}"},
 		{`%+v`, blv},
 	}
 

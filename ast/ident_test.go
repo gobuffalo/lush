@@ -53,7 +53,6 @@ func Test_Ident_Format(t *testing.T) {
 	}{
 		{`%s`, `x`},
 		{`%q`, `"x"`},
-		{`%v`, `x`},
 		{`%+v`, brv},
 	}
 

@@ -2,7 +2,6 @@ package ast
 
 import (
 	"fmt"
-	"io"
 )
 
 type Script struct {
@@ -25,14 +24,7 @@ func (s Script) Exec(c *Context) (*Returned, error) {
 }
 
 func (a Script) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "`%q`", a.String())
-	}
+	format(a, st, verb)
 }
 
 func (a Script) MarshalAST() ([]byte, error) {

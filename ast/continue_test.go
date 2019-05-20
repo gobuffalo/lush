@@ -19,7 +19,6 @@ func Test_Continue_Format(t *testing.T) {
 	}{
 		{`%s`, `continue`},
 		{`%q`, `"continue"`},
-		{`%v`, `continue`},
 		{`%+v`, brv},
 	}
 

@@ -3,7 +3,6 @@ package ast
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"strings"
 )
 
@@ -21,6 +20,10 @@ func (a Array) String() string {
 	bb.WriteString("[")
 	var args []string
 	for _, i := range a.Value {
+		if s, ok := i.(fmt.Stringer); ok {
+			args = append(args, s.String())
+			continue
+		}
 		args = append(args, fmt.Sprint(i))
 	}
 	bb.WriteString(strings.Join(args, ", "))
@@ -29,17 +32,10 @@ func (a Array) String() string {
 }
 
 func (s Array) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, s)
-	case 's':
-		io.WriteString(st, s.String())
-	case 'q':
-		fmt.Fprintf(st, "%q", s.String())
-	}
+	format(s, st, verb)
 }
 
-func (a Array) MarshalAST() ([]byte, error) {
+func (a Array) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Value":    genericJSON(a.Value),
 		"ast.Meta": a.Meta,

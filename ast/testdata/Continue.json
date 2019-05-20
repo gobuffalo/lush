@@ -1,9 +1,11 @@
 {
-  "Meta": {
-    "Filename": "",
-    "Line": 0,
-    "Col": 0,
-    "Offset": 0,
-    "Original": ""
+  "ast.Continue": {
+    "ast.Meta": {
+      "Filename": "",
+      "Line": 0,
+      "Col": 0,
+      "Offset": 0,
+      "Original": ""
+    }
   }
 }

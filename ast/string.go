@@ -2,7 +2,6 @@ package ast
 
 import (
 	"fmt"
-	"io"
 	"strconv"
 	"strings"
 )
@@ -41,17 +40,10 @@ func (s String) String() string {
 }
 
 func (a String) Format(st fmt.State, verb rune) {
-	switch verb {
-	case 'v':
-		printV(st, a)
-	case 's':
-		io.WriteString(st, a.String())
-	case 'q':
-		fmt.Fprintf(st, "`%q`", a.Original)
-	}
+	format(a, st, verb)
 }
 
-func (a String) MarshalAST() ([]byte, error) {
+func (a String) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Original":    genericJSON(a.Original),
 		"QuoteFormat": genericJSON(a.QuoteFormat),

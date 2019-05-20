@@ -26,6 +26,9 @@ func main() {
 	an, err := ast.NewAssign(id, num)
 	write(an, err)
 
+	vr, err := ast.NewVar(id, num)
+	write(vr, err)
+
 	acc, err := ast.NewAccess(id, 1)
 	write(acc, err)
 

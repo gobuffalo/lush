@@ -27,5 +27,5 @@ func (e ElseIf) MarshalJSON() ([]byte, error) {
 		"Meta": e.Meta,
 	}
 
-	return toJSON("ast.ElseIf", m)
+	return toJSON(e, m)
 }

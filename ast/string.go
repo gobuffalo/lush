@@ -49,7 +49,7 @@ func (a String) MarshalJSON() ([]byte, error) {
 		"QuoteFormat": genericJSON(a.QuoteFormat),
 		"Meta":        a.Meta,
 	}
-	return toJSON("ast.String", m)
+	return toJSON(a, m)
 }
 
 func (s String) Interface() interface{} {

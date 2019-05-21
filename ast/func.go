@@ -39,7 +39,7 @@ func (f Func) MarshalJSON() ([]byte, error) {
 		"Meta":      f.Meta,
 	}
 
-	return toJSON("ast.Func", m)
+	return toJSON(f, m)
 }
 
 func (f Func) String() string {

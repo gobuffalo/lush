@@ -56,7 +56,7 @@ func (i If) MarshalJSON() ([]byte, error) {
 		"Block":        i.Block,
 		"Meta":         i.Meta,
 	}
-	return toJSON("ast.If", m)
+	return toJSON(i, m)
 }
 
 func (i If) Bool(c *Context) (bool, error) {

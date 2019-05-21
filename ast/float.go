@@ -37,5 +37,5 @@ func (n Float) MarshalJSON() ([]byte, error) {
 		"Value": n.Value,
 		"Meta":  n.Meta,
 	}
-	return toJSON("ast.Float", m)
+	return toJSON(n, m)
 }

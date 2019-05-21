@@ -26,5 +26,5 @@ func (n Noop) MarshalJSON() ([]byte, error) {
 		"Text": n.Text,
 		"Meta": n.Meta,
 	}
-	return toJSON("ast.Noop", m)
+	return toJSON(n, m)
 }

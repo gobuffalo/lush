@@ -24,7 +24,7 @@ func (a Assign) MarshalJSON() ([]byte, error) {
 		"Value": a.Value,
 		"Meta":  a.Meta,
 	}
-	return toJSON("ast.Assign", m)
+	return toJSON(a, m)
 }
 
 func (l *Assign) Exec(c *Context) (interface{}, error) {

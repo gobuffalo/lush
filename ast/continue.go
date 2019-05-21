@@ -20,5 +20,5 @@ func (a Continue) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Meta": a.Meta,
 	}
-	return toJSON("ast.Continue", m)
+	return toJSON(a, m)
 }

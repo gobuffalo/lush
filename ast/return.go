@@ -45,5 +45,5 @@ func (r Return) MarshalJSON() ([]byte, error) {
 		"Statements": r.Statements,
 		"Meta":       r.Meta,
 	}
-	return toJSON("ast.Return", m)
+	return toJSON(r, m)
 }

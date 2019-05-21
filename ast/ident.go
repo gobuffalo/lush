@@ -32,7 +32,7 @@ func (a Ident) MarshalJSON() ([]byte, error) {
 		"Name": genericJSON(a.Name),
 		"Meta": a.Meta,
 	}
-	return toJSON("ast.Ident", m)
+	return toJSON(a, m)
 }
 
 func (i Ident) MapKey() string {

@@ -32,7 +32,7 @@ func (f Range) MarshalJSON() ([]byte, error) {
 		"Meta": f.Meta,
 	}
 
-	return toJSON("ast.Range", m)
+	return toJSON(f, m)
 }
 
 func (f Range) String() string {

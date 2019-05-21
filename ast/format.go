@@ -37,9 +37,9 @@ func genericJSON(i interface{}) map[string]interface{} {
 	}
 }
 
-func toJSON(t string, i interface{}) ([]byte, error) {
+func toJSON(t Statement, i interface{}) ([]byte, error) {
 	m := map[string]interface{}{
-		t: i,
+		fmt.Sprintf("%T", t): i,
 	}
 	b, err := json.MarshalIndent(m, "", "  ")
 	if err != nil {

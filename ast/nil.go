@@ -36,5 +36,5 @@ func (a Nil) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Meta": a.Meta,
 	}
-	return toJSON("ast.Nil", m)
+	return toJSON(a, m)
 }

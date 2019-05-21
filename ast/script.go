@@ -31,7 +31,7 @@ func (a Script) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Statements": a.Statements,
 	}
-	return toJSON("ast.Script", m)
+	return toJSON(a, m)
 }
 
 func (s Script) String() string {

@@ -41,5 +41,5 @@ func (a Integer) MarshalJSON() ([]byte, error) {
 		"Value": genericJSON(a.Value),
 		"Meta":  a.Meta,
 	}
-	return toJSON("ast.Integer", m)
+	return toJSON(a, m)
 }

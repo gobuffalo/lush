@@ -49,5 +49,5 @@ func (a Block) MarshalJSON() ([]byte, error) {
 		"Statements": a.Statements,
 		"Meta":       a.Meta,
 	}
-	return toJSON("ast.Block", m)
+	return toJSON(a, m)
 }

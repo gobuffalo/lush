@@ -48,7 +48,7 @@ func (e OpExpression) MarshalJSON() ([]byte, error) {
 		"Meta":   e.Meta,
 		"Format": e.format,
 	}
-	return toJSON("ast.OpExpression", m)
+	return toJSON(e, m)
 }
 
 func (e OpExpression) Exec(c *Context) (interface{}, error) {

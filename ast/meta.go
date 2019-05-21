@@ -40,5 +40,5 @@ func (a Meta) MarshalJSON() ([]byte, error) {
 		"Original": a.Original,
 	}
 
-	return toJSON("ast.Meta", m)
+	return toJSON(a, m)
 }

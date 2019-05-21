@@ -49,7 +49,7 @@ func (a Bool) MarshalJSON() ([]byte, error) {
 		"Value": genericJSON(a.Value),
 		"Meta":  a.Meta,
 	}
-	return toJSON("ast.Bool", m)
+	return toJSON(a, m)
 }
 
 func boolExec(s interface{}, c *Context) (bool, error) {

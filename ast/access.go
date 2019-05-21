@@ -33,7 +33,7 @@ func (a Access) MarshalJSON() ([]byte, error) {
 		"Key":  genericJSON(a.Key),
 		"Meta": a.Meta,
 	}
-	return toJSON("ast.Access", m)
+	return toJSON(a, m)
 }
 
 func (a Access) Exec(c *Context) (interface{}, error) {

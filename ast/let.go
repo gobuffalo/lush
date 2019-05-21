@@ -47,7 +47,7 @@ func (l Let) MarshalJSON() ([]byte, error) {
 		"Value": l.Value,
 		"Meta":  l.Meta,
 	}
-	return toJSON("ast.Let", m)
+	return toJSON(l, m)
 }
 
 func (l Let) Format(st fmt.State, verb rune) {

@@ -34,5 +34,5 @@ func (a Comment) MarshalJSON() ([]byte, error) {
 		"Value": genericJSON(a.Value),
 		"Meta":  a.Meta,
 	}
-	return toJSON("ast.Comment", m)
+	return toJSON(a, m)
 }

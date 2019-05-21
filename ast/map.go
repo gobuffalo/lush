@@ -127,7 +127,7 @@ func (m Map) MarshalJSON() ([]byte, error) {
 	mm := map[string]interface{}{
 		"Values": vals,
 	}
-	return toJSON("ast.Map", mm)
+	return toJSON(m, mm)
 }
 
 func (m Map) Bool(c *Context) (bool, error) {

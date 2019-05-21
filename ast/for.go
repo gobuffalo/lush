@@ -50,6 +50,17 @@ func (f For) Format(st fmt.State, verb rune) {
 	format(f, st, verb)
 }
 
+func (f For) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name":         f.Name,
+		"Args":         f.Args,
+		"Block":        f.Block,
+		"Meta":         f.Meta,
+		"NormalSingle": f.normalSingle,
+	}
+	return toJSON(f, m)
+}
+
 func (f For) String() string {
 	if f.Name == nil {
 		bb := &bytes.Buffer{}

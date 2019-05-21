@@ -47,5 +47,5 @@ func (i Else) MarshalJSON() ([]byte, error) {
 		"Block": i.Block,
 		"Meta":  i.Meta,
 	}
-	return toJSON("ast.Else", m)
+	return toJSON(i, m)
 }

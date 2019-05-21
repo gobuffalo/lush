@@ -27,7 +27,7 @@ func (l Var) MarshalJSON() ([]byte, error) {
 		"Value": l.Value,
 		"Meta":  l.Meta,
 	}
-	return toJSON("ast.Var", m)
+	return toJSON(l, m)
 }
 
 func (l Var) String() string {

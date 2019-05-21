@@ -46,7 +46,7 @@ func (f Call) MarshalJSON() ([]byte, error) {
 		"Concurrent": genericJSON(f.Concurrent),
 	}
 
-	return toJSON("ast.Call", m)
+	return toJSON(f, m)
 }
 
 func (f Call) String() string {

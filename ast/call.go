@@ -129,6 +129,17 @@ func (f Call) mExec(m reflect.Value, c *Context) (interface{}, error) {
 				continue
 			}
 			v := mt.In(i)
+
+			name := v.Name()
+			if strings.HasSuffix(name, "HelperContext") {
+				hhc := reflect.TypeOf((*legacyContext)(nil)).Elem()
+				fmt.Printf("### ast/call.go:136 hhc (%T) -> %q %+v\n", hhc, hhc, hhc)
+				ctx := legacyCtx{Ctx: c}
+				ctx.Ctx.Block = f.Block
+				args = append(args, reflect.ValueOf(legacyHelperContext(ctx)))
+				continue
+			}
+
 			rv := reflect.Indirect(reflect.New(v))
 
 			if _, ok := rv.Interface().(*Context); ok {

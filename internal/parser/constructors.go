@@ -376,3 +376,9 @@ func newArray(c *current, i interface{}) (ret ast.Array, err error) {
 	ret.Meta = meta(c)
 	return ret, nil
 }
+
+func newNoop(c *current) (ast.Noop, error) {
+	n, err := ast.NewNoop(c.text)
+	n.Meta = meta(c)
+	return n, err
+}

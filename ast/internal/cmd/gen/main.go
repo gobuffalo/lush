@@ -35,6 +35,7 @@ func main() {
 	write(quick.FOR)
 	write(quick.FUNC)
 	write(quick.LET)
+	write(quick.OPEXPR)
 }
 
 func write(s interface{}) {

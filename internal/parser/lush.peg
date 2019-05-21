@@ -167,12 +167,12 @@ COMMENT <- ("#" / "//" ) a:[^\n\r]* {
   return newComment(c, c.text)
 }
 
-LP <- '(' { return ast.NewNoop(c.text)}
-RP <- ')' { return ast.NewNoop(c.text)}
-LB <- '[' { return ast.NewNoop(c.text)}
-RB <- ']' { return ast.NewNoop(c.text)}
-LC <- '{' { return ast.NewNoop(c.text)}
-RC <- '}' { return ast.NewNoop(c.text)}
+LP <- '(' { return newNoop(c)}
+RP <- ')' { return newNoop(c)}
+LB <- '[' { return newNoop(c)}
+RB <- ']' { return newNoop(c)}
+LC <- '{' { return newNoop(c)}
+RC <- '}' { return newNoop(c)}
 
 MLEscapeChar <- [\x00-\x1f\\`]
 MLEscapeSequence <- MLSingleCharEscape / UnicodeEscape
@@ -191,7 +191,7 @@ NonZeroDecimalDigit ← [1-9]
 HexDigit ← [0-9a-f]i
 
 _ "whitespace" ← [ \t\r\n]* {
-  return ast.NewNoop(c.text)
+  return newNoop(c)
 }
 
 EOF <- !. {

@@ -100,3 +100,9 @@ func NewLet(name ast.Ident, value ast.Statement) *ast.Let {
 
 	return l
 }
+
+func NewOpExpression(a ast.Statement, op string, b ast.Statement) *ast.OpExpression {
+	o, _ := ast.NewOpExpression(a, op, b)
+
+	return o
+}

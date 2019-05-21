@@ -7,6 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
@@ -56,6 +57,7 @@ func jsonFixture(name string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
-	return string(b), nil
+	s := string(b)
+	s = strings.Replace(s, "\r", "", -1)
+	return s, nil
 }

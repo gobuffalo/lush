@@ -46,6 +46,10 @@ type For struct {
 	normalSingle bool
 }
 
+func (f For) Format(st fmt.State, verb rune) {
+	format(f, st, verb)
+}
+
 func (f For) String() string {
 	if f.Name == nil {
 		bb := &bytes.Buffer{}

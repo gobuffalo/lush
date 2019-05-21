@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -158,4 +159,29 @@ func Test_For_Infinite_String(t *testing.T) {
 	s, err := parse(in)
 	r.NoError(err)
 	r.Equal(out, strings.TrimSpace(s.String()))
+}
+
+func Test_For_Format(t *testing.T) {
+	blv, err := jsonFixture("For")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, "for (i, n) in [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%q`, "\"for (i, n) in [1, 2, 3] {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
+		{`%+v`, blv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, quick.FOR)
+
+			r.Equal(tt.out, ft)
+		})
+	}
 }

@@ -1,7 +1,6 @@
 {
-  "PreCondition": null,
-  "Expression": {
-    "ast.Bool": {
+  "Name": {
+    "ast.Array": {
       "Meta": {
         "ast.Meta": {
           "Col": 0,
@@ -12,11 +11,63 @@
         }
       },
       "Value": {
-        "bool": true
+        "[]interface {}": [
+          1,
+          {
+            "ast.Integer": {
+              "Meta": {
+                "ast.Meta": {
+                  "Col": 0,
+                  "Filename": "",
+                  "Line": 0,
+                  "Offset": 0,
+                  "Original": ""
+                }
+              },
+              "Value": {
+                "int": 2
+              }
+            }
+          },
+          "3"
+        ]
       }
     }
   },
-  "Clause": null,
+  "Args": [
+    {
+      "ast.Ident": {
+        "Meta": {
+          "ast.Meta": {
+            "Col": 0,
+            "Filename": "",
+            "Line": 0,
+            "Offset": 0,
+            "Original": ""
+          }
+        },
+        "Name": {
+          "string": "i"
+        }
+      }
+    },
+    {
+      "ast.Ident": {
+        "Meta": {
+          "ast.Meta": {
+            "Col": 0,
+            "Filename": "",
+            "Line": 0,
+            "Offset": 0,
+            "Original": ""
+          }
+        },
+        "Name": {
+          "string": "n"
+        }
+      }
+    }
+  ],
   "Block": {
     "ast.Block": {
       "Meta": {

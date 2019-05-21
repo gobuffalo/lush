@@ -20,4 +20,5 @@ var (
 	IF     = NewIf(nil, ast.True, BLOCK, nil)
 	ELSE   = NewElse(BLOCK)
 	ELSEIF = NewElseIf(IF)
+	FOR    = NewFor(ARRAY, []interface{}{NewIdent("i"), NewIdent("n")}, BLOCK)
 )

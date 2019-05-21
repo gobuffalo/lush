@@ -83,3 +83,9 @@ func NewIf(p ast.Statement, e ast.Expression, b *ast.Block, elsa ast.Statement) 
 
 	return i
 }
+
+func NewFor(n ast.ExecStringer, args interface{}, b *ast.Block) ast.For {
+	f, _ := ast.NewFor(n, args, b)
+
+	return f
+}

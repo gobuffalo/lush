@@ -1,8 +1,12 @@
-// 
-// return x
-// // this is a comment
-// // there are many like it
-// // but this is mine
+shoe := {"evan": "dando"}
+
+shoe["evan"] = "Dando"
+
+fmt.Println(shoe)
+
+// this is a comment
+// there are many like it
+// but this is mine
 if false {
 	fmt.Println("in if")
 } else if (1 == 2) {

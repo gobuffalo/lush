@@ -45,9 +45,8 @@ func main() {
 	case "-h":
 		fmt.Println(strings.TrimSpace(usage))
 		os.Exit(1)
-	default:
-		run(args)
 	}
+	run(args)
 }
 
 func run(args []string) {

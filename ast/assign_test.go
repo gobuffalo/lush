@@ -19,12 +19,19 @@ func Test_Assign(t *testing.T) {
 		return x`, 1, false},
 		{`x = 1
 		return x`, nil, true},
+		{`foo[0] = 42
+		return foo`, []int{42}, false},
+		{`baz["bar"] = 42
+		return baz`, map[interface{}]interface{}{"bar": 42}, false},
 	}
 
 	for _, tt := range table {
 		t.Run(tt.in, func(st *testing.T) {
 			r := require.New(st)
 			c := NewContext()
+
+			c.Set("foo", []int{2})
+			c.Set("baz", map[interface{}]interface{}{})
 
 			res, err := exec(tt.in, c)
 			if tt.err {

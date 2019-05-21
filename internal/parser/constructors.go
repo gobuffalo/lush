@@ -274,9 +274,9 @@ func newLet(c *current, n, v interface{}) (ret *ast.Let, err error) {
 }
 
 func newAssign(c *current, n, v interface{}) (ret *ast.Assign, err error) {
-	in, ok := n.(ast.Ident)
-	if !ok {
-		return nil, fmt.Errorf("expected ast.Ident got %T", n)
+	in, err := toStatement(n)
+	if err != nil {
+		return nil, err
 	}
 
 	sv, err := toStatement(v)

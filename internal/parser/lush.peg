@@ -70,7 +70,7 @@ VAR <- _ name:IDENT _ ":=" _ value:LETV {
   return newVar(c, name, value)
 }
 
-ASSIGN <- _ name:IDENT _ "=" _ value:LETV {
+ASSIGN <- _ name:(ACCESS/IDENT) _ "=" _ value:LETV {
   return newAssign(c, name, value)
 }
 

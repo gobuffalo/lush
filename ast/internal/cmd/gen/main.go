@@ -34,6 +34,7 @@ func main() {
 	write(quick.ELSEIF)
 	write(quick.FOR)
 	write(quick.FUNC)
+	write(quick.LET)
 }
 
 func write(s interface{}) {

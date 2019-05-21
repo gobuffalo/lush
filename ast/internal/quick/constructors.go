@@ -94,3 +94,9 @@ func NewFunc(ax interface{}, b *ast.Block) ast.Func {
 	f, _ := ast.NewFunc(ax, b)
 	return f
 }
+
+func NewLet(name ast.Ident, value ast.Statement) *ast.Let {
+	l, _ := ast.NewLet(name, value)
+
+	return l
+}

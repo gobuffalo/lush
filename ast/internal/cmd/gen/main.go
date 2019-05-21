@@ -33,6 +33,7 @@ func main() {
 	write(quick.ELSE)
 	write(quick.ELSEIF)
 	write(quick.FOR)
+	write(quick.FUNC)
 }
 
 func write(s interface{}) {

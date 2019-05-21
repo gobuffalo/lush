@@ -89,3 +89,8 @@ func NewFor(n ast.ExecStringer, args interface{}, b *ast.Block) ast.For {
 
 	return f
 }
+
+func NewFunc(ax interface{}, b *ast.Block) ast.Func {
+	f, _ := ast.NewFunc(ax, b)
+	return f
+}

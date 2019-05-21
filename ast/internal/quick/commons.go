@@ -21,4 +21,5 @@ var (
 	ELSE   = NewElse(BLOCK)
 	ELSEIF = NewElseIf(IF)
 	FOR    = NewFor(ARRAY, []interface{}{NewIdent("i"), NewIdent("n")}, BLOCK)
+	FUNC   = NewFunc([]interface{}{IDENT}, BLOCK)
 )

@@ -1,8 +1,10 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -18,4 +20,29 @@ func Test_Func_Immediate_Call(t *testing.T) {
 
 	r.NotNil(res)
 	r.Equal("hi", res.Value)
+}
+
+func Test_Func_Format(t *testing.T) {
+	blv, err := jsonFixture("Func")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, "func(foo) {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%q`, "\"func(foo) {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
+		{`%+v`, blv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, quick.FUNC)
+
+			r.Equal(tt.out, ft)
+		})
+	}
 }

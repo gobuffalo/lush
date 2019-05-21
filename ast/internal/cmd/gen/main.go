@@ -33,6 +33,7 @@ func main() {
 	write(quick.ELSE)
 	write(quick.ELSEIF)
 	write(quick.FOR)
+	write(quick.RANGE)
 	write(quick.FUNC)
 	write(quick.LET)
 	write(quick.OPEXPR)

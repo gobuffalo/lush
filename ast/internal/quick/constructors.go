@@ -90,6 +90,12 @@ func NewFor(n ast.ExecStringer, args interface{}, b *ast.Block) ast.For {
 	return f
 }
 
+func NewRange(n ast.ExecStringer, args interface{}, b *ast.Block) ast.Range {
+	f, _ := ast.NewRange(n, args, b)
+
+	return f
+}
+
 func NewFunc(ax interface{}, b *ast.Block) ast.Func {
 	f, _ := ast.NewFunc(ax, b)
 	return f

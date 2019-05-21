@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -133,4 +134,29 @@ func Test_Range_Array_String(t *testing.T) {
 	r.NoError(err)
 
 	r.Equal(in, strings.TrimSpace(n.String()))
+}
+
+func Test_Range_Format(t *testing.T) {
+	blv, err := jsonFixture("Range")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, "for i, n := range [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%q`, "\"for i, n := range [1, 2, 3] {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
+		{`%+v`, blv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, quick.RANGE)
+
+			r.Equal(tt.out, ft)
+		})
+	}
 }

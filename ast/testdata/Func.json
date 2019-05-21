@@ -1,5 +1,23 @@
 {
-  "ast.If": {
+  "ast.Func": {
+    "Arguments": [
+      {
+        "ast.Ident": {
+          "Meta": {
+            "ast.Meta": {
+              "Col": 0,
+              "Filename": "",
+              "Line": 0,
+              "Offset": 0,
+              "Original": ""
+            }
+          },
+          "Name": {
+            "string": "foo"
+          }
+        }
+      }
+    ],
     "Block": {
       "ast.Block": {
         "Meta": {
@@ -107,23 +125,6 @@
         }
       }
     },
-    "Clause": null,
-    "Expression": {
-      "ast.Bool": {
-        "Meta": {
-          "ast.Meta": {
-            "Col": 0,
-            "Filename": "",
-            "Line": 0,
-            "Offset": 0,
-            "Original": ""
-          }
-        },
-        "Value": {
-          "bool": true
-        }
-      }
-    },
     "Meta": {
       "ast.Meta": {
         "Col": 0,
@@ -132,7 +133,6 @@
         "Offset": 0,
         "Original": ""
       }
-    },
-    "PreCondition": null
+    }
   }
 }

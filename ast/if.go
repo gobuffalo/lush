@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 )
 
@@ -41,6 +42,21 @@ func (i If) String() string {
 	}
 
 	return bb.String()
+}
+
+func (i If) Format(st fmt.State, verb rune) {
+	format(i, st, verb)
+}
+
+func (i If) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"PreCondition": i.PreCondition,
+		"Expression":   i.Expression,
+		"Clause":       i.Clause,
+		"Block":        i.Block,
+		"Meta":         i.Meta,
+	}
+	return toJSON("ast.If", m)
 }
 
 func (i If) Bool(c *Context) (bool, error) {

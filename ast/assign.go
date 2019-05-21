@@ -14,6 +14,19 @@ func (l Assign) String() string {
 	return fmt.Sprintf("%s = %s", l.Name, l.Value)
 }
 
+func (a Assign) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a Assign) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name":  a.Name,
+		"Value": a.Value,
+		"Meta":  a.Meta,
+	}
+	return toJSON(a, m)
+}
+
 func (l *Assign) Exec(c *Context) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil

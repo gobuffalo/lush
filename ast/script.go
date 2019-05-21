@@ -1,5 +1,9 @@
 package ast
 
+import (
+	"fmt"
+)
+
 type Script struct {
 	Statements Statements
 }
@@ -17,6 +21,17 @@ func (s Script) Exec(c *Context) (*Returned, error) {
 		return nil, nil
 	}
 	return &ret, nil
+}
+
+func (a Script) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a Script) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Statements": a.Statements,
+	}
+	return toJSON(a, m)
 }
 
 func (s Script) String() string {

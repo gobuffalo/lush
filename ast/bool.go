@@ -8,8 +8,8 @@ type Boolable interface {
 	Bool(*Context) (bool, error)
 }
 
-var True = Bool(true)
-var False = Bool(false)
+var True = Bool{Value: true}
+var False = Bool{Value: false}
 
 func NewBool(b []byte) (Bool, error) {
 	bl := string(b)
@@ -19,22 +19,37 @@ func NewBool(b []byte) (Bool, error) {
 	return False, nil
 }
 
-type Bool bool
+type Bool struct {
+	Value bool
+	Meta  Meta
+}
 
 func (b Bool) String() string {
-	return fmt.Sprint(bool(b))
+	return fmt.Sprint(b.Value)
 }
 
 func (b Bool) Exec(c *Context) (interface{}, error) {
-	return bool(b), nil
+	return b.Value, nil
 }
 
 func (b Bool) Bool(c *Context) (bool, error) {
-	return bool(b), nil
+	return b.Value, nil
 }
 
 func (b Bool) Interface() interface{} {
-	return bool(b)
+	return b.Value
+}
+
+func (a Bool) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a Bool) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Value": genericJSON(a.Value),
+		"Meta":  a.Meta,
+	}
+	return toJSON(a, m)
 }
 
 func boolExec(s interface{}, c *Context) (bool, error) {

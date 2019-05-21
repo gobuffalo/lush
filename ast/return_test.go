@@ -1,8 +1,10 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -36,6 +38,31 @@ func Test_Return(t *testing.T) {
 			r.NoError(err)
 			r.NotNil(res)
 			r.Equal(tt.out, res.Value)
+		})
+	}
+}
+
+func Test_Return_Format(t *testing.T) {
+	blv, err := jsonFixture("Return")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, "return 42"},
+		{`%q`, "\"return 42\""},
+		{`%+v`, blv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, quick.RETURN)
+
+			r.Equal(tt.out, ft)
 		})
 	}
 }

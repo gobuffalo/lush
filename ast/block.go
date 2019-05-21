@@ -39,3 +39,15 @@ func NewBlock(stmts Statements) (*Block, error) {
 	}
 	return t, nil
 }
+
+func (a Block) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a Block) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Statements": a.Statements,
+		"Meta":       a.Meta,
+	}
+	return toJSON(a, m)
+}

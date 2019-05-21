@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -58,6 +59,10 @@ func (t Statements) String() string {
 	return strings.Join(x, "")
 }
 
+func (i Statements) Format(st fmt.State, verb rune) {
+	format(i, st, verb)
+}
+
 func (st Statements) Exec(c *Context) (interface{}, error) {
 	var stmts []interface{}
 	for _, s := range st {
@@ -90,4 +95,16 @@ func (st Statements) Exec(c *Context) (interface{}, error) {
 		}
 	}
 	return stmts, nil
+}
+
+func (st Statements) MarshalJSON() ([]byte, error) {
+	var a []interface{}
+	for _, s := range st {
+		a = append(a, s)
+	}
+	m := map[string]interface{}{
+		"ast.Statements": a,
+	}
+
+	return json.Marshal(m)
 }

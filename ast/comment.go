@@ -6,21 +6,33 @@ import (
 )
 
 type Comment struct {
-	text string
-	Meta Meta
+	Value string
+	Meta  Meta
 }
 
 func (c Comment) String() string {
-	return fmt.Sprintf("// %s", c.text)
+	return fmt.Sprintf("// %s", c.Value)
 }
 
 func NewComment(b []byte) (Comment, error) {
 	c := Comment{
-		text: string(b),
+		Value: string(b),
 	}
-	c.text = strings.TrimSpace(c.text)
+	c.Value = strings.TrimSpace(c.Value)
 	for _, t := range []string{"//", "#", " "} {
-		c.text = strings.TrimPrefix(c.text, t)
+		c.Value = strings.TrimPrefix(c.Value, t)
 	}
 	return c, nil
+}
+
+func (a Comment) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a Comment) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Value": genericJSON(a.Value),
+		"Meta":  a.Meta,
+	}
+	return toJSON(a, m)
 }

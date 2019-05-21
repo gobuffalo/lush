@@ -5,23 +5,58 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
-	pig "github.com/gobuffalo/lush"
+	"github.com/gobuffalo/lush"
 	"github.com/gobuffalo/lush/ast"
 )
 
+const usage = `
+Lush is a tool for managing Lush source code.
+
+Usage:
+
+	lush <command> [arguments]
+
+The commands are:
+
+	run		Executes .lush files
+	fmt		lushfmt (reformat) lush sources
+	ast		print the AST for a .lush file
+`
+
 func main() {
 	args := os.Args[1:]
+	if len(args) < 1 {
+		args = append(args, "-h")
+	}
+	switch args[0] {
+	case "run":
+		args = args[1:]
+	case "fmt":
+		if err := fmtOptions.Flags.Parse(args[1:]); err != nil {
+			log.Fatal(err)
+		}
+		format(fmtOptions.Flags.Args())
+		return
+	case "ast":
+		printAST(args[1:])
+		return
+	case "-h":
+		fmt.Println(strings.TrimSpace(usage))
+		os.Exit(1)
+	default:
+		run(args)
+	}
+}
+
+func run(args []string) {
 	for _, a := range args {
-		script, err := pig.ParseFile(a)
+		script, err := lush.ParseFile(a)
 		if err != nil {
 			log.Fatal(err)
 		}
 		c := ast.NewContext(context.Background(), os.Stdout)
-
-		// fmt
-		format(a, script)
-		// fmt
 
 		res, err := script.Exec(c)
 		if err != nil {
@@ -39,19 +74,5 @@ func main() {
 			continue
 		}
 		fmt.Println(res)
-	}
-}
-
-func format(a string, script ast.Script) {
-	f, err := os.Create(a)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = f.WriteString(script.String())
-	if err != nil {
-		log.Fatal(err)
-	}
-	if err := f.Close(); err != nil {
-		log.Fatal(err)
 	}
 }

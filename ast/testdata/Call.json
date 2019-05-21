@@ -1,0 +1,208 @@
+{
+  "ast.Call": {
+    "Arguments": {
+      "ast.Statements": [
+        {
+          "ast.Integer": {
+            "Meta": {
+              "ast.Meta": {
+                "Col": 0,
+                "Filename": "",
+                "Line": 0,
+                "Offset": 0,
+                "Original": ""
+              }
+            },
+            "Value": {
+              "int": 42
+            }
+          }
+        },
+        {
+          "ast.Float": {
+            "Meta": {
+              "ast.Meta": {
+                "Col": 0,
+                "Filename": "",
+                "Line": 0,
+                "Offset": 0,
+                "Original": ""
+              }
+            },
+            "Value": 3.14
+          }
+        },
+        {
+          "ast.String": {
+            "Meta": {
+              "ast.Meta": {
+                "Col": 0,
+                "Filename": "",
+                "Line": 0,
+                "Offset": 0,
+                "Original": ""
+              }
+            },
+            "Original": {
+              "string": "hi"
+            },
+            "QuoteFormat": {
+              "string": "%q"
+            }
+          }
+        }
+      ]
+    },
+    "Block": {
+      "ast.Block": {
+        "Meta": {
+          "ast.Meta": {
+            "Col": 0,
+            "Filename": "",
+            "Line": 0,
+            "Offset": 0,
+            "Original": ""
+          }
+        },
+        "Statements": {
+          "ast.Statements": [
+            {
+              "ast.Assign": {
+                "Meta": {
+                  "ast.Meta": {
+                    "Col": 0,
+                    "Filename": "",
+                    "Line": 0,
+                    "Offset": 0,
+                    "Original": ""
+                  }
+                },
+                "Name": {
+                  "ast.Ident": {
+                    "Meta": {
+                      "ast.Meta": {
+                        "Col": 0,
+                        "Filename": "",
+                        "Line": 0,
+                        "Offset": 0,
+                        "Original": ""
+                      }
+                    },
+                    "Name": {
+                      "string": "foo"
+                    }
+                  }
+                },
+                "Value": {
+                  "ast.Integer": {
+                    "Meta": {
+                      "ast.Meta": {
+                        "Col": 0,
+                        "Filename": "",
+                        "Line": 0,
+                        "Offset": 0,
+                        "Original": ""
+                      }
+                    },
+                    "Value": {
+                      "int": 42
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "ast.Var": {
+                "Meta": {
+                  "ast.Meta": {
+                    "Col": 0,
+                    "Filename": "",
+                    "Line": 0,
+                    "Offset": 0,
+                    "Original": ""
+                  }
+                },
+                "Name": {
+                  "ast.Ident": {
+                    "Meta": {
+                      "ast.Meta": {
+                        "Col": 0,
+                        "Filename": "",
+                        "Line": 0,
+                        "Offset": 0,
+                        "Original": ""
+                      }
+                    },
+                    "Name": {
+                      "string": "foo"
+                    }
+                  }
+                },
+                "Value": {
+                  "ast.Integer": {
+                    "Meta": {
+                      "ast.Meta": {
+                        "Col": 0,
+                        "Filename": "",
+                        "Line": 0,
+                        "Offset": 0,
+                        "Original": ""
+                      }
+                    },
+                    "Value": {
+                      "int": 42
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "Concurrent": {
+      "bool": false
+    },
+    "FName": {
+      "ast.Ident": {
+        "Meta": {
+          "ast.Meta": {
+            "Col": 0,
+            "Filename": "",
+            "Line": 0,
+            "Offset": 0,
+            "Original": ""
+          }
+        },
+        "Name": {
+          "string": "Bar"
+        }
+      }
+    },
+    "Meta": {
+      "ast.Meta": {
+        "Col": 0,
+        "Filename": "",
+        "Line": 0,
+        "Offset": 0,
+        "Original": ""
+      }
+    },
+    "Name": {
+      "ast.Ident": {
+        "Meta": {
+          "ast.Meta": {
+            "Col": 0,
+            "Filename": "",
+            "Line": 0,
+            "Offset": 0,
+            "Original": ""
+          }
+        },
+        "Name": {
+          "string": "foo"
+        }
+      }
+    }
+  }
+}

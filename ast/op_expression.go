@@ -36,6 +36,21 @@ func (e OpExpression) String() string {
 	return fmt.Sprintf("(%s %s %s)", e.A, e.Op, e.B)
 }
 
+func (e OpExpression) Format(st fmt.State, verb rune) {
+	format(e, st, verb)
+}
+
+func (e OpExpression) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"A":      e.A,
+		"B":      e.B,
+		"op":     e.Op,
+		"Meta":   e.Meta,
+		"Format": e.format,
+	}
+	return toJSON(e, m)
+}
+
 func (e OpExpression) Exec(c *Context) (interface{}, error) {
 	switch e.Op {
 	case "==", "!=", "~=", "<", ">", "<=", ">=", "&&":

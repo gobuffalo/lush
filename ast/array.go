@@ -20,11 +20,27 @@ func (a Array) String() string {
 	bb.WriteString("[")
 	var args []string
 	for _, i := range a.Value {
+		if s, ok := i.(fmt.Stringer); ok {
+			args = append(args, s.String())
+			continue
+		}
 		args = append(args, fmt.Sprint(i))
 	}
 	bb.WriteString(strings.Join(args, ", "))
 	bb.WriteString("]")
 	return bb.String()
+}
+
+func (s Array) Format(st fmt.State, verb rune) {
+	format(s, st, verb)
+}
+
+func (a Array) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Value": genericJSON(a.Value),
+		"Meta":  a.Meta,
+	}
+	return toJSON(a, m)
 }
 
 func (a Array) Exec(c *Context) (interface{}, error) {

@@ -28,6 +28,20 @@ type Func struct {
 	Meta      Meta
 }
 
+func (f Func) Format(st fmt.State, verb rune) {
+	format(f, st, verb)
+}
+
+func (f Func) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Arguments": f.Arguments,
+		"Block":     f.Block,
+		"Meta":      f.Meta,
+	}
+
+	return toJSON(f, m)
+}
+
 func (f Func) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("func(")

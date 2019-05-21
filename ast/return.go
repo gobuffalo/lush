@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 )
 
@@ -33,4 +34,16 @@ func NewReturn(s Statements) (Return, error) {
 	return Return{
 		Statements: s,
 	}, nil
+}
+
+func (r Return) Format(st fmt.State, verb rune) {
+	format(r, st, verb)
+}
+
+func (r Return) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Statements": r.Statements,
+		"Meta":       r.Meta,
+	}
+	return toJSON(r, m)
 }

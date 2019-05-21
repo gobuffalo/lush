@@ -1,0 +1,33 @@
+{
+  "ast.Return": {
+    "Meta": {
+      "ast.Meta": {
+        "Col": 0,
+        "Filename": "",
+        "Line": 0,
+        "Offset": 0,
+        "Original": ""
+      }
+    },
+    "Statements": {
+      "ast.Statements": [
+        {
+          "ast.Integer": {
+            "Meta": {
+              "ast.Meta": {
+                "Col": 0,
+                "Filename": "",
+                "Line": 0,
+                "Offset": 0,
+                "Original": ""
+              }
+            },
+            "Value": {
+              "int": 42
+            }
+          }
+        }
+      ]
+    }
+  }
+}

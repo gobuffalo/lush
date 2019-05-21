@@ -33,7 +33,7 @@ func floats(i ...interface{}) ([]float64, error) {
 	for _, x := range i {
 		switch f := x.(type) {
 		case Float:
-			fl = append(fl, float64(f))
+			fl = append(fl, f.Value)
 		case float64:
 			fl = append(fl, f)
 		case int:
@@ -50,7 +50,7 @@ func ints(i ...interface{}) ([]int, error) {
 	for _, x := range i {
 		switch f := x.(type) {
 		case Integer:
-			fl = append(fl, int(f))
+			fl = append(fl, f.Value)
 		case int:
 			fl = append(fl, f)
 		default:

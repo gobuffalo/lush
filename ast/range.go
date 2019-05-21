@@ -2,6 +2,7 @@ package ast
 
 import (
 	"bytes"
+	"fmt"
 	"strings"
 )
 
@@ -19,6 +20,19 @@ func NewRange(n ExecStringer, args interface{}, b *Block) (Range, error) {
 type Range struct {
 	For
 	Meta Meta
+}
+
+func (f Range) Format(st fmt.State, verb rune) {
+	format(f, st, verb)
+}
+
+func (f Range) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"For":  f.For,
+		"Meta": f.Meta,
+	}
+
+	return toJSON(f, m)
 }
 
 func (f Range) String() string {

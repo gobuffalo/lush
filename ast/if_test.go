@@ -1,8 +1,10 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -95,6 +97,30 @@ func Test_If_PreCondition(t *testing.T) {
 			res, err := exec(tt.in, NewContext())
 			r.NoError(err)
 			r.Equal(tt.out, res.Value)
+		})
+	}
+}
+
+func Test_If_Format(t *testing.T) {
+	stringv, err := jsonFixture("If")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, "if true {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%+v`, stringv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, quick.IF)
+
+			r.Equal(tt.out, ft)
 		})
 	}
 }

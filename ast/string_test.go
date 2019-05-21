@@ -1,6 +1,7 @@
 package ast_test
 
 import (
+	"fmt"
 	"strconv"
 	"testing"
 
@@ -49,6 +50,33 @@ func Test_NewString(t *testing.T) {
 			un, err := strconv.Unquote(tt.out)
 			r.NoError(err)
 			r.Equal(un, s.Original)
+		})
+	}
+}
+
+func Test_String_Format(t *testing.T) {
+	stringv, err := jsonFixture("String")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, `"hi"`},
+		{`%+v`, stringv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			s, err := ast.NewString([]byte("hi"))
+			r.NoError(err)
+
+			ft := fmt.Sprintf(tt.format, s)
+
+			r.Equal(tt.out, ft)
 		})
 	}
 }

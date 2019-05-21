@@ -23,6 +23,19 @@ func (a Access) String() string {
 	return fmt.Sprintf("%s[%v]", a.Name, a.Key)
 }
 
+func (a Access) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a Access) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name": a.Name,
+		"Key":  genericJSON(a.Key),
+		"Meta": a.Meta,
+	}
+	return toJSON(a, m)
+}
+
 func (a Access) Exec(c *Context) (interface{}, error) {
 	v, err := a.Name.Exec(c)
 	if err != nil {
@@ -32,7 +45,11 @@ func (a Access) Exec(c *Context) (interface{}, error) {
 	rv := reflect.Indirect(reflect.ValueOf(v))
 	switch rv.Kind() {
 	case reflect.Array, reflect.Slice:
-		i, err := strconv.Atoi(fmt.Sprint(a.Key))
+		k := fmt.Sprint(a.Key)
+		if sk, ok := a.Key.(fmt.Stringer); ok {
+			k = sk.String()
+		}
+		i, err := strconv.Atoi(k)
 		if err != nil {
 			return nil, err
 		}

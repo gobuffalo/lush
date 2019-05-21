@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"fmt"
 	"reflect"
 )
 
@@ -20,6 +21,18 @@ func (i Ident) IsZero() bool {
 
 func (i Ident) String() string {
 	return i.Name
+}
+
+func (a Ident) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a Ident) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name": genericJSON(a.Name),
+		"Meta": a.Meta,
+	}
+	return toJSON(a, m)
 }
 
 func (i Ident) MapKey() string {

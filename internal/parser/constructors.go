@@ -7,6 +7,16 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
+func newString(c *current) (ast.String, error) {
+	s, err := ast.NewString(c.text)
+	if err != nil {
+		return s, err
+	}
+	s.Meta = meta(c)
+
+	return s, nil
+}
+
 func newAccess(c *current, i interface{}, k interface{}) (ret ast.Access, err error) {
 	id, err := toIdent(i)
 	if err != nil {
@@ -35,7 +45,7 @@ func newMap(c *current, vals interface{}) (ret ast.Map, err error) {
 	if err != nil {
 		return ret, err
 	}
-	// ret.Meta = meta(c)
+	ret.Meta = meta(c)
 	return ret, nil
 }
 
@@ -45,7 +55,7 @@ func newBool(c *current, b []byte) (ret ast.Bool, err error) {
 		return ret, err
 	}
 
-	// ret.Meta = meta(c)
+	ret.Meta = meta(c)
 	return ret, nil
 }
 
@@ -224,15 +234,24 @@ func newReturn(c *current, i interface{}) (ret ast.Return, err error) {
 
 func newFloat(c *current, b []byte) (ret ast.Float, err error) {
 	f, err := strconv.ParseFloat(string(b), 64)
-	return ast.Float(f), err
+	fl, err := ast.NewFloat(f)
+	fl.Meta = meta(c)
+
+	return fl, err
 }
 
 func newInteger(c *current, b []byte) (ret ast.Integer, err error) {
 	i, err := strconv.Atoi(string(b))
 	if err != nil {
-		return ast.Integer(i), err
+		return ast.Integer{}, err
 	}
-	return ast.Integer(i), nil
+
+	in, err := ast.NewInteger(i)
+	if err != nil {
+		return ast.Integer{}, err
+	}
+	in.Meta = meta(c)
+	return in, nil
 }
 
 func newLet(c *current, n, v interface{}) (ret *ast.Let, err error) {
@@ -356,4 +375,10 @@ func newArray(c *current, i interface{}) (ret ast.Array, err error) {
 
 	ret.Meta = meta(c)
 	return ret, nil
+}
+
+func newNoop(c *current) (ast.Noop, error) {
+	n, err := ast.NewNoop(c.text)
+	n.Meta = meta(c)
+	return n, err
 }

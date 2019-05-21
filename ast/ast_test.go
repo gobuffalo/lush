@@ -3,10 +3,11 @@ package ast_test
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
@@ -51,10 +52,12 @@ func parse(in string) (ast.Script, error) {
 	return n, nil
 }
 
-func newString(in string) ast.String {
-	s, err := ast.NewString([]byte(in))
+func jsonFixture(name string) (string, error) {
+	b, err := ioutil.ReadFile(fmt.Sprintf("./testdata/%s.json", name))
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
-	return s
+	s := string(b)
+	s = strings.Replace(s, "\r", "", -1)
+	return s, nil
 }

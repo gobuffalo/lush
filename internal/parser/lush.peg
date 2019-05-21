@@ -3,6 +3,8 @@
 
   import (
       "fmt"
+      "unicode"
+      "io"
       "github.com/gobuffalo/lush/ast"
   )
 }
@@ -138,23 +140,23 @@ STRING <- s:(MLSTRING / DQSTRING ) {
 }
 
 MLSTRING <- "`" [^`]+ "`" {
-  return ast.NewString(c.text)
+  return newString(c)
 }
 
 DQSTRING <- '"' ( !DQEscapeChar . / '\\' DQEscapeSequence )* '"' {
-  return ast.NewString(c.text)
+  return newString(c)
 }
 
 BREAK <- _ "break" _ {
-  return ast.Break{}, nil
+  return ast.Break{Meta: meta(c)}, nil
 }
 
 CONTINUE <- _ "continue" _ {
-  return ast.Continue{}, nil
+  return ast.Continue{Meta: meta(c)}, nil
 }
 
 NULL ← ( "nil" ) {
-  return ast.Nil{}, nil
+  return ast.Nil{Meta: meta(c)}, nil
 }
 
 MAP <- LC _ vals:( (IDENT/STRING) _ ':' _ (ARG) _ (',')* _ )*  _ RC {
@@ -165,12 +167,12 @@ COMMENT <- ("#" / "//" ) a:[^\n\r]* {
   return newComment(c, c.text)
 }
 
-LP <- '(' { return ast.NewNoop(c.text)}
-RP <- ')' { return ast.NewNoop(c.text)}
-LB <- '[' { return ast.NewNoop(c.text)}
-RB <- ']' { return ast.NewNoop(c.text)}
-LC <- '{' { return ast.NewNoop(c.text)}
-RC <- '}' { return ast.NewNoop(c.text)}
+LP <- '(' { return newNoop(c)}
+RP <- ')' { return newNoop(c)}
+LB <- '[' { return newNoop(c)}
+RB <- ']' { return newNoop(c)}
+LC <- '{' { return newNoop(c)}
+RC <- '}' { return newNoop(c)}
 
 MLEscapeChar <- [\x00-\x1f\\`]
 MLEscapeSequence <- MLSingleCharEscape / UnicodeEscape
@@ -189,7 +191,7 @@ NonZeroDecimalDigit ← [1-9]
 HexDigit ← [0-9a-f]i
 
 _ "whitespace" ← [ \t\r\n]* {
-  return ast.NewNoop(c.text)
+  return newNoop(c)
 }
 
 EOF <- !. {

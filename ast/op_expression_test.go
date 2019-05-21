@@ -1,9 +1,11 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -32,7 +34,7 @@ func Test_OpExpression_Equal(t *testing.T) {
 			r := require.New(st)
 
 			c := NewContext()
-			c.Set("magic", ast.Integer(42))
+			c.Set("magic", ast.Integer{Value: 42})
 			res, err := exec(tt.in, c)
 
 			if tt.err {
@@ -569,6 +571,31 @@ func Test_OpExpression_Or(t *testing.T) {
 
 			r.NoError(err)
 			r.Equal(tt.out, res.Value)
+		})
+	}
+}
+
+func Test_OpExpression_OpExpressionmat(t *testing.T) {
+	blv, err := jsonFixture("OpExpression")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, "(42 == 3.14)"},
+		{`%q`, "\"(42 == 3.14)\""},
+		{`%+v`, blv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, quick.OPEXPR)
+
+			r.Equal(tt.out, ft)
 		})
 	}
 }

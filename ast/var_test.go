@@ -1,8 +1,10 @@
 package ast_test
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -28,6 +30,33 @@ func Test_Var(t *testing.T) {
 				return
 			}
 			r.NoError(err)
+		})
+	}
+}
+
+func Test_Var_Format(t *testing.T) {
+	assignv, err := jsonFixture("Var")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{"%s", `foo := 42`},
+		{"%q", `"foo := 42"`},
+		{"%+v", assignv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			s := quick.VAR
+
+			ft := fmt.Sprintf(tt.format, s)
+
+			r.Equal(tt.out, ft)
 		})
 	}
 }

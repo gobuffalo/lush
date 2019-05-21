@@ -9,14 +9,14 @@ import (
 func NewString(b []byte) (String, error) {
 	t := string(b)
 	st := String{
-		Original: t,
-		format:   "%q",
+		Original:    t,
+		QuoteFormat: "%q",
 	}
 	if strings.HasPrefix(t, "`") {
 		t = strings.TrimPrefix(t, "`")
 		t = strings.TrimSuffix(t, "`")
 		st.Original = t
-		st.format = "`%s`"
+		st.QuoteFormat = "`%s`"
 		return st, nil
 	}
 	s, err := strconv.Unquote(t)
@@ -30,13 +30,26 @@ func NewString(b []byte) (String, error) {
 }
 
 type String struct {
-	Original string
-	Meta     Meta
-	format   string
+	Original    string
+	QuoteFormat string
+	Meta        Meta
 }
 
 func (s String) String() string {
-	return fmt.Sprintf(s.format, s.Original)
+	return fmt.Sprintf(s.QuoteFormat, s.Original)
+}
+
+func (a String) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a String) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Original":    genericJSON(a.Original),
+		"QuoteFormat": genericJSON(a.QuoteFormat),
+		"Meta":        a.Meta,
+	}
+	return toJSON(a, m)
 }
 
 func (s String) Interface() interface{} {

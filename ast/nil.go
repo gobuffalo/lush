@@ -1,6 +1,12 @@
 package ast
 
-type Nil struct{}
+import (
+	"fmt"
+)
+
+type Nil struct {
+	Meta Meta
+}
 
 func (i Nil) IsZero() bool {
 	return true
@@ -20,4 +26,15 @@ func (i Nil) Exec(c *Context) (interface{}, error) {
 
 func (i Nil) Bool(c *Context) (bool, error) {
 	return false, nil
+}
+
+func (a Nil) Format(st fmt.State, verb rune) {
+	format(a, st, verb)
+}
+
+func (a Nil) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Meta": a.Meta,
+	}
+	return toJSON(a, m)
 }

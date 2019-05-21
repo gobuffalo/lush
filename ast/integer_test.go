@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -43,6 +44,31 @@ func Test_Integer(t *testing.T) {
 			f, err := ast.NewInteger(int(tt.exp))
 			r.NoError(err)
 			r.Equal(fmt.Sprint(tt.exp), f.String())
+		})
+	}
+}
+
+func Test_Integer_Format(t *testing.T) {
+	intv, err := jsonFixture("Integer")
+	if err != nil {
+		t.Fatal(err)
+	}
+	table := []struct {
+		format string
+		out    string
+	}{
+		{`%s`, `42`},
+		{`%q`, `"42"`},
+		{`%+v`, intv},
+	}
+
+	for _, tt := range table {
+		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
+			r := require.New(st)
+
+			ft := fmt.Sprintf(tt.format, quick.INT)
+
+			r.Equal(tt.out, ft)
 		})
 	}
 }

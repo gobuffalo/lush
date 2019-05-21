@@ -16,10 +16,18 @@ func NewVar(name Ident, value Statement) (*Var, error) {
 }
 
 type Var struct {
-	Name   Ident
-	Value  Statement
-	Meta   Meta
-	format string
+	Name  Ident
+	Value Statement
+	Meta  Meta
+}
+
+func (l Var) MarshalJSON() ([]byte, error) {
+	m := map[string]interface{}{
+		"Name":  l.Name,
+		"Value": l.Value,
+		"Meta":  l.Meta,
+	}
+	return toJSON(l, m)
 }
 
 func (l Var) String() string {
@@ -45,4 +53,8 @@ func (l *Var) Exec(c *Context) (interface{}, error) {
 	}
 	c.Set(name, i)
 	return nil, nil
+}
+
+func (l Var) Format(st fmt.State, verb rune) {
+	format(l, st, verb)
 }

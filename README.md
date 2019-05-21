@@ -8,8 +8,11 @@ Lush will provide the basis for [https://github.com/gobuffalo/plush](https://git
 
 **WIP**: Lush is currently a work in progress. We would love your feedback (and PR's), but be warned that things are liable to shift.
 
+---
+
 # Table of Contents
 
+* [CLI](#cli)
 * [Comments](#comments)
 * [Identifiers](#identifiers)
 * [Variables](#variables)
@@ -30,6 +33,43 @@ Lush will provide the basis for [https://github.com/gobuffalo/plush](https://git
 * [Calling](#calling)
 * [Built-ins](#builtins)
 
+---
+
+## [CLI](#cli)
+
+### Installation
+
+```bash
+$ go get -u github.com/gobuffalo/lush/cmd/lush
+```
+
+### Usage
+
+#### Run Lush Scripts
+
+```bash
+$ lush run ./path/to/file.lush
+```
+
+#### Format Lush Scripts
+
+```bash
+$ lush fmt ./path/to/file.lush
+```
+
+##### Flags
+
+* `-w` - write result to (source) file instead of stdout
+* `-d` - display diffs instead of rewriting files
+
+#### Print AST
+
+```bash
+$ lush ast ./path/to/file.lush
+```
+
+---
+
 ## [Comments](#comments)
 
 ```lush
@@ -38,6 +78,8 @@ Lush will provide the basis for [https://github.com/gobuffalo/plush](https://git
 // (Deprecated):
 # my comment
 ```
+
+---
 
 ## [Identifiers](#identifiers)
 
@@ -64,6 +106,8 @@ _x := 1
 1x := 1
 x! := 1
 ```
+
+---
 
 ## [Variables](#variables)
 
@@ -105,6 +149,8 @@ func() {
 return x // 42
 ```
 
+---
+
 ## [Strings](#strings)
 
 * `"my string"` - Interpreted string literal
@@ -120,10 +166,14 @@ line
 string`
 ```
 
+---
+
 ## [Numbers](#numbers)
 
 * `42`, `-42` - `int` values
 * `4.2`, `-4.2` - `float64` values
+
+---
 
 ## [Booleans](#booleans)
 
@@ -132,11 +182,15 @@ true
 false
 ```
 
+---
+
 ## Nil
 
 ```lush
 nil
 ```
+
+---
 
 ## [`if` Statements](#if)
 
@@ -190,6 +244,8 @@ if false {
 }
 ```
 
+---
+
 ## [Operators](#operators)
 
 * `&&` - Requires both expressions to be `true`.
@@ -207,11 +263,13 @@ if false {
 * `>=` - Greater than or equal operator. Supports all types with a `string` comparison.
 * `~=` - Regular expression operator. Supports `string` type only. `"abc" ~= "^A"`
 
+---
+
 ## [Arrays](#arrays)
 
 Arrays are backed by `[]interface{}` so they can contain any known type.
 
-## Defining
+### Defining
 
 ```lush
 a := [1, "a", true, [4, 5, nil], {"x": "y", "z": "Z"}]
@@ -242,6 +300,8 @@ for (i, x) in myArray {
   // do work
 }
 ```
+
+---
 
 ## [Maps](#maps)
 
@@ -277,9 +337,11 @@ for (k, v) in myMap {
 }
 ```
 
+---
+
 ## [For Loops](#for)
 
-## `break`
+### `break`
 
 The `break` keyword works with both Maps and Arrays.
 
@@ -337,6 +399,8 @@ type Iterator interface {
 }
 ```
 
+---
+
 ## [Functions](#functions)
 
 Functions can be defined using the `func` keyword. They can take and return `N` arguments.
@@ -350,6 +414,8 @@ x := myFunc("hi")
 
 fmt.fmt.Printlnln(x) // HI
 ```
+
+---
 
 ## [Returns](#returns)
 
@@ -380,9 +446,13 @@ if true {
 }
 ```
 
+---
+
 ## [Scope](#scope)
 
 When a new code block, defined by `{ ... }`, is called, a new clone of the current Context is created for that block.
+
+---
 
 ## [Custom Helpers](#custom-helpers)
 
@@ -448,6 +518,8 @@ s := myFunc(x) {
 fmt.fmt.Printlnln(s) // another string
 ```
 
+---
+
 ## [Errors](#errors)
 
 This is set by default when creating a new `Context`. It is a function mapped to [`fmt#Errorf`](https://godoc.org/fmt#Errorf).
@@ -455,6 +527,8 @@ This is set by default when creating a new `Context`. It is a function mapped to
 ```lush
 return error("stop %s", "dragging my heart around")
 ```
+
+---
 
 ## [Goroutines](#goroutines)
 
@@ -481,8 +555,13 @@ go func() {
 
 ```
 
+---
+
 ## [Calling](#calling)
+
+---
 
 ## [Built-ins](#builtins)
 
 The [`github.com/gobuffalo/lush/builtins`](https://godoc.org/github.com/gobuffalo/lush/builtins) package provides implementations of a small set of the Go standard library.
+

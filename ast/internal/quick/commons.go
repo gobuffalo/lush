@@ -25,4 +25,5 @@ var (
 	FUNC   = NewFunc([]interface{}{IDENT}, BLOCK)
 	LET    = NewLet(IDENT, INT)
 	OPEXPR = NewOpExpression(INT, "==", FLOAT)
+	RETURN = NewReturn(INT)
 )

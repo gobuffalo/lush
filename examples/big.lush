@@ -4,6 +4,8 @@ shoe["evan"] = "Dando"
 
 fmt.Println(shoe)
 
+fmt.Println(this)
+
 // this is a comment
 // there are many like it
 // but this is mine

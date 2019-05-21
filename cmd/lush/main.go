@@ -2,12 +2,11 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"log"
 	"os"
 
-	pig "github.com/gobuffalo/lush"
+	"github.com/gobuffalo/lush"
 	"github.com/gobuffalo/lush/ast"
 )
 
@@ -15,40 +14,29 @@ func main() {
 	args := os.Args[1:]
 	if len(args) >= 1 {
 		switch args[0] {
-		case "debug":
-			debug(args[1:])
+		case "run":
+			args = args[1:]
+		case "fmt":
+			if err := fmtCmd.Parse(args[1:]); err != nil {
+				log.Fatal(err)
+			}
+			format(fmtCmd.Args())
+			return
+		case "ast":
+			printAST(args[1:])
 			return
 		}
 	}
 	run(args)
 }
 
-func debug(args []string) {
-	for _, a := range args {
-		script, err := pig.ParseFile(a)
-		if err != nil {
-			log.Fatal(err)
-		}
-		b, err := json.MarshalIndent(script, "", "  ")
-		if err != nil {
-			log.Fatal(err)
-		}
-		fmt.Println(string(b))
-	}
-}
-
 func run(args []string) {
 	for _, a := range args {
-		script, err := pig.ParseFile(a)
+		script, err := lush.ParseFile(a)
 		if err != nil {
 			log.Fatal(err)
 		}
 		c := ast.NewContext(context.Background(), os.Stdout)
-
-		// fmt
-		format(a, script)
-		// fmt.Printf("%+v", script)
-		// fmt
 
 		res, err := script.Exec(c)
 		if err != nil {
@@ -66,19 +54,5 @@ func run(args []string) {
 			continue
 		}
 		fmt.Println(res)
-	}
-}
-
-func format(a string, script ast.Script) {
-	f, err := os.Create(a)
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = f.WriteString(script.String())
-	if err != nil {
-		log.Fatal(err)
-	}
-	if err := f.Close(); err != nil {
-		log.Fatal(err)
 	}
 }

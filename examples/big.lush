@@ -1,6 +1,9 @@
 import "fmt"
 import "time"
 import "strings"
+import "os"
+
+fmt.Println(os.Environ())
 
 shoe := {"evan": "dando"}
 

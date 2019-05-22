@@ -579,6 +579,8 @@ import "fmt"
 fmt.Println("foo")
 ```
 
+See [`github.com/gobuffalo/lush/builtins#Available`](https://godoc.org/github.com/gobuffalo/lush/builtins#Available) for a full list of packages that are available for import.
+
 ### Adding Imports
 
 To make something available for import, it must first be added to [`github.com/gobuffalo/lush/ast#Context.Imports`](https://godoc.org/github.com/gobuffalo/lush/ast#Context.Imports).
@@ -587,6 +589,16 @@ To make something available for import, it must first be added to [`github.com/g
 c := ast.NewContext(context.Background(), os.Stdout)
 
 c.Imports.Store("mypkg", mypkg{})
+```
+
+### CLI Imports
+
+When running a Lush script using the CLI tool, the `-import` flag allows for making the [built-in](#builtins) package implementations available for importing into the script.
+
+Of example the [`github.com/gobuffalo/lush/builtins#OS`](https://godoc.org/github.com/gobuffalo/lush/builtins#OS) built-in isn't include by default for security/safety reasons. To allow this to be imported by the script you can use the `-import` flag to allow access.
+
+```bash
+$ lush run -import os ./examples/big.lush
 ```
 
 ---

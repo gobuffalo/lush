@@ -14,7 +14,7 @@ func (i Import) String() string {
 func (i Import) Exec(c *Context) (interface{}, error) {
 	imp, ok := c.Imports.Load(i.Name)
 	if !ok {
-		return nil, fmt.Errorf("could not find import %s", i.Name)
+		return nil, fmt.Errorf("could not find import for %s", i.Name)
 	}
 	c.Set(i.Name, imp)
 	return nil, nil

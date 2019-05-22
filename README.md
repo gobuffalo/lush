@@ -31,6 +31,8 @@ Lush will provide the basis for [https://github.com/gobuffalo/plush](https://git
 * [Errors](#errors)
 * [Goroutines](#goroutines)
 * [Calling](#calling)
+* [Helpers](#helpers)
+* [Imports](#imports)
 * [Built-ins](#builtins)
 
 ---
@@ -558,6 +560,46 @@ go func() {
 ---
 
 ## [Calling](#calling)
+
+---
+
+## [Helpers](#helpers)
+
+---
+
+## [Imports](#imports)
+
+Imports differ from [helpers](#helpers) in that helpers are **automatically** available inside of a script, whereas imports need to be explicitly included.
+
+For example to use the [built-in](#builtins) implementation of the `fmt` package, you would first `import "fmt"`.
+
+```lush
+import "fmt"
+
+fmt.Println("foo")
+```
+
+See [`github.com/gobuffalo/lush/builtins#Available`](https://godoc.org/github.com/gobuffalo/lush/builtins#Available) for a full list of packages that are available for import.
+
+### Adding Imports
+
+To make something available for import, it must first be added to [`github.com/gobuffalo/lush/ast#Context.Imports`](https://godoc.org/github.com/gobuffalo/lush/ast#Context.Imports).
+
+```go
+c := ast.NewContext(context.Background(), os.Stdout)
+
+c.Imports.Store("mypkg", mypkg{})
+```
+
+### CLI Imports
+
+When running a Lush script using the CLI tool, the `-import` flag allows for making the [built-in](#builtins) package implementations available for importing into the script.
+
+Of example the [`github.com/gobuffalo/lush/builtins#OS`](https://godoc.org/github.com/gobuffalo/lush/builtins#OS) built-in isn't include by default for security/safety reasons. To allow this to be imported by the script you can use the `-import` flag to allow access.
+
+```bash
+$ lush run -import os ./examples/big.lush
+```
 
 ---
 

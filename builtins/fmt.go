@@ -5,21 +5,6 @@ import (
 	"io"
 )
 
-type Setable interface {
-	Set(key string, value interface{})
-}
-
-func WithFmt(c Setable, w io.Writer) {
-	f := NewFmt(w)
-	c.Set("errorf", f.Errorf)
-	c.Set("print", f.Print)
-	c.Set("printf", f.Printf)
-	c.Set("println", f.Println)
-	c.Set("sprint", f.Print)
-	c.Set("sprintf", f.Printf)
-	c.Set("sprintln", f.Println)
-}
-
 type Fmt struct {
 	io.Writer
 }

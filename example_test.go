@@ -28,14 +28,17 @@ func ExampleExec() {
 func ExampleExec_assignment() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 
-	in := `x := 0
-	func() {
-		if true {
-			x = 42
-		}
-	}()
+	in := `
+import "fmt"
 
-	fmt.Println(x)`
+x := 0
+func() {
+	if true {
+		x = 42
+	}
+}()
+
+fmt.Println(x)`
 
 	_, err := ExecReader(c, "x.lush", strings.NewReader(in))
 	if err != nil {
@@ -50,14 +53,16 @@ func ExampleExec_ifStatements() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 
 	in := `
+import "fmt"
+
 if false {
-  fmt.Println("in if")
+	fmt.Println("in if")
 } else if (1 == 2) {
-  fmt.Println("in else")
+	fmt.Println("in else")
 } else if true {
-  fmt.Println("2 == 2")
+	fmt.Println("2 == 2")
 } else {
-  fmt.Println("in other else")
+	fmt.Println("in other else")
 }
 `
 
@@ -74,10 +79,12 @@ func ExampleExec_arrays() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 
 	in := `
-	a := [1, "a", true, [4, 5, nil]]
-	for i, v := range a {
-		fmt.Println(i, v)
-	}
+import "fmt"
+
+a := [1, "a", true, [4, 5, nil]]
+for i, v := range a {
+	fmt.Println(i, v)
+}
 	`
 
 	_, err := ExecReader(c, "x.lush", strings.NewReader(in))
@@ -96,10 +103,12 @@ func ExampleExec_maps() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 
 	in := `
-	m := {"a": "b", "h": 1, "foo": "bar", "y": func(x) {}}
-	for k, v := range m {
-		fmt.Println(k, v)
-	}
+import "fmt"
+
+m := {"a": "b", "h": 1, "foo": "bar", "y": func(x) {}}
+for k, v := range m {
+	fmt.Println(k, v)
+}
 	`
 
 	_, err := ExecReader(c, "x.lush", strings.NewReader(in))
@@ -112,17 +121,20 @@ func ExampleExec_maps() {
 func ExampleExec_infiniteForLoop() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 
-	in := `for {
-  if (i == nil) {
-    let i = 0
-  }
+	in := `
+import "fmt"
 
-  i = (i + 1)
+for {
+	if (i == nil) {
+		let i = 0
+	}
 
-  if (i == 4) {
+	i = (i + 1)
+
+	if (i == 4) {
 		fmt.Println(i)
 		break
-  }
+	}
 }`
 
 	_, err := ExecReader(c, "x.lush", strings.NewReader(in))
@@ -148,11 +160,14 @@ func ExampleExec_customHelperOptionalContext() {
 		return strings.ToUpper(s), nil
 	})
 
-	in := `x := "A String"
+	in := `
+import "fmt"
+
+x := "A String"
 fmt.Println(myFunc(x)) // A STRING
 
 s := myFunc(x) {
-  return "another string"
+	return "another string"
 }
 fmt.Println(s) // another string
 `

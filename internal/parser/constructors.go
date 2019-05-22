@@ -7,6 +7,20 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
+func newImport(c *current, s interface{}) (ast.Import, error) {
+	n, ok := s.(ast.String)
+	if !ok {
+		return ast.Import{}, fmt.Errorf("expected ast.String got %T", s)
+	}
+	x, err := strconv.Unquote(n.Original)
+	if err != nil {
+		x = n.Original
+	}
+	i, err := ast.NewImport(x)
+	i.Meta = meta(c)
+	return i, err
+}
+
 func newString(c *current) (ast.String, error) {
 	s, err := ast.NewString(c.text)
 	if err != nil {

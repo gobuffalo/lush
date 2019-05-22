@@ -26,4 +26,5 @@ var (
 	LET    = NewLet(IDENT, INT)
 	OPEXPR = NewOpExpression(INT, "==", FLOAT)
 	RETURN = NewReturn(INT)
+	IMPORT = NewImport("fmt")
 )

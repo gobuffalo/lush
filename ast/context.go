@@ -31,9 +31,10 @@ func NewContext(ctx context.Context, w io.Writer) *Context {
 		Writer:  w,
 	}
 
-	c.Set("fmt", builtins.NewFmt(w))
-	c.Set("strings", builtins.Strings{})
-	c.Set("time", builtins.Time{})
+	c.Imports.Store("fmt", builtins.NewFmt(w))
+	c.Imports.Store("strings", builtins.Strings{})
+	c.Imports.Store("time", builtins.Time{})
+
 	c.Set("error", fmt.Errorf)
 	return c
 }
@@ -41,9 +42,10 @@ func NewContext(ctx context.Context, w io.Writer) *Context {
 type Context struct {
 	context.Context
 	io.Writer
-	data  sync.Map
-	Block *Block
-	wg    sync.WaitGroup
+	data    sync.Map
+	Block   *Block
+	wg      sync.WaitGroup
+	Imports sync.Map
 }
 
 func (c *Context) Clone() *Context {
@@ -51,6 +53,7 @@ func (c *Context) Clone() *Context {
 	fhc.wg = c.wg
 	fhc.Context = c
 	fhc.Block = c.Block
+	fhc.Imports = c.Imports
 	c.data.Range(func(k, v interface{}) bool {
 		fhc.data.Store(k, v)
 		return true

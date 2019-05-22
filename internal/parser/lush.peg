@@ -14,8 +14,12 @@ DOC <- stmts:(_ STATEMENT _)+ EOF {
   return ast.Script{Statements: s}, err
 }
 
-STATEMENT <- s:( GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
+STATEMENT <- s:( IMPORT / GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
   return s, nil
+}
+
+IMPORT <- _ "import" _ s:DQSTRING {
+  return newImport(c, s)
 }
 
 EXPRARG <- (POPEX / CALL / NUMBER / STRING / BOOL / ARRAY / MAP / NULL / IDENT)

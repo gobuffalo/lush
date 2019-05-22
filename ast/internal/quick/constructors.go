@@ -117,3 +117,8 @@ func NewReturn(s ...ast.Statement) ast.Return {
 	r, _ := ast.NewReturn(s)
 	return r
 }
+
+func NewImport(s string) ast.Import {
+	i, _ := ast.NewImport(s)
+	return i
+}

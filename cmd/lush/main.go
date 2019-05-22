@@ -1,14 +1,12 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/gobuffalo/lush"
-	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/cmd/lush/commands"
 )
 
 const usage = `
@@ -50,28 +48,10 @@ func main() {
 }
 
 func run(args []string) {
-	for _, a := range args {
-		script, err := lush.ParseFile(a)
-		if err != nil {
-			log.Fatal(err)
-		}
-		c := ast.NewContext(context.Background(), os.Stdout)
-
-		res, err := script.Exec(c)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		if res == nil {
-			return
-		}
-
-		if ri, ok := res.Value.([]interface{}); ok {
-			for _, i := range ri {
-				fmt.Println(i)
-			}
-			continue
-		}
-		fmt.Println(res)
+	r := commands.NewRunner()
+	r.FlagSet.Parse(args)
+	err := r.Exec()
+	if err != nil {
+		log.Fatal(err)
 	}
 }

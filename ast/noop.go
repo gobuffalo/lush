@@ -11,6 +11,10 @@ func (n Noop) String() string {
 	return ""
 }
 
+func (n Noop) Exec(c *Context) (interface{}, error) {
+	return nil, nil
+}
+
 func NewNoop(b []byte) (Noop, error) {
 	return Noop{
 		Text: string(b),

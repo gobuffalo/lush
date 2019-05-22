@@ -95,6 +95,20 @@ UNARY <- num:NUMBER {
   return num, nil
 } / "(" expr:EXPR ")" {
   return expr, nil
+} / call:CALLEXPR {
+  return call, nil
+}
+
+CALLEXPR <- head:(REF / FCALL) tail:("." IDENT ARGS?)* {
+  return newCallExpr(head, tail)
+}
+
+ARGS <- "(" head:EXPR? tail:("," _ EXPR )* ")" {
+  return []ast.Execable{}, nil
+}
+
+REF <- name:IDENT {
+  return newVarRef(name)
 }
 
 LET <- _ "let" _ name:IDENT _ "=" _ value:EXPR {

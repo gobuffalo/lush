@@ -38,6 +38,42 @@ func toIfaceSlice(v interface{}) []interface{} {
 	return v.([]interface{})
 }
 
+func newCallExpr(head, tail interface{}) (ast.Execable, error) {
+	tailSlice := toIfaceSlice(tail)
+	if len(tailSlice) == 0 {
+		return head.(ast.Execable), nil
+	}
+
+	var nextCallee ast.Execable = head.(ast.Execable)
+
+	for _, call := range tailSlice {
+		callParts := toIfaceSlice(call)
+		name := callParts[1].(ast.Ident)
+
+		if callParts[2] != nil {
+			nextCallee = &ast.MethodCallExpr{
+				Callee: nextCallee,
+				Method: name.Name,
+				Args:   callParts[2].([]ast.Execable),
+			}
+		} else {
+			nextCallee = &ast.AccessExpr{
+				Callee:   nextCallee,
+				Property: name.Name,
+			}
+		}
+	}
+
+	return nextCallee, nil
+}
+
+func newVarRef(i interface{}) (ast.Execable, error) {
+	ident := i.(ast.Ident)
+	return ast.VarRef{
+		Name: ident.Name,
+	}, nil
+}
+
 func newBinaryExpr(head, tail interface{}) (ast.Execable, error) {
 	cur := &ast.BinaryExpr{
 		LHS: head.(ast.Execable),

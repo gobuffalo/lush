@@ -38,6 +38,7 @@ func main() {
 	write(quick.LET)
 	write(quick.OPEXPR)
 	write(quick.RETURN)
+	write(quick.IMPORT)
 }
 
 func write(s interface{}) {

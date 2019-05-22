@@ -41,6 +41,7 @@ type Statements []Statement
 
 func (t Statements) String() string {
 	var x []string
+	var last Statement
 	for _, s := range t {
 		y := strings.TrimSpace(s.String())
 		if len(y) == 0 {
@@ -50,11 +51,15 @@ func (t Statements) String() string {
 		case Statements:
 			x = append(x, t.String())
 		case Noop:
-		case Comment:
+		case Comment, Import:
 			x = append(x, t.String()+"\n")
 		default:
+			if _, ok := last.(Import); ok {
+				x = append(x, "\n")
+			}
 			x = append(x, y+"\n\n")
 		}
+		last = s
 	}
 	return strings.Join(x, "")
 }

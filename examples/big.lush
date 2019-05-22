@@ -1,3 +1,7 @@
+import "fmt"
+import "time"
+import "strings"
+
 shoe := {"evan": "dando"}
 
 shoe["evan"] = "Dando"

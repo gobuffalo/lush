@@ -13,6 +13,12 @@ type ASTMarshaler interface {
 func format(i fmt.Stringer, st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
+		if st.Flag('#') {
+			if gs, ok := i.(fmt.GoStringer); ok {
+				fmt.Fprint(st, gs.GoString())
+				return
+			}
+		}
 		if st.Flag('+') {
 			b, err := json.MarshalIndent(i, "", "  ")
 			if err != nil {

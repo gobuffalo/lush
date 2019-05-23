@@ -71,7 +71,7 @@ func compileGoTests() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Fprintf(f, goTest, name, s)
+		fmt.Fprintf(f, goTest, strings.TrimSpace(s.String()), name, s)
 
 		if err := f.Close(); err != nil {
 			return err
@@ -95,9 +95,11 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush"
-	"fmt"
 )
 
+/*
+%s
+*/
 func %sExec(c *ast.Context) (*ast.Returned, error) {
 	%#v
 }

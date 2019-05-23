@@ -5,6 +5,21 @@ import (
 	"github.com/gobuffalo/lush/builtins"
 )
 
+/*
+import "fmt"
+
+myNum := 0
+
+myArray := [1, "2", true]
+
+for i, x := range myArray {
+	myNum = i
+
+	fmt.Print(i, x)
+}
+
+return myArray, myNum
+*/
 func rangeExec(c *ast.Context) (*ast.Returned, error) {
 
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})

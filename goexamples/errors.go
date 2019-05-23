@@ -5,6 +5,11 @@ import (
 	"github.com/gobuffalo/lush/builtins"
 )
 
+/*
+import "fmt"
+
+return fmt.Errorf("stop %s", "dragging my heart around")
+*/
 func errorsExec(c *ast.Context) (*ast.Returned, error) {
 
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})

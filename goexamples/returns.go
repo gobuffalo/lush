@@ -4,6 +4,18 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
+/*
+x := 0
+
+func() {
+	if true {
+		x = 42
+	}
+}()
+
+// hopefully 42!
+return "what do you get?", x
+*/
 func returnsExec(c *ast.Context) (*ast.Returned, error) {
 
 	x := 0

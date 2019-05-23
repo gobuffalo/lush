@@ -26,7 +26,16 @@ func (m *MethodCallExpr) Exec(ctx *Context) (interface{}, error) {
 		return nil, errors.New("Attempt to call a method on a non-struct type")
 	}
 
+	var args []reflect.Value
+	for _, arg := range m.Args {
+		val, err := arg.Exec(ctx)
+		if err != nil {
+			return nil, err
+		}
+		args = append(args, reflect.ValueOf(val))
+	}
+
 	meth := rv.MethodByName(m.Method)
-	callRes := meth.Call([]reflect.Value{})
+	callRes := meth.Call(args)
 	return callRes[0].Interface(), nil
 }

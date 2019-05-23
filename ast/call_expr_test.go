@@ -15,6 +15,10 @@ func (b Bar) Quux() int {
 	return b.Baz
 }
 
+func (_ Bar) Add(a, b int) int {
+	return a + b
+}
+
 func Test_CallExpr(t *testing.T) {
 
 	callExprTests := []struct {
@@ -73,9 +77,50 @@ func Test_CallExpr(t *testing.T) {
 			"return 2 * foo.Bar.Quux() + 2",
 			42,
 		},
+		{
+			"arguments",
+			map[string]interface{}{
+				"foo": struct {
+					Bar Bar
+				}{Bar{20}},
+			},
+			"return foo.Bar.Add(2, 2)",
+			4,
+		},
+		{
+			"moar arguments",
+			map[string]interface{}{
+				"foo": struct {
+					Bar Bar
+				}{Bar{20}},
+			},
+			"return foo.Bar.Add(4, 8) + foo.Bar.Add(15, 16) + foo.Bar.Add(23, 42)",
+			108,
+		},
+		{
+			"you got math in my arguments",
+			map[string]interface{}{
+				"foo": struct {
+					Bar Bar
+				}{Bar{20}},
+			},
+			"return foo.Bar.Add(4 + 8 + 15 + 16 + 23, 42)",
+			108,
+		},
+		{
+			"we have to go deeper",
+			map[string]interface{}{
+				"foo": struct {
+					Bar Bar
+				}{Bar{20}},
+			},
+			"return foo.Bar.Add(4, foo.Bar.Add(8, foo.Bar.Add(15, foo.Bar.Add(16, foo.Bar.Add(23, 42)))))",
+			108,
+		},
 	}
 
 	for _, test := range callExprTests {
+		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 

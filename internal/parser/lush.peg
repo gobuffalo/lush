@@ -104,7 +104,7 @@ CALLEXPR <- head:(REF / FCALL) tail:("." IDENT ARGS?)* {
 }
 
 ARGS <- "(" head:EXPR? tail:("," _ EXPR )* ")" {
-  return []ast.Execable{}, nil
+  return newArglist(head, tail)
 }
 
 REF <- name:IDENT {

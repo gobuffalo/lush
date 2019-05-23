@@ -38,6 +38,23 @@ func toIfaceSlice(v interface{}) []interface{} {
 	return v.([]interface{})
 }
 
+func newArglist(head, tail interface{}) ([]ast.Execable, error) {
+	if head == nil {
+		return []ast.Execable{}, nil
+	}
+
+	var args []ast.Execable
+
+	args = append(args, head.(ast.Execable))
+
+	tailSlice := toIfaceSlice(tail)
+	for _, a := range tailSlice {
+		parts := toIfaceSlice(a)
+		args = append(args, parts[2].(ast.Execable))
+	}
+	return args, nil
+}
+
 func newCallExpr(head, tail interface{}) (ast.Execable, error) {
 	tailSlice := toIfaceSlice(tail)
 	if len(tailSlice) == 0 {

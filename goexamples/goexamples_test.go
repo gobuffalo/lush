@@ -7,6 +7,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 type exec func(*ast.Context) (*ast.Returned, error)
@@ -29,17 +30,40 @@ func Equal(c *ast.Context, a, b exec) bool {
 
 	res := true
 
-	if r1 != r2 {
-		fmt.Println(cmp.Diff(r1, r2))
+	var rr1 interface{}
+	var rr2 interface{}
+
+	if r1 != nil {
+		rr1 = *r1
+	}
+	if r2 != nil {
+		rr2 = *r2
+	}
+
+	if rr1 == nil || rr2 == nil {
+		if !(rr1 == nil && rr2 == nil) {
+			fmt.Printf("! %s != %s", rr1, rr2)
+			res = false
+		}
+	} else if !cmp.Equal(rr1, rr2, cmpopts.IgnoreUnexported(rr1, rr2)) {
+		fmt.Println(cmp.Diff(rr1, rr2, cmpopts.IgnoreUnexported(rr1, rr2)))
 		res = false
 	}
 
+	// if err1 == nil || err2 == nil {
+	// 	return res && err1 == nil && err2 == nil
+	// }
+	if err1 == nil && err2 == nil {
+		return res
+	}
+
 	if err1 == nil || err2 == nil {
-		return res && err1 == nil && err2 == nil
+		fmt.Printf("%s != %s", err1, err2)
+		return false
 	}
 
 	if err1.Error() != err2.Error() {
-		fmt.Println(cmp.Diff(r1, r2))
+		fmt.Println(cmp.Diff(err1, err2, cmpopts.IgnoreUnexported(err1, err2)))
 		res = false
 	}
 

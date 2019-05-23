@@ -9,12 +9,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_errorsExec(t *testing.T) {
+func Test_returnsExec(t *testing.T) {
 	r := require.New(t)
 
 	c := ast.NewContext(context.Background(), nil)
 
-	s, err := lush.ParseFile("errors.lush")
+	s, err := lush.ParseFile("returns.lush")
 	r.NoError(err)
-	r.True(Equal(c, s.Exec, errorsExec))
+	r.True(Equal(c, s.Exec, returnsExec))
 }

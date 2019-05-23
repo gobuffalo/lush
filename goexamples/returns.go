@@ -15,9 +15,10 @@ func() {
 
 // hopefully 42!
 return "what do you get?", x
+
+
 */
 func returnsExec(c *ast.Context) (*ast.Returned, error) {
-
 	x := 0
 	_ = x
 
@@ -33,5 +34,4 @@ func returnsExec(c *ast.Context) (*ast.Returned, error) {
 		return nil, ret.Err()
 	}
 	return &ret, nil
-
 }

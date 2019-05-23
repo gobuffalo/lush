@@ -5,6 +5,7 @@ import (
 	"regexp"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 func NewOpExpression(a Statement, op string, b Statement) (*OpExpression, error) {
@@ -103,10 +104,10 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 
 	switch e.Op {
 	case "==":
-		res := cmp.Equal(a, b)
+		res := cmp.Equal(a, b, cmpopts.IgnoreUnexported())
 		return res, nil
 	case "!=":
-		res := cmp.Equal(a, b)
+		res := cmp.Equal(a, b, cmpopts.IgnoreUnexported())
 		return !res, nil
 	case "~=":
 		sb, ok := b.(string)

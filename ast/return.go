@@ -25,9 +25,10 @@ func (r Return) String() string {
 func (r Return) Exec(c *Context) (interface{}, error) {
 	st, err := r.Statements.Exec(c)
 	if err != nil {
-		return nil, err
+		return NewReturned(err), err
 	}
-	return NewReturned(st), nil
+	ret := NewReturned(st)
+	return ret, ret.Err()
 }
 
 func NewReturn(s Statements) (Return, error) {
@@ -67,7 +68,10 @@ func (r Return) GoString() string {
 
 	const ret = `
 ret := ast.NewReturned([]interface {}{%s})
-return &ret, ret.Err()
+if ret.Err() != nil {
+	return nil, ret.Err()
+}
+return &ret, nil
 `
 	return fmt.Sprintf(ret, strings.Join(args, ", "))
 }

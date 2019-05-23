@@ -29,6 +29,9 @@ func returnsExec(c *ast.Context) (*ast.Returned, error) {
 	// hopefully 42!
 
 	ret := ast.NewReturned([]interface{}{"what do you get?", x})
-	return &ret, ret.Err()
+	if ret.Err() != nil {
+		return nil, ret.Err()
+	}
+	return &ret, nil
 
 }

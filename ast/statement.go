@@ -85,7 +85,7 @@ func (st Statements) Exec(c *Context) (interface{}, error) {
 			res, err := r.Exec(c)
 			return res, err
 		case Returned:
-			return r, nil
+			return r, r.Err()
 		case Break:
 			return r, nil
 		case Continue:
@@ -97,7 +97,7 @@ func (st Statements) Exec(c *Context) (interface{}, error) {
 			}
 			switch t := i.(type) {
 			case Returned:
-				return t, nil
+				return t, t.Err()
 			case Break:
 				return t, nil
 			case Continue:

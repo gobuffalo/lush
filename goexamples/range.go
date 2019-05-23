@@ -43,6 +43,9 @@ func rangeExec(c *ast.Context) (*ast.Returned, error) {
 	}
 
 	ret := ast.NewReturned([]interface{}{myArray, myNum})
-	return &ret, ret.Err()
+	if ret.Err() != nil {
+		return nil, ret.Err()
+	}
+	return &ret, nil
 
 }

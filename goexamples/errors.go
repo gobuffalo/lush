@@ -17,6 +17,9 @@ func errorsExec(c *ast.Context) (*ast.Returned, error) {
 	_ = fmt
 
 	ret := ast.NewReturned([]interface{}{fmt.Errorf("stop %s", "dragging my heart around")})
-	return &ret, ret.Err()
+	if ret.Err() != nil {
+		return nil, ret.Err()
+	}
+	return &ret, nil
 
 }

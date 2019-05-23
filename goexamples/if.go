@@ -23,7 +23,10 @@ if false {
 func ifExec(c *ast.Context) (*ast.Returned, error) {
 
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
-	fmt := fmti.(builtins.Fmt)
+	fmt, ok := fmti.(builtins.Fmt)
+	if !ok {
+		return nil, fmt.Errorf("expected builtins.Fmt got %T", fmti)
+	}
 	_ = fmt
 
 	// this is a comment

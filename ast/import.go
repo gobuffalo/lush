@@ -47,10 +47,13 @@ func (i Import) GoString() string {
 	if ok {
 		s := `
 %si, _ := c.Imports.LoadOrStore(%q, %#v)
-%s := %si.(%T)
+%s, ok := %si.(%T)
+if !ok {
+	return nil, fmt.Errorf("expected %T got %%T", %si)
+}
 _ = %s
 		`
-		return fmt.Sprintf(s, i.Name, i.Name, x, i.Name, i.Name, x, i.Name)
+		return fmt.Sprintf(s, i.Name, i.Name, x, i.Name, i.Name, x, x, i.Name, i.Name)
 	}
 
 	s := `

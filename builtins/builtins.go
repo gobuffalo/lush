@@ -11,5 +11,6 @@ var Available = func() sync.Map {
 	m.Store("strings", Strings{})
 	m.Store("time", Time{})
 	m.Store("os", OS{})
+	m.Store("sort", Sort{})
 	return m
 }()

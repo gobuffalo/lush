@@ -173,6 +173,9 @@ func (e OpExpression) Add(c *Context) (interface{}, error) {
 		if bt, ok := b.([]interface{}); ok {
 			return append(at, bt...), nil
 		}
+		if bi, ok := b.(interfacer); ok {
+			return append(at, bi.Interface()), nil
+		}
 	}
 
 	return nil, e.Meta.Errorf("can not add %T and %T", a, b)

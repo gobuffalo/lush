@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -64,6 +65,14 @@ func (t Statements) String() string {
 	return strings.Join(x, "")
 }
 
+func (t *Statements) Append(s Statement, err error) error {
+	if err != nil {
+		return err
+	}
+	(*t) = append(*t, s)
+	return nil
+}
+
 func (i Statements) Format(st fmt.State, verb rune) {
 	format(i, st, verb)
 }
@@ -112,4 +121,20 @@ func (st Statements) MarshalJSON() ([]byte, error) {
 	}
 
 	return json.Marshal(m)
+}
+
+func (st Statements) GoString() string {
+	bb := &bytes.Buffer{}
+
+	for _, s := range st {
+		switch t := s.(type) {
+		case fmt.GoStringer:
+			bb.WriteString(t.GoString() + "\n")
+		case fmt.Stringer:
+			bb.WriteString(t.String() + "\n")
+		default:
+
+		}
+	}
+	return bb.String()
 }

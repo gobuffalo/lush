@@ -43,3 +43,7 @@ func (a Integer) MarshalJSON() ([]byte, error) {
 	}
 	return toJSON(a, m)
 }
+
+func (a Integer) GoString() string {
+	return fmt.Sprintf("%d", a.Value)
+}

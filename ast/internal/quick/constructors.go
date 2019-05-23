@@ -47,7 +47,7 @@ func NewAccess(id ast.Ident, i interface{}) ast.Access {
 }
 
 func NewBlock(s ...ast.Statement) *ast.Block {
-	bl, _ := ast.NewBlock(s)
+	bl, _ := ast.NewBlock(s...)
 	return bl
 }
 

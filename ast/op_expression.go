@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/gobuffalo/lush/opers"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -145,37 +146,38 @@ func (e OpExpression) Add(c *Context) (interface{}, error) {
 		return nil, err
 	}
 
-	if fl, err := ints(a, b); err == nil {
-		var f int
-		for _, x := range fl {
-			f += x
-		}
-		return f, nil
-	}
-
-	if fl, err := floats(a, b); err == nil {
-		var f float64
-		for _, x := range fl {
-			f += x
-		}
-		return f, nil
-	}
-
-	if fl, err := stringSlice(c, a, b); err == nil {
-		var f string
-		for _, x := range fl {
-			f += x
-		}
-		return f, nil
-	}
-
-	if at, ok := a.([]interface{}); ok {
-		if bt, ok := b.([]interface{}); ok {
-			return append(at, bt...), nil
-		}
-	}
-
-	return nil, e.Meta.Errorf("can not add %T and %T", a, b)
+	return opers.Add(a, b)
+	// if fl, err := ints(a, b); err == nil {
+	// 	var f int
+	// 	for _, x := range fl {
+	// 		f += x
+	// 	}
+	// 	return f, nil
+	// }
+	//
+	// if fl, err := floats(a, b); err == nil {
+	// 	var f float64
+	// 	for _, x := range fl {
+	// 		f += x
+	// 	}
+	// 	return f, nil
+	// }
+	//
+	// if fl, err := stringSlice(c, a, b); err == nil {
+	// 	var f string
+	// 	for _, x := range fl {
+	// 		f += x
+	// 	}
+	// 	return f, nil
+	// }
+	//
+	// if at, ok := a.([]interface{}); ok {
+	// 	if bt, ok := b.([]interface{}); ok {
+	// 		return append(at, bt...), nil
+	// 	}
+	// }
+	//
+	// return nil, e.Meta.Errorf("can not add %T and %T", a, b)
 }
 
 func (e OpExpression) Sub(c *Context) (interface{}, error) {

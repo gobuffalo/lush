@@ -9,6 +9,7 @@ type Integer interface {
 	Int() int
 }
 
+// Int ...
 func Int(i interface{}) (int, error) {
 	switch t := i.(type) {
 	case int:

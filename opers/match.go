@@ -20,7 +20,10 @@ type Matcher interface {
 //	* fmt.Stringer
 //	* Matcher
 func Match(i interface{}, pattern string) (bool, error) {
-	fmt.Printf("### opers/match.go:23 pattern (%T) -> %q %+v\n", pattern, pattern, pattern)
+	if m, ok := i.(Matcher); ok {
+		return m.Match(pattern)
+	}
+
 	rx, err := regexp.Compile(pattern)
 	if err != nil {
 		return false, err
@@ -31,10 +34,7 @@ func Match(i interface{}, pattern string) (bool, error) {
 		return rx.MatchString(s), nil
 	case fmt.Stringer:
 		return rx.MatchString(s.String()), nil
-	case Matcher:
-		return s.Match(pattern)
 	default:
-		// panic(fmt.Sprintf("%T", i))
 		return rx.MatchString(types.Value(s)), nil
 	}
 	return false, nil

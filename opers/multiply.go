@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/lush/types"
 )
 
-// Multiply defines an interface to support the
+// Multiplyer defines an interface to support the
 // "multiplication" of one type with an another.
 type Multiplyer interface {
 	Multiply(b interface{}) (interface{}, error)

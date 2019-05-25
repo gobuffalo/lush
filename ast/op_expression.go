@@ -5,7 +5,6 @@ import (
 
 	"github.com/gobuffalo/lush/opers"
 	"github.com/gobuffalo/lush/types"
-	"github.com/google/go-cmp/cmp"
 )
 
 func NewOpExpression(a Statement, op string, b Statement) (*OpExpression, error) {
@@ -104,21 +103,20 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 
 	switch e.Op {
 	case "==":
-		res := cmp.Equal(a, b)
-		return res, nil
+		return opers.Equal(a, b)
 	case "!=":
-		res := cmp.Equal(a, b)
-		return !res, nil
+		res, err := opers.Equal(a, b)
+		return !res, err
 	case "~=":
 		return opers.Match(a, types.Value(b))
 	case "<":
-		return types.String(a) < types.String(b), nil
+		return opers.LessThan(a, b)
 	case ">":
-		return types.String(a) > types.String(b), nil
+		return types.Value(a) > types.Value(b), nil
 	case "<=":
-		return types.String(a) <= types.String(b), nil
+		return types.Value(a) <= types.Value(b), nil
 	case ">=":
-		return types.String(a) >= types.String(b), nil
+		return types.Value(a) >= types.Value(b), nil
 	}
 	return false, nil
 }

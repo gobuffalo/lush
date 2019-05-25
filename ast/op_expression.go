@@ -210,24 +210,17 @@ func (e OpExpression) Divide(c *Context) (interface{}, error) {
 func (e OpExpression) Modulus(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	switch at := a.(type) {
-	case int:
-		switch bt := b.(type) {
-		case int:
-			if bt == 0 {
-				return 0, nil
-			}
-			return at % bt, nil
-		}
+	i, err := opers.Modulus(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
 	}
-
-	return nil, e.Meta.Errorf("can not modulus %T and %T", a, b)
+	return i, nil
 }

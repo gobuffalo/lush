@@ -138,77 +138,37 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 func (e OpExpression) Add(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	return opers.Add(a, b)
-	// if fl, err := ints(a, b); err == nil {
-	// 	var f int
-	// 	for _, x := range fl {
-	// 		f += x
-	// 	}
-	// 	return f, nil
-	// }
-	//
-	// if fl, err := floats(a, b); err == nil {
-	// 	var f float64
-	// 	for _, x := range fl {
-	// 		f += x
-	// 	}
-	// 	return f, nil
-	// }
-	//
-	// if fl, err := stringSlice(c, a, b); err == nil {
-	// 	var f string
-	// 	for _, x := range fl {
-	// 		f += x
-	// 	}
-	// 	return f, nil
-	// }
-	//
-	// if at, ok := a.([]interface{}); ok {
-	// 	if bt, ok := b.([]interface{}); ok {
-	// 		return append(at, bt...), nil
-	// 	}
-	// }
-	//
-	// return nil, e.Meta.Errorf("can not add %T and %T", a, b)
+	i, err := opers.Add(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
+	}
+	return i, nil
 }
 
 func (e OpExpression) Sub(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	switch at := a.(type) {
-	case int:
-		switch bt := b.(type) {
-		case int:
-			return at - bt, nil
-		case float64:
-			return float64(at) - bt, nil
-		}
-	case float64:
-		switch bt := b.(type) {
-		case int:
-			return at - float64(bt), nil
-		case float64:
-			return at - bt, nil
-		}
+	i, err := opers.Sub(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
 	}
-
-	return nil, e.Meta.Errorf("can not subtract %T and %T", a, b)
+	return i, nil
 }
 
 func (e OpExpression) Multiply(c *Context) (interface{}, error) {

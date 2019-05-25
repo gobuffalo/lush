@@ -91,11 +91,13 @@ func Test_OpExpression_Regexp(t *testing.T) {
 		err bool
 	}{
 		{`if ("a" ~= "a") {return true} return false`, true, false},
-		{`if (42 ~= 42) {return true} return false`, true, true},
-		{`if (3.14 ~= 3.14) {return true} return false`, true, true},
-		{`if (true ~= true) {return true} return false`, true, true},
-		{`if ([1,2,3] ~= [1,2,3]) {return true} return false`, true, true},
-		{`if ({a: "A"} ~= {a: "A"}) {return true} return false`, false, true},
+		{`if (42 ~= 42) {return true} return false`, true, false},
+		{`if (4.2 ~= 42) {return true} return false`, false, false},
+		{`if (3.14 ~= 3.14) {return true} return false`, true, false},
+		{`if (true ~= true) {return true} return false`, true, false},
+		{`if (true ~= trUe) {return true} return false`, false, false},
+		{`if ([1,2,3] ~= [1,2,3]) {return true} return false`, true, false},
+		{`if ({a: "A"} ~= {a: "A"}) {return true} return false`, true, false},
 		{`if ("a" ~= "b") {return true} return false`, false, false},
 	}
 

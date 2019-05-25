@@ -6,10 +6,19 @@ import (
 	"github.com/gobuffalo/lush/types"
 )
 
+// Adder defines an interface to support the
+// "adding" of one type to another.
 type Adder interface {
 	Add(b interface{}) (interface{}, error)
 }
 
+// Add attempts to "add" type `a` with type `b`.
+// Supports:
+//	* int
+//	* float64
+//	* Adder
+//	* types.Floater
+//	* types.Integer
 func Add(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
 	case Adder:
@@ -47,6 +56,30 @@ func Add(a, b interface{}) (interface{}, error) {
 		switch bt := b.(type) {
 		case string:
 			return at + bt, nil
+		}
+	case types.Integer:
+		a := at.Int()
+		switch bt := b.(type) {
+		case int:
+			return a + bt, nil
+		case float64:
+			return float64(a) + bt, nil
+		case types.Integer:
+			return a + bt.Int(), nil
+		case types.Floater:
+			return float64(a) + bt.Float(), nil
+		}
+	case types.Floater:
+		a := at.Float()
+		switch bt := b.(type) {
+		case float64:
+			return a + bt, nil
+		case types.Integer:
+			return a + float64(bt.Int()), nil
+		case types.Floater:
+			return a + bt.Float(), nil
+		case int:
+			return a + float64(bt), nil
 		}
 	}
 

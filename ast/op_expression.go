@@ -2,9 +2,9 @@ package ast
 
 import (
 	"fmt"
-	"regexp"
 
 	"github.com/gobuffalo/lush/opers"
+	"github.com/gobuffalo/lush/types"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -110,27 +110,15 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 		res := cmp.Equal(a, b)
 		return !res, nil
 	case "~=":
-		sb, ok := b.(string)
-		if !ok {
-			return false, e.Meta.Errorf("expected string got %T", b)
-		}
-		rx, err := regexp.Compile(sb)
-		if err != nil {
-			return false, err
-		}
-		s, ok := a.(string)
-		if !ok {
-			return false, e.Meta.Errorf("expected string got %T", a)
-		}
-		return rx.MatchString(s), nil
+		return opers.Match(a, types.Value(b))
 	case "<":
-		return fmt.Sprint(a) < fmt.Sprint(b), nil
+		return types.String(a) < types.String(b), nil
 	case ">":
-		return fmt.Sprint(a) > fmt.Sprint(b), nil
+		return types.String(a) > types.String(b), nil
 	case "<=":
-		return fmt.Sprint(a) <= fmt.Sprint(b), nil
+		return types.String(a) <= types.String(b), nil
 	case ">=":
-		return fmt.Sprint(a) >= fmt.Sprint(b), nil
+		return types.String(a) >= types.String(b), nil
 	}
 	return false, nil
 }

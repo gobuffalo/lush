@@ -10,6 +10,7 @@ type Floater interface {
 	Float() float64
 }
 
+// Float ...
 func Float(i interface{}) (float64, error) {
 	switch t := i.(type) {
 	case float64:

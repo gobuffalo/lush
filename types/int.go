@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// Integer ...
 type Integer interface {
 	Int() int
 }

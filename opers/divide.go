@@ -3,25 +3,20 @@ package opers
 import (
 	"fmt"
 
+	"github.com/gobuffalo/lush/faces"
 	"github.com/gobuffalo/lush/types"
 )
-
-// Divider defines an interface to support the
-// "dividing" of one type from an another.
-type Divider interface {
-	Divide(b interface{}) (interface{}, error)
-}
 
 // Divide attempts to "divide" type `b` from type `a`.
 // Supports:
 //	* int
 //	* float64
-//	* Divider
+//	* faces.Divide
 //	* types.Floater
 //	* types.Integer
 func Divide(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
-	case Divider:
+	case faces.Divide:
 		return at.Divide(b)
 	case int:
 		switch bt := b.(type) {

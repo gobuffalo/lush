@@ -1,7 +1,22 @@
 package types
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/gobuffalo/lush/faces"
+)
+
+type Valuer string
+
+func (s Valuer) Value() string {
+	return fmt.Sprintf("%v", s)
+}
 
 func Value(i interface{}) string {
-	return fmt.Sprintf("%v", i)
+	switch t := i.(type) {
+	case faces.Value:
+		return t.Value()
+	default:
+		return fmt.Sprintf("%v", i)
+	}
 }

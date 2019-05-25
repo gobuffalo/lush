@@ -3,23 +3,18 @@ package opers
 import (
 	"fmt"
 
+	"github.com/gobuffalo/lush/faces"
 	"github.com/gobuffalo/lush/types"
 )
-
-// Modululerize defines an interface to support the
-// take the "modulus" of one type from an another.
-type Modululerize interface {
-	Modulus(b interface{}) (int, error)
-}
 
 // Modulus attempts to take the "modulus" of type `a` with type `b`.
 // Supports:
 //	* int
-//	* Modululerize
+//	* faces.Modulus
 //	* types.Integer
 func Modulus(a, b interface{}) (int, error) {
 	switch at := a.(type) {
-	case Modululerize:
+	case faces.Modulus:
 		return at.Modulus(b)
 	case int:
 		switch bt := b.(type) {

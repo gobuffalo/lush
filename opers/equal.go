@@ -1,20 +1,17 @@
 package opers
 
-import "github.com/google/go-cmp/cmp"
-
-// Equalizer defines an interface to support the
-// checking "equality" of one type to an another.
-type Equalizer interface {
-	Equal(b interface{}) (bool, error)
-}
+import (
+	"github.com/gobuffalo/lush/faces"
+	"github.com/google/go-cmp/cmp"
+)
 
 // Equal attempts to check "equality" of two types.
 // Supports:
-//	* Equalizer
+//	* faces.Equal
 //	* github.com/google/go-cmp/cmp
 func Equal(a, b interface{}) (bool, error) {
 	switch at := a.(type) {
-	case Equalizer:
+	case faces.Equal:
 		return at.Equal(b)
 	}
 

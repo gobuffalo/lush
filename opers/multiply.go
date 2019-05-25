@@ -3,25 +3,20 @@ package opers
 import (
 	"fmt"
 
+	"github.com/gobuffalo/lush/faces"
 	"github.com/gobuffalo/lush/types"
 )
-
-// Multiply defines an interface to support the
-// "multiplication" of one type with an another.
-type Multiplyer interface {
-	Multiply(b interface{}) (interface{}, error)
-}
 
 // Multiply attempts to "multiply" type `a` with type `b`.
 // Supports:
 //	* int
 //	* float64
-//	* Multiplyer
+//	* faces.Multiply
 //	* types.Floater
 //	* types.Integer
 func Multiply(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
-	case Multiplyer:
+	case faces.Multiply:
 		return at.Multiply(b)
 	case int:
 		switch bt := b.(type) {

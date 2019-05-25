@@ -3,25 +3,20 @@ package opers
 import (
 	"fmt"
 
+	"github.com/gobuffalo/lush/faces"
 	"github.com/gobuffalo/lush/types"
 )
-
-// Suber defines an interface to support the
-// "subtracting" of one type from an another.
-type Suber interface {
-	Sub(b interface{}) (interface{}, error)
-}
 
 // Sub attempts to "subtract" type `b` from type `a`.
 // Supports:
 //	* int
 //	* float64
-//	* Suber
+//	* faces.Sub
 //	* types.Floater
 //	* types.Integer
 func Sub(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
-	case Suber:
+	case faces.Sub:
 		return at.Sub(b)
 	case int:
 		switch bt := b.(type) {

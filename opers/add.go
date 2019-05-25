@@ -3,25 +3,20 @@ package opers
 import (
 	"fmt"
 
+	"github.com/gobuffalo/lush/faces"
 	"github.com/gobuffalo/lush/types"
 )
-
-// Adder defines an interface to support the
-// "adding" of one type to another.
-type Adder interface {
-	Add(b interface{}) (interface{}, error)
-}
 
 // Add attempts to "add" type `a` with type `b`.
 // Supports:
 //	* int
 //	* float64
-//	* Adder
+//	* faces.Add
 //	* types.Floater
 //	* types.Integer
 func Add(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
-	case Adder:
+	case faces.Add:
 		return at.Add(b)
 	case int:
 		switch bt := b.(type) {

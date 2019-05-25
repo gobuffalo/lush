@@ -4,23 +4,18 @@ import (
 	"fmt"
 	"regexp"
 
+	"github.com/gobuffalo/lush/faces"
 	"github.com/gobuffalo/lush/types"
 )
-
-// Matcher defines an interface to support the
-// "matches" of one type from an another.
-type Matcher interface {
-	Match(string) (bool, error)
-}
 
 // Match will attempt to match the given regex pattern
 // against the given type.
 // Supports:
 //	* string
 //	* fmt.Stringer
-//	* Matcher
+//	* faces.Match
 func Match(i interface{}, pattern string) (bool, error) {
-	if m, ok := i.(Matcher); ok {
+	if m, ok := i.(faces.Match); ok {
 		return m.Match(pattern)
 	}
 

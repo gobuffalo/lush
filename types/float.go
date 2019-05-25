@@ -3,17 +3,21 @@ package types
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/gobuffalo/lush/faces"
 )
 
-type Floater interface {
-	Float() float64
+type Floater float64
+
+func (f Floater) Float() float64 {
+	return float64(f)
 }
 
 func Float(i interface{}) (float64, error) {
 	switch t := i.(type) {
 	case float64:
 		return t, nil
-	case Floater:
+	case faces.Float:
 		return t.Float(), nil
 	default:
 		a, err := strconv.Atoi(fmt.Sprintf("%s", i))

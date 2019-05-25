@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// Floater ...
 type Floater interface {
 	Float() float64
 }

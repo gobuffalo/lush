@@ -192,32 +192,19 @@ func (e OpExpression) Multiply(c *Context) (interface{}, error) {
 func (e OpExpression) Divide(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	switch at := a.(type) {
-	case int:
-		switch bt := b.(type) {
-		case int:
-			return float64(at) / float64(bt), nil
-		case float64:
-			return float64(at) / bt, nil
-		}
-	case float64:
-		switch bt := b.(type) {
-		case int:
-			return at / float64(bt), nil
-		case float64:
-			return at / bt, nil
-		}
+	i, err := opers.Divide(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
 	}
-
-	return nil, e.Meta.Errorf("can not divide %T and %T", a, b)
+	return i, nil
 }
 
 func (e OpExpression) Modulus(c *Context) (interface{}, error) {

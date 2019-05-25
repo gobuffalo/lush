@@ -243,11 +243,11 @@ func Test_OpExpression_Divide(t *testing.T) {
 		out interface{}
 		err bool
 	}{
-		{`return 4 / 2`, 2.0, false},
+		{`return 4 / 2`, 2, false},
 		{`return 4 / 2.0`, 2.0, false},
 		{`return 4 / -2.0`, -2.0, false},
 		{`return 3.50 / 4`, 0.875, false},
-		{`return 10 / ( 4 / 2 )`, 5.0, false},
+		{`return 10 / ( 4 / 2 )`, 5, false},
 		{`return "a" / "b"`, nil, true},
 		{`return ( ( "a" / "b" ) / ("c" / "d") )`, nil, true},
 		{`return [1] / [2]`, nil, true},

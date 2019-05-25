@@ -13,6 +13,7 @@ func (f Floater) Float() float64 {
 	return float64(f)
 }
 
+// Float ...
 func Float(i interface{}) (float64, error) {
 	switch t := i.(type) {
 	case float64:

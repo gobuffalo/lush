@@ -12,6 +12,7 @@ func (s Valuer) Value() string {
 	return fmt.Sprintf("%v", s)
 }
 
+// Value ...
 func Value(i interface{}) string {
 	switch t := i.(type) {
 	case faces.Value:

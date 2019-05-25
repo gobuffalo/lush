@@ -13,6 +13,7 @@ func (i Integer) Int() int {
 	return int(i)
 }
 
+// Int ...
 func Int(i interface{}) (int, error) {
 	switch t := i.(type) {
 	case int:

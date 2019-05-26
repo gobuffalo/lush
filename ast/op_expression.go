@@ -118,7 +118,7 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 	case "<=":
 		return opers.LessThanEqualTo(a, b)
 	case ">=":
-		return types.Value(a) >= types.Value(b), nil
+		return opers.GreaterThanEqualTo(a, b)
 	}
 	return false, nil
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/gobuffalo/lush/faces"
 	"github.com/gobuffalo/lush/opers/internal/equal"
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 // Equal `a == b`
@@ -22,7 +23,7 @@ func Equal(a, b interface{}) (bool, error) {
 		return at == nil, nil
 	}
 
-	res := cmp.Equal(a, b)
+	res := cmp.Equal(a, b, cmpopts.IgnoreUnexported())
 
 	return res, nil
 }

@@ -20,16 +20,7 @@ func Add(a, b interface{}) (interface{}, error) {
 	case int:
 		return add.Int(at, b)
 	case float64:
-		switch bt := b.(type) {
-		case float64:
-			return at + bt, nil
-		case types.Integer:
-			return at + float64(bt.Int()), nil
-		case types.Floater:
-			return at + bt.Float(), nil
-		case int:
-			return at + float64(bt), nil
-		}
+		return add.Float(at, b)
 	case []interface{}:
 		switch bt := b.(type) {
 		case []interface{}:
@@ -45,17 +36,7 @@ func Add(a, b interface{}) (interface{}, error) {
 	case types.Integer:
 		return add.Int(at.Int(), b)
 	case types.Floater:
-		a := at.Float()
-		switch bt := b.(type) {
-		case float64:
-			return a + bt, nil
-		case types.Integer:
-			return a + float64(bt.Int()), nil
-		case types.Floater:
-			return a + bt.Float(), nil
-		case int:
-			return a + float64(bt), nil
-		}
+		return add.Float(at.Float(), b)
 	}
 
 	return nil, add.Cant(a, b)

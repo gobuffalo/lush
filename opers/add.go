@@ -22,12 +22,7 @@ func Add(a, b interface{}) (interface{}, error) {
 	case float64:
 		return add.Float(at, b)
 	case []interface{}:
-		switch bt := b.(type) {
-		case []interface{}:
-			return append(at, bt...), nil
-		default:
-			return append(at, bt), nil
-		}
+		return add.Slice(at, b)
 	case string:
 		switch bt := b.(type) {
 		case string:

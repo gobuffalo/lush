@@ -15,8 +15,17 @@ type Map struct {
 	Meta   Meta
 }
 
-type Keyable interface {
-	MapKey() string
+func (m Map) Map() map[string]interface{} {
+	mm := map[string]interface{}{}
+
+	for k, v := range m.Values {
+		if iv, ok := v.(interfacer); ok {
+			v = iv.Interface()
+		}
+		mm[k] = v
+	}
+
+	return mm
 }
 
 func NewMap(vals interface{}) (Map, error) {
@@ -87,16 +96,7 @@ func (m Map) String() string {
 }
 
 func (m Map) Interface() interface{} {
-	mm := map[string]interface{}{}
-
-	for k, v := range m.Values {
-		if iv, ok := v.(interfacer); ok {
-			v = iv.Interface()
-		}
-		mm[k] = v
-	}
-
-	return mm
+	return m.Map()
 }
 
 func (m Map) MarshalJSON() ([]byte, error) {

@@ -12,6 +12,10 @@ type Array struct {
 }
 
 func (a Array) Interface() interface{} {
+	return a.Slice()
+}
+
+func (a Array) Slice() []interface{} {
 	return a.Value
 }
 

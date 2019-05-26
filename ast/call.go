@@ -7,6 +7,8 @@ import (
 	"log"
 	"reflect"
 	"strings"
+
+	"github.com/gobuffalo/lush/types"
 )
 
 func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error) {
@@ -191,14 +193,9 @@ func app(args []reflect.Value, mt reflect.Type, i int, c *Context, v interface{}
 		args = append(args, ar)
 	}
 
-	if ii, err := toII(v); err == nil {
-		for _, x := range ii {
-			app(x)
-		}
-		return args, err
+	for _, x := range types.Slice(v) {
+		app(x)
 	}
-
-	app(v)
 	return args, nil
 }
 

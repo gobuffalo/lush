@@ -56,4 +56,4 @@ release:
 	make tidy
 
 examples: install
-	lush -import os ./examples/big.lush ./examples/returns.lush ./examples/errors.lush
+	lush run -import os ./examples/big.lush ./examples/returns.lush ./examples/errors.lush

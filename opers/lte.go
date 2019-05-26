@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/lush/opers/internal/lte"
 )
 
-// LessThan `a <= b`
+// LessThanEqualTo `a <= b`
 // Supports:
 //	* int
 //	* float64

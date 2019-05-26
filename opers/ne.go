@@ -14,7 +14,7 @@ func NotEqual(a, b interface{}) (bool, error) {
 	switch at := a.(type) {
 	case faces.NotEqual:
 		return at.NotEqual(b)
-	case map[interface{}]interface{}:
+	case map[string]interface{}:
 		return ne.Map(at, b)
 	case faces.Map:
 		return ne.Map(at.Map(), b)

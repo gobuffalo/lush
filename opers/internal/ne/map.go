@@ -7,9 +7,9 @@ import (
 )
 
 // Map ...
-func Map(m map[interface{}]interface{}, b interface{}) (bool, error) {
+func Map(m map[string]interface{}, b interface{}) (bool, error) {
 	switch bt := b.(type) {
-	case map[interface{}]interface{}:
+	case map[string]interface{}:
 		var sa []string
 		var sb []string
 

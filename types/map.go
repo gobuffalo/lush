@@ -7,17 +7,17 @@ import (
 )
 
 // Mapper ...
-type Mapper map[interface{}]interface{}
+type Mapper map[string]interface{}
 
 // Map ...
-func (m Mapper) Map() map[interface{}]interface{} {
-	return map[interface{}]interface{}(m)
+func (m Mapper) Map() map[string]interface{} {
+	return map[string]interface{}(m)
 }
 
 // Map ...
-func Map(i interface{}) (map[interface{}]interface{}, error) {
+func Map(i interface{}) (map[string]interface{}, error) {
 	switch t := i.(type) {
-	case map[interface{}]interface{}:
+	case map[string]interface{}:
 		return t, nil
 	case faces.Map:
 		return t.Map(), nil

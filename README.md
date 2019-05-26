@@ -307,7 +307,7 @@ for (i, x) in myArray {
 
 ## [Maps](#maps)
 
-Maps are backed by `map[interface{}]interface{}` and can contain any legal Go value.
+Maps are backed by `map[string]interface{}` and can contain any legal Go value.
 
 ### Defining
 

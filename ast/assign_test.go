@@ -22,7 +22,7 @@ func Test_Assign(t *testing.T) {
 		{`foo[0] = 42
 		return foo`, []int{42}, false},
 		{`baz["bar"] = 42
-		return baz`, map[interface{}]interface{}{"bar": 42}, false},
+		return baz`, map[string]interface{}{"bar": 42}, false},
 	}
 
 	for _, tt := range table {
@@ -31,7 +31,7 @@ func Test_Assign(t *testing.T) {
 			c := NewContext()
 
 			c.Set("foo", []int{2})
-			c.Set("baz", map[interface{}]interface{}{})
+			c.Set("baz", map[string]interface{}{})
 
 			res, err := exec(tt.in, c)
 			if tt.err {

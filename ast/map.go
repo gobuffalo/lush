@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/gobuffalo/lush/types"
 )
 
 type Map struct {
-	Values map[Statement]interface{}
+	Values map[string]interface{}
 	Meta   Meta
 }
 
@@ -19,7 +20,7 @@ type Keyable interface {
 }
 
 func NewMap(vals interface{}) (Map, error) {
-	m := Map{Values: map[Statement]interface{}{}}
+	m := Map{Values: map[string]interface{}{}}
 
 	sl := types.Slice(vals)
 
@@ -32,10 +33,9 @@ func NewMap(vals interface{}) (Map, error) {
 
 		k := sl[0]
 		v := sl[4]
-
-		sk, ok := k.(Statement)
-		if !ok {
-			return m, fmt.Errorf("expected Statement got %T", k)
+		sk := fmt.Sprintf("%s", k)
+		if uq, err := strconv.Unquote(sk); err == nil {
+			sk = uq
 		}
 		m.Values[sk] = v
 	}
@@ -44,17 +44,12 @@ func NewMap(vals interface{}) (Map, error) {
 }
 
 func (m Map) Exec(c *Context) (interface{}, error) {
-	mm := map[interface{}]interface{}{}
+	mm := map[string]interface{}{}
 	for k, v := range m.Values {
-		var key interface{} = k
 		var value interface{} = v
 
 		if vv, ok := v.(interfacer); ok {
 			value = vv.Interface()
-		}
-
-		if vv, ok := k.(interfacer); ok {
-			key = vv.Interface()
 		}
 
 		value, err := exec(c, v)
@@ -62,19 +57,19 @@ func (m Map) Exec(c *Context) (interface{}, error) {
 			return nil, err
 		}
 
-		mm[key] = value
+		mm[k] = value
 	}
 	return mm, nil
 }
 
 func (m Map) String() string {
-	var keys []Statement
+	var keys []string
 
 	for k := range m.Values {
 		keys = append(keys, k)
 	}
 	sort.Slice(keys, func(a, b int) bool {
-		return keys[a].String() < keys[b].String()
+		return keys[a] < keys[b]
 	})
 
 	bb := &bytes.Buffer{}
@@ -82,8 +77,8 @@ func (m Map) String() string {
 	var lines []string
 	for _, k := range keys {
 		v := m.Values[k]
-		mk := strings.TrimSpace(k.String())
-		lines = append(lines, fmt.Sprintf("%s: %s", mk, v))
+		mk := strings.TrimSpace(k)
+		lines = append(lines, fmt.Sprintf("%q: %s", mk, v))
 	}
 	sort.Strings(lines)
 	bb.WriteString(strings.Join(lines, ", "))
@@ -95,14 +90,10 @@ func (m Map) Interface() interface{} {
 	mm := map[string]interface{}{}
 
 	for k, v := range m.Values {
-		ks := k.String()
-		if kv, ok := k.(interfacer); ok {
-			ks = fmt.Sprint(kv.Interface())
-		}
 		if iv, ok := v.(interfacer); ok {
 			v = iv.Interface()
 		}
-		mm[ks] = v
+		mm[k] = v
 	}
 
 	return mm

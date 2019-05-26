@@ -5,6 +5,12 @@ import (
 	"reflect"
 )
 
+type Slicer []interface{}
+
+func (s Slicer) Slice() []interface{} {
+	return []interface{}(s)
+}
+
 // Slice ...
 func Slice(i interface{}) []interface{} {
 	if ii, ok := i.([]interface{}); ok {

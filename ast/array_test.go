@@ -25,7 +25,7 @@ func Test_Array(t *testing.T) {
 		{`let a = [1,["a", "b"],3]`, []interface{}{1, []interface{}{"a", "b"}, 3}, false},
 		{`let a = [`, nil, true},
 		{`let a = ["a", "b", 42]`, []interface{}{"a", "b", 42}, false},
-		{`let a = [true, {"foo": "bar"}, 42]`, []interface{}{true, map[interface{}]interface{}{"foo": "bar"}, 42}, false},
+		{`let a = [true, {"foo": "bar"}, 42]`, []interface{}{true, map[string]interface{}{"foo": "bar"}, 42}, false},
 	}
 
 	for _, tt := range table {

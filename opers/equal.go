@@ -14,7 +14,7 @@ func Equal(a, b interface{}) (bool, error) {
 	switch at := a.(type) {
 	case faces.Equal:
 		return at.Equal(b)
-	case map[interface{}]interface{}:
+	case map[string]interface{}:
 		return equal.Map(at, b)
 	case faces.Map:
 		return equal.Map(at.Map(), b)

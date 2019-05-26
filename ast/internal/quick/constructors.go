@@ -55,7 +55,7 @@ func NewComment(s string) ast.Comment {
 	return ast.Comment{Value: s}
 }
 
-func NewMap(m map[ast.Statement]interface{}) ast.Map {
+func NewMap(m map[string]interface{}) ast.Map {
 	mp := ast.Map{
 		Values: m,
 	}

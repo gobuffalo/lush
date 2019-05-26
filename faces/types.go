@@ -22,5 +22,5 @@ type Slice interface {
 
 // Map ...
 type Map interface {
-	Map() map[interface{}]interface{}
+	Map() map[string]interface{}
 }

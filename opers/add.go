@@ -13,11 +13,13 @@ import (
 //	* float64
 //	* string
 //	* []interface{}
+//	* map[string]interface{}
 //	* fmt.Stringer
 //	* faces.Add
 //	* faces.Int
 //	* faces.Float
 //	* faces.Slice
+//	* faces.Map
 func Add(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
 	case faces.Add:
@@ -30,6 +32,10 @@ func Add(a, b interface{}) (interface{}, error) {
 		return add.Slice(at, b)
 	case string:
 		return add.String(at, b)
+	case map[string]interface{}:
+		return add.Map(at, b)
+	case faces.Map:
+		return add.Map(at.Map(), b)
 	case fmt.Stringer:
 		return add.String(at.String(), b)
 	case faces.Int:

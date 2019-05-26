@@ -135,7 +135,7 @@ func Test_OpExpression_Add(t *testing.T) {
 		{`return y + " " + z`, "zoo farm", false},
 		{`return 4 + "a"`, nil, true},
 		{`return "a" + 4`, nil, true},
-		{`return {a: 1, b: "hi"} + {c: true}`, nil, true},
+		{`return {a: 1, b: "hi"} + {c: true}`, map[string]interface{}{"a": 1, "b": "hi", "c": true}, false},
 		{`return "a" + "b" + "c"`, "abc", false},
 		{`return ( "a" + "b" ) + ("c" + "d")`, "abcd", true}, // TODO
 		{`return ( ( "a" + "b" ) + "c" + "d" )`, nil, true},  // TODO
@@ -171,6 +171,7 @@ func Test_OpExpression_Sub(t *testing.T) {
 		{`return 4 - -3.50`, 7.50, false},
 		{`return 3.50 - 4`, -0.50, false},
 		{`return 10 - ( 4 - 2 )`, 8, false},
+		{`return {a: 1, b: "hi"} - "b"`, map[string]interface{}{"a": 1}, false},
 		{`return "a" - "b"`, nil, true},
 		{`return ( ( "a" - "b" ) - ("c" - "d") )`, nil, true},
 		{`return [1] - [2]`, nil, true},

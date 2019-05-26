@@ -2,22 +2,7 @@
   "ast.Map": {
     "Values": [
       [
-        {
-          "ast.Ident": {
-            "Meta": {
-              "ast.Meta": {
-                "Col": 0,
-                "Filename": "",
-                "Line": 0,
-                "Offset": 0,
-                "Original": ""
-              }
-            },
-            "Name": {
-              "string": "foo"
-            }
-          }
-        },
+        "foo",
         {
           "ast.Integer": {
             "Meta": {

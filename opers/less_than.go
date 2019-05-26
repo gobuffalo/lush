@@ -7,6 +7,17 @@ import (
 	"github.com/gobuffalo/lush/opers/internal/lessthan"
 )
 
+// LessThan `a < b`
+// Supports:
+//	* int
+//	* float64
+//	* string
+//	* []interface{}
+//	* fmt.Stringer
+//	* faces.Add
+//	* faces.Int
+//	* faces.Float
+//	* faces.Slice
 func LessThan(a, b interface{}) (bool, error) {
 	switch at := a.(type) {
 	case faces.LessThan:

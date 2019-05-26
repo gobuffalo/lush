@@ -1,18 +1,23 @@
 package opers
 
 import (
+	"fmt"
+
 	"github.com/gobuffalo/lush/faces"
 	"github.com/gobuffalo/lush/opers/internal/add"
-	"github.com/gobuffalo/lush/types"
 )
 
-// Add attempts to "add" type `a` with type `b`.
+// Add `a + b`
 // Supports:
 //	* int
 //	* float64
+//	* string
+//	* []interface{}
+//	* fmt.Stringer
 //	* faces.Add
-//	* types.Floater
-//	* types.Integer
+//	* faces.Int
+//	* faces.Float
+//	* faces.Slice
 func Add(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
 	case faces.Add:
@@ -24,14 +29,15 @@ func Add(a, b interface{}) (interface{}, error) {
 	case []interface{}:
 		return add.Slice(at, b)
 	case string:
-		switch bt := b.(type) {
-		case string:
-			return at + bt, nil
-		}
-	case types.Integer:
+		return add.String(at, b)
+	case fmt.Stringer:
+		return add.String(at.String(), b)
+	case faces.Int:
 		return add.Int(at.Int(), b)
-	case types.Floater:
+	case faces.Float:
 		return add.Float(at.Float(), b)
+	case faces.Slice:
+		return add.Slice(at.Slice(), b)
 	}
 
 	return nil, add.Cant(a, b)

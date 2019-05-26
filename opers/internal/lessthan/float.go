@@ -30,5 +30,5 @@ func Float(at float64, b interface{}) (bool, error) {
 		}
 		return at < float64(toi), nil
 	}
-	return false, fmt.Errorf("can not compare %T with %T", at, b)
+	return false, Cant(at, b)
 }

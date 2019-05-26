@@ -30,6 +30,6 @@ func Int(at int, b interface{}) (bool, error) {
 		}
 		return at < toi, nil
 	}
-	return false, fmt.Errorf("can not compare %T with %T", at, b)
+	return false, Cant(at, b)
 
 }

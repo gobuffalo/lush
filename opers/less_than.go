@@ -24,5 +24,5 @@ func LessThan(a, b interface{}) (bool, error) {
 	case faces.Float:
 		return lessthan.Float(at.Float(), b)
 	}
-	return false, fmt.Errorf("can not compare %T with %T", a, b)
+	return false, lessthan.Cant(a, b)
 }

@@ -13,8 +13,8 @@ var (
 	ACCESS  = NewAccess(IDENT, 42)
 	BLOCK   = NewBlock(ASSIGN, VAR)
 	COMMENT = NewComment("i've got blisters on my fingers")
-	MAP     = NewMap(map[ast.Statement]interface{}{
-		IDENT: INT,
+	MAP     = NewMap(map[string]interface{}{
+		IDENT.String(): INT,
 	})
 	CALL   = NewCall(IDENT, NewIdent("Bar"), ast.Statements{INT, FLOAT, STRING}, BLOCK)
 	IF     = NewIf(nil, ast.True, BLOCK, nil)

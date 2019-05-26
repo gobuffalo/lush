@@ -5,6 +5,14 @@ import "os"
 
 fmt.Println(os.Environ())
 
+let j = {"a": "b", "foo": "bar", "h": 1, "y": func(x) {}}
+
+fmt.Println(j)
+
+j = (j - "foo")
+
+fmt.Println(j)
+
 shoe := {"evan": "dando"}
 
 shoe["evan"] = "Dando"
@@ -147,8 +155,6 @@ let f = "tyhis is my string. \"don't\" ask me about it. :)"
 let h = -42
 
 let i = ["foo", "bar", 1, "this is i"]
-
-let j = {"a": "b", "foo": "bar", "h": 1, "y": func(x) {}}
 
 for (x, y) in i {
 	fmt.Println("array")

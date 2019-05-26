@@ -2,10 +2,9 @@ package ast
 
 import (
 	"fmt"
-	"regexp"
 
-	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/gobuffalo/lush/opers"
+	"github.com/gobuffalo/lush/types"
 )
 
 func NewOpExpression(a Statement, op string, b Statement) (*OpExpression, error) {
@@ -93,44 +92,32 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 	}
 
 	a, _ := exec(c, e.A)
+
 	if ia, ok := a.(interfacer); ok {
 		a = ia.Interface()
 	}
 
 	b, _ := exec(c, e.B)
+
 	if ib, ok := b.(interfacer); ok {
 		b = ib.Interface()
 	}
 
 	switch e.Op {
 	case "==":
-		res := cmp.Equal(a, b, cmpopts.IgnoreUnexported())
-		return res, nil
+		return opers.Equal(a, b)
 	case "!=":
-		res := cmp.Equal(a, b, cmpopts.IgnoreUnexported())
-		return !res, nil
+		return opers.NotEqual(a, b)
 	case "~=":
-		sb, ok := b.(string)
-		if !ok {
-			return false, e.Meta.Errorf("expected string got %T", b)
-		}
-		rx, err := regexp.Compile(sb)
-		if err != nil {
-			return false, err
-		}
-		s, ok := a.(string)
-		if !ok {
-			return false, e.Meta.Errorf("expected string got %T", a)
-		}
-		return rx.MatchString(s), nil
+		return opers.Match(a, types.String(b))
 	case "<":
-		return fmt.Sprint(a) < fmt.Sprint(b), nil
+		return opers.LessThan(a, b)
 	case ">":
-		return fmt.Sprint(a) > fmt.Sprint(b), nil
+		return opers.GreaterThan(a, b)
 	case "<=":
-		return fmt.Sprint(a) <= fmt.Sprint(b), nil
+		return opers.LessThanEqualTo(a, b)
 	case ">=":
-		return fmt.Sprint(a) >= fmt.Sprint(b), nil
+		return opers.GreaterThanEqualTo(a, b)
 	}
 	return false, nil
 }
@@ -138,164 +125,89 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 func (e OpExpression) Add(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	if fl, err := ints(a, b); err == nil {
-		var f int
-		for _, x := range fl {
-			f += x
-		}
-		return f, nil
+	i, err := opers.Add(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
 	}
-
-	if fl, err := floats(a, b); err == nil {
-		var f float64
-		for _, x := range fl {
-			f += x
-		}
-		return f, nil
-	}
-
-	if fl, err := stringSlice(c, a, b); err == nil {
-		var f string
-		for _, x := range fl {
-			f += x
-		}
-		return f, nil
-	}
-
-	if at, ok := a.([]interface{}); ok {
-		if bt, ok := b.([]interface{}); ok {
-			return append(at, bt...), nil
-		}
-		if bi, ok := b.(interfacer); ok {
-			return append(at, bi.Interface()), nil
-		}
-	}
-
-	return nil, e.Meta.Errorf("can not add %T and %T", a, b)
+	return i, nil
 }
 
 func (e OpExpression) Sub(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	switch at := a.(type) {
-	case int:
-		switch bt := b.(type) {
-		case int:
-			return at - bt, nil
-		case float64:
-			return float64(at) - bt, nil
-		}
-	case float64:
-		switch bt := b.(type) {
-		case int:
-			return at - float64(bt), nil
-		case float64:
-			return at - bt, nil
-		}
+	i, err := opers.Sub(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
 	}
-
-	return nil, e.Meta.Errorf("can not subtract %T and %T", a, b)
+	return i, nil
 }
 
 func (e OpExpression) Multiply(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	switch at := a.(type) {
-	case int:
-		switch bt := b.(type) {
-		case int:
-			return at * bt, nil
-		case float64:
-			return float64(at) * bt, nil
-		}
-	case float64:
-		switch bt := b.(type) {
-		case int:
-			return at * float64(bt), nil
-		case float64:
-			return at * bt, nil
-		}
+	i, err := opers.Multiply(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
 	}
-
-	return nil, e.Meta.Errorf("can not multiply %T and %T", a, b)
+	return i, nil
 }
 
 func (e OpExpression) Divide(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	switch at := a.(type) {
-	case int:
-		switch bt := b.(type) {
-		case int:
-			return float64(at) / float64(bt), nil
-		case float64:
-			return float64(at) / bt, nil
-		}
-	case float64:
-		switch bt := b.(type) {
-		case int:
-			return at / float64(bt), nil
-		case float64:
-			return at / bt, nil
-		}
+	i, err := opers.Divide(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
 	}
-
-	return nil, e.Meta.Errorf("can not divide %T and %T", a, b)
+	return i, nil
 }
 
 func (e OpExpression) Modulus(c *Context) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
 	b, err := exec(c, e.B)
 	if err != nil {
-		return nil, err
+		return nil, e.Meta.Wrap(err)
 	}
 
-	switch at := a.(type) {
-	case int:
-		switch bt := b.(type) {
-		case int:
-			if bt == 0 {
-				return 0, nil
-			}
-			return at % bt, nil
-		}
+	i, err := opers.Modulus(a, b)
+	if err != nil {
+		return nil, e.Meta.Wrap(err)
 	}
-
-	return nil, e.Meta.Errorf("can not modulus %T and %T", a, b)
+	return i, nil
 }

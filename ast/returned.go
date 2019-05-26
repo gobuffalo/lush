@@ -1,6 +1,10 @@
 package ast
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/gobuffalo/lush/faces"
+)
 
 type Returned struct {
 	Value interface{}
@@ -30,7 +34,35 @@ func NewReturned(i interface{}) (ret Returned) {
 	if i == nil {
 		return Returned{}
 	}
-	if ii, err := toII(i); err == nil {
+
+	switch t := i.(type) {
+	case Returned:
+		return t
+	case nil:
+		return Returned{}
+	case interfacer:
+		return Returned{Value: t.Interface()}
+	case []interface{}:
+		ii := t
+		if len(ii) == 0 {
+			return Returned{}
+		}
+		if len(ii) == 1 {
+			i = ii[0]
+			if r, ok := i.(Returned); ok {
+				return r
+			}
+			if ri, ok := i.(interfacer); ok {
+				i = ri.Interface()
+			}
+			if ri, ok := i.([]interface{}); ok {
+				return NewReturned(ri)
+			}
+			return Returned{Value: i}
+		}
+		return Returned{Value: ii}
+	case faces.Slice:
+		ii := t.Slice()
 		if len(ii) == 0 {
 			return Returned{}
 		}
@@ -49,8 +81,6 @@ func NewReturned(i interface{}) (ret Returned) {
 		}
 		return Returned{Value: ii}
 	}
-	if ri, ok := i.(interfacer); ok {
-		i = ri.Interface()
-	}
+
 	return Returned{Value: i}
 }

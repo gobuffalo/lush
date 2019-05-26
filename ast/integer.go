@@ -10,8 +10,12 @@ type Integer struct {
 	Meta  Meta
 }
 
-func (d Integer) Interface() interface{} {
+func (d Integer) Int() int {
 	return d.Value
+}
+
+func (d Integer) Interface() interface{} {
+	return d.Int()
 }
 
 func (d Integer) String() string {

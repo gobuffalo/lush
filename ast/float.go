@@ -10,6 +10,10 @@ type Float struct {
 }
 
 func (d Float) Interface() interface{} {
+	return d.Float()
+}
+
+func (d Float) Float() float64 {
 	return d.Value
 }
 

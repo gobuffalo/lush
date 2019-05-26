@@ -12,7 +12,7 @@ import (
 func Test_Map_String(t *testing.T) {
 	r := require.New(t)
 
-	in := `let j = {"a": "b", "foo": "bar", "h": 1, y: func(x) {}}`
+	in := `let j = {"a": "b", "foo": "bar", "h": 1, "y": func(x) {}}`
 
 	s, err := parse(in)
 	r.NoError(err)
@@ -29,8 +29,8 @@ func Test_Map_Format(t *testing.T) {
 		format string
 		out    string
 	}{
-		{`%s`, `{foo: 42}`},
-		{`%q`, `"{foo: 42}"`},
+		{`%s`, `{"foo": 42}`},
+		{`%q`, `"{\"foo\": 42}"`},
 		{`%+v`, nlv},
 	}
 

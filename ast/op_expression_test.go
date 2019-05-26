@@ -91,10 +91,12 @@ func Test_OpExpression_Regexp(t *testing.T) {
 		err bool
 	}{
 		{`if ("a" ~= "a") {return true} return false`, true, false},
-		{`if (42 ~= 42) {return true} return false`, true, true},
-		{`if (3.14 ~= 3.14) {return true} return false`, true, true},
-		{`if (true ~= true) {return true} return false`, true, true},
-		{`if ([1,2,3] ~= [1,2,3]) {return true} return false`, true, true},
+		{`if (42 ~= 42) {return true} return false`, true, false},
+		{`if (4.2 ~= 42) {return true} return false`, false, false},
+		{`if (3.14 ~= 3.14) {return true} return false`, true, false},
+		{`if (true ~= true) {return true} return false`, true, false},
+		{`if (true ~= trUe) {return true} return false`, false, false},
+		{`if ([1,2,3] ~= [1,2,3]) {return true} return false`, false, true},
 		{`if ({a: "A"} ~= {a: "A"}) {return true} return false`, false, true},
 		{`if ("a" ~= "b") {return true} return false`, false, false},
 	}
@@ -133,7 +135,7 @@ func Test_OpExpression_Add(t *testing.T) {
 		{`return y + " " + z`, "zoo farm", false},
 		{`return 4 + "a"`, nil, true},
 		{`return "a" + 4`, nil, true},
-		{`return {a: 1, b: "hi"} + {c: true}`, nil, true},
+		{`return {a: 1, b: "hi"} + {c: true}`, map[string]interface{}{"a": 1, "b": "hi", "c": true}, false},
 		{`return "a" + "b" + "c"`, "abc", false},
 		{`return ( "a" + "b" ) + ("c" + "d")`, "abcd", true}, // TODO
 		{`return ( ( "a" + "b" ) + "c" + "d" )`, nil, true},  // TODO
@@ -169,6 +171,7 @@ func Test_OpExpression_Sub(t *testing.T) {
 		{`return 4 - -3.50`, 7.50, false},
 		{`return 3.50 - 4`, -0.50, false},
 		{`return 10 - ( 4 - 2 )`, 8, false},
+		{`return {a: 1, b: "hi"} - "b"`, map[string]interface{}{"a": 1}, false},
 		{`return "a" - "b"`, nil, true},
 		{`return ( ( "a" - "b" ) - ("c" - "d") )`, nil, true},
 		{`return [1] - [2]`, nil, true},
@@ -243,11 +246,11 @@ func Test_OpExpression_Divide(t *testing.T) {
 		out interface{}
 		err bool
 	}{
-		{`return 4 / 2`, 2.0, false},
+		{`return 4 / 2`, 2, false},
 		{`return 4 / 2.0`, 2.0, false},
 		{`return 4 / -2.0`, -2.0, false},
 		{`return 3.50 / 4`, 0.875, false},
-		{`return 10 / ( 4 / 2 )`, 5.0, false},
+		{`return 10 / ( 4 / 2 )`, 5, false},
 		{`return "a" / "b"`, nil, true},
 		{`return ( ( "a" / "b" ) / ("c" / "d") )`, nil, true},
 		{`return [1] / [2]`, nil, true},
@@ -324,13 +327,14 @@ func Test_OpExpression_LessThan(t *testing.T) {
 		{`if ("a" < "b") {return true} return false`, true, false},
 		{`if (42 < 43) {return true} return false`, true, false},
 		{`if (3.14 < 3.15) {return true} return false`, true, false},
-		{`if (true < true) {return true} return false`, false, false},
-		{`if ([1,2,3] < [3,2,1]) {return true} return false`, true, false},
-		{`if ({a: "A"} < {a: "A"}) {return true} return false`, false, false},
 		{`if ("a" < "a") {return true} return false`, false, false},
 		{`if (42 < 42) {return true} return false`, false, false},
 		{`if (3.14 < 3.14) {return true} return false`, false, false},
-		{`if (true < false) {return true} return false`, false, false},
+
+		{`if (true < true) {return true} return false`, false, true},
+		{`if ([1,2,3] < [3,2,1]) {return true} return false`, false, true},
+		{`if ({a: "A"} < {a: "A"}) {return true} return false`, false, true},
+		{`if (true < false) {return true} return false`, false, true},
 	}
 
 	for _, tt := range table {
@@ -359,13 +363,14 @@ func Test_OpExpression_GreaterThan(t *testing.T) {
 		{`if ("b" > "a") {return true} return false`, true, false},
 		{`if (43 > 42) {return true} return false`, true, false},
 		{`if (3.15 > 3.14) {return true} return false`, true, false},
-		{`if (true > true) {return true} return false`, false, false},
-		{`if ([3,2,1] > [1,2,3]) {return true} return false`, true, false},
-		{`if ({a: "A"} > {a: "A"}) {return true} return false`, false, false},
 		{`if ("a" > "a") {return true} return false`, false, false},
 		{`if (42 > 42) {return true} return false`, false, false},
 		{`if (3.14 > 3.14) {return true} return false`, false, false},
-		{`if (true > false) {return true} return false`, true, false},
+
+		{`if (true > true) {return true} return false`, false, true},
+		{`if ([3,2,1] > [1,2,3]) {return true} return false`, true, true},
+		{`if ({a: "A"} > {a: "A"}) {return true} return false`, false, true},
+		{`if (true > false) {return true} return false`, false, true},
 	}
 
 	for _, tt := range table {
@@ -397,16 +402,17 @@ func Test_OpExpression_LessThanEqualTo(t *testing.T) {
 		{`if (42 <= 42) {return true} return false`, true, false},
 		{`if (3.14 <= 3.15) {return true} return false`, true, false},
 		{`if (3.14 <= 3.14) {return true} return false`, true, false},
-		{`if (true <= true) {return true} return false`, true, false},
-		{`if (false <= true) {return true} return false`, true, false},
-		{`if ([1,2,3] <= [3,2,1]) {return true} return false`, true, false},
-		{`if ([1,2,3] <= [1,2,3]) {return true} return false`, true, false},
-		{`if ({a: "A"} <= {a: "A"}) {return true} return false`, true, false},
 		{`if ("b" <= "a") {return true} return false`, false, false},
 		{`if (43 <= 42) {return true} return false`, false, false},
 		{`if (3.15 <= 3.14) {return true} return false`, false, false},
-		{`if (true <= false) {return true} return false`, false, false},
-		{`if ([1,2,4] <= [1,2,3]) {return true} return false`, false, false},
+
+		{`if (true <= true) {return true} return false`, true, true},
+		{`if (false <= true) {return true} return false`, true, true},
+		{`if ([1,2,3] <= [3,2,1]) {return true} return false`, true, true},
+		{`if ([1,2,3] <= [1,2,3]) {return true} return false`, true, true},
+		{`if ({a: "A"} <= {a: "A"}) {return true} return false`, true, true},
+		{`if (true <= false) {return true} return false`, false, true},
+		{`if ([1,2,4] <= [1,2,3]) {return true} return false`, false, true},
 	}
 
 	for _, tt := range table {
@@ -437,17 +443,18 @@ func Test_OpExpression_GreaterThanEqualTo(t *testing.T) {
 		{`if (43 >= 42) {return true} return false`, true, false},
 		{`if ("b" >= "a") {return true} return false`, true, false},
 		{`if (3.15 >= 3.14) {return true} return false`, true, false},
-		{`if (true >= false) {return true} return false`, true, false},
-		{`if ([1,2,4] >= [1,2,3]) {return true} return false`, true, false},
-		{`if ({a: "A"} >= {a: "A"}) {return true} return false`, true, false},
 		{`if (3.14 >= 3.14) {return true} return false`, true, false},
 		{`if (3.15 >= 3.14) {return true} return false`, true, false},
-		{`if (true >= true) {return true} return false`, true, false},
 		{`if ("a" >= "b") {return true} return false`, false, false},
 		{`if (42 >= 43) {return true} return false`, false, false},
 		{`if (3.14 >= 3.15) {return true} return false`, false, false},
-		{`if (false >= true) {return true} return false`, false, false},
-		{`if ([1,2,3] >= [3,2,1]) {return true} return false`, false, false},
+
+		{`if (true >= false) {return true} return false`, false, true},
+		{`if ([1,2,4] >= [1,2,3]) {return true} return false`, false, true},
+		{`if ({a: "A"} >= {a: "A"}) {return true} return false`, false, true},
+		{`if (true >= true) {return true} return false`, false, true},
+		{`if (false >= true) {return true} return false`, false, true},
+		{`if ([1,2,3] >= [3,2,1]) {return true} return false`, false, true},
 	}
 
 	for _, tt := range table {

@@ -1,10 +1,8 @@
 package opers
 
 import (
-	"fmt"
-
 	"github.com/gobuffalo/lush/faces"
-	"github.com/gobuffalo/lush/types"
+	"github.com/gobuffalo/lush/opers/internal/divide"
 )
 
 // Divide attempts to "divide" type `b` from type `a`.
@@ -12,59 +10,21 @@ import (
 //	* int
 //	* float64
 //	* faces.Divide
-//	* types.Floater
-//	* types.Integer
+//	* faces.Float
+//	* faces.Int
 func Divide(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
 	case faces.Divide:
 		return at.Divide(b)
 	case int:
-		switch bt := b.(type) {
-		case int:
-			return at / bt, nil
-		case float64:
-			return float64(at) / bt, nil
-		case types.Integer:
-			return at / bt.Int(), nil
-		case types.Floater:
-			return float64(at) / bt.Float(), nil
-		}
+		return divide.Int(at, b)
 	case float64:
-		switch bt := b.(type) {
-		case float64:
-			return at / bt, nil
-		case int:
-			return at / float64(bt), nil
-		case types.Floater:
-			return at / bt.Float(), nil
-		case types.Integer:
-			return at / float64(bt.Int()), nil
-		}
-	case types.Integer:
-		a := at.Int()
-		switch bt := b.(type) {
-		case int:
-			return a / bt, nil
-		case float64:
-			return float64(a) / bt, nil
-		case types.Integer:
-			return a / bt.Int(), nil
-		case types.Floater:
-			return float64(a) / bt.Float(), nil
-		}
-	case types.Floater:
-		a := at.Float()
-		switch bt := b.(type) {
-		case float64:
-			return a / bt, nil
-		case int:
-			return a / float64(bt), nil
-		case types.Floater:
-			return a / bt.Float(), nil
-		case types.Integer:
-			return a / float64(bt.Int()), nil
-		}
+		return divide.Float(at, b)
+	case faces.Int:
+		return divide.Int(at.Int(), b)
+	case faces.Float:
+		return divide.Float(at.Float(), b)
 	}
 
-	return nil, fmt.Errorf("can't divide %T and %T", a, b)
+	return nil, divide.Cant(a, b)
 }

@@ -51,10 +51,12 @@ type Context struct {
 
 func (c *Context) Clone() *Context {
 	fhc := NewContext(c, c.Writer)
-	fhc.wg = c.wg
 	fhc.Context = c
 	fhc.Block = c.Block
-	fhc.Imports = c.Imports
+	c.Imports.Range(func(k, v interface{}) bool {
+		fhc.Imports.Store(k, v)
+		return true
+	})
 	c.data.Range(func(k, v interface{}) bool {
 		fhc.data.Store(k, v)
 		return true

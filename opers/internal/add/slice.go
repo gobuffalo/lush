@@ -9,8 +9,6 @@ func Slice(at []interface{}, b interface{}) (interface{}, error) {
 		return append(at, bt...), nil
 	case faces.Slice:
 		return append(at, bt.Slice()...), nil
-	default:
-		return append(at, bt), nil
 	}
-	return nil, Cant(at, b)
+	return append(at, b), nil
 }

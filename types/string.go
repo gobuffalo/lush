@@ -15,5 +15,5 @@ func String(i interface{}) string {
 	case fmt.Stringer:
 		return s.String()
 	}
-	return fmt.Sprintf("%s", i)
+	return fmt.Sprintf("%v", i)
 }

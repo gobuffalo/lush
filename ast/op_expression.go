@@ -92,11 +92,13 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 	}
 
 	a, _ := exec(c, e.A)
+
 	if ia, ok := a.(interfacer); ok {
 		a = ia.Interface()
 	}
 
 	b, _ := exec(c, e.B)
+
 	if ib, ok := b.(interfacer); ok {
 		b = ib.Interface()
 	}
@@ -108,7 +110,7 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 		res, err := opers.Equal(a, b)
 		return !res, err
 	case "~=":
-		return opers.Match(a, types.Value(b))
+		return opers.Match(a, types.String(b))
 	case "<":
 		return opers.LessThan(a, b)
 	case ">":

@@ -2,10 +2,9 @@ package opers
 
 import (
 	"fmt"
-	"regexp"
 
 	"github.com/gobuffalo/lush/faces"
-	"github.com/gobuffalo/lush/types"
+	"github.com/gobuffalo/lush/opers/internal/match"
 )
 
 // Match will attempt to match the given regex pattern
@@ -15,22 +14,27 @@ import (
 //	* fmt.Stringer
 //	* faces.Match
 func Match(i interface{}, pattern string) (bool, error) {
-	if m, ok := i.(faces.Match); ok {
-		return m.Match(pattern)
-	}
-
-	rx, err := regexp.Compile(pattern)
-	if err != nil {
-		return false, err
-	}
-
 	switch s := i.(type) {
+	case faces.Match:
+		return s.Match(pattern)
 	case string:
-		return rx.MatchString(s), nil
+		return match.String(s, pattern)
 	case fmt.Stringer:
-		return rx.MatchString(s.String()), nil
-	default:
-		return rx.MatchString(types.Value(s)), nil
+		return match.String(s.String(), pattern)
+	case faces.Value:
+		return match.String(s.Value(), pattern)
+	case int:
+		return match.Int(s, pattern)
+	case faces.Int:
+		return match.Int(s.Int(), pattern)
+	case float64:
+		return match.Float(s, pattern)
+	case faces.Float:
+		return match.Float(s.Float(), pattern)
+	case bool:
+		return match.Bool(s, pattern)
+	case faces.Bool:
+		return match.Bool(s.Bool(), pattern)
 	}
-	return false, nil
+	return false, match.Cant(i, pattern)
 }

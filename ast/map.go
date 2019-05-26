@@ -50,8 +50,8 @@ func NewMap(vals interface{}) (Map, error) {
 func (m Map) Exec(c *Context) (interface{}, error) {
 	mm := map[interface{}]interface{}{}
 	for k, v := range m.Values {
-		var key interface{}
-		var value interface{}
+		var key interface{} = k
+		var value interface{} = v
 
 		if vv, ok := v.(interfacer); ok {
 			value = vv.Interface()
@@ -62,11 +62,6 @@ func (m Map) Exec(c *Context) (interface{}, error) {
 		}
 
 		value, err := exec(c, v)
-		if err != nil {
-			return nil, err
-		}
-
-		key, err = exec(c, k)
 		if err != nil {
 			return nil, err
 		}

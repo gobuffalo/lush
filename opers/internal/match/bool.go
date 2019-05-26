@@ -5,6 +5,7 @@ import (
 	"regexp"
 )
 
+// Bool ...
 func Bool(i bool, pattern string) (bool, error) {
 	rx, err := regexp.Compile(pattern)
 	if err != nil {

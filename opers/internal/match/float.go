@@ -5,6 +5,7 @@ import (
 	"regexp"
 )
 
+// Float ...
 func Float(i float64, pattern string) (bool, error) {
 	rx, err := regexp.Compile(pattern)
 	if err != nil {

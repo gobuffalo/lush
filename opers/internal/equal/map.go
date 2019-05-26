@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+// Map ...
 func Map(m map[interface{}]interface{}, b interface{}) (bool, error) {
 	switch bt := b.(type) {
 	case map[interface{}]interface{}:

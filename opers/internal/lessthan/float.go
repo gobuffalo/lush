@@ -7,6 +7,7 @@ import (
 	"github.com/gobuffalo/lush/faces"
 )
 
+// Float ...
 func Float(at float64, b interface{}) (bool, error) {
 	switch bt := b.(type) {
 	case float64:

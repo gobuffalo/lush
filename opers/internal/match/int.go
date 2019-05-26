@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// Int ...
 func Int(i int, pattern string) (bool, error) {
 	rx, err := regexp.Compile(pattern)
 	if err != nil {

@@ -2,6 +2,7 @@ package types
 
 import "fmt"
 
+// Stringer ...
 type Stringer string
 
 func (s Stringer) String() string {

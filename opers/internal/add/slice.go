@@ -2,6 +2,7 @@ package add
 
 import "github.com/gobuffalo/lush/faces"
 
+// Slice ...
 func Slice(at []interface{}, b interface{}) (interface{}, error) {
 	switch bt := b.(type) {
 	case []interface{}:

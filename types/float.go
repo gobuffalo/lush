@@ -7,8 +7,10 @@ import (
 	"github.com/gobuffalo/lush/faces"
 )
 
+// Floater ...
 type Floater float64
 
+// Float ...
 func (f Floater) Float() float64 {
 	return float64(f)
 }

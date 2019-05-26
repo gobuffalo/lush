@@ -7,6 +7,7 @@ import (
 	"github.com/gobuffalo/lush/faces"
 )
 
+// Int ...
 func Int(at int, b interface{}) (bool, error) {
 	switch bt := b.(type) {
 	case int:

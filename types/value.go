@@ -6,8 +6,10 @@ import (
 	"github.com/gobuffalo/lush/faces"
 )
 
+// Valuer ...
 type Valuer string
 
+// Value ...
 func (s Valuer) Value() string {
 	return fmt.Sprintf("%v", s)
 }

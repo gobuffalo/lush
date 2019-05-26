@@ -5,6 +5,7 @@ import (
 	"reflect"
 )
 
+// Slice ...
 func Slice(i interface{}) []interface{} {
 	if ii, ok := i.([]interface{}); ok {
 		return ii
@@ -26,6 +27,7 @@ func Slice(i interface{}) []interface{} {
 	return res
 }
 
+// StringSlice ...
 func StringSlice(i interface{}) ([]string, error) {
 	if s, ok := i.([]string); ok {
 		return s, nil

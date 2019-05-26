@@ -7,8 +7,10 @@ import (
 	"github.com/gobuffalo/lush/faces"
 )
 
+// Integer ...
 type Integer int
 
+// Int ...
 func (i Integer) Int() int {
 	return int(i)
 }

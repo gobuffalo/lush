@@ -1,4 +1,4 @@
-package lessthan
+package lt
 
 import "fmt"
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gobuffalo/lush/faces"
-	"github.com/gobuffalo/lush/opers/internal/lessthan"
+	"github.com/gobuffalo/lush/opers/internal/lt"
 )
 
 // LessThan `a < b`
@@ -23,17 +23,17 @@ func LessThan(a, b interface{}) (bool, error) {
 	case faces.LessThan:
 		return at.LessThan(b)
 	case int:
-		return lessthan.Int(at, b)
+		return lt.Int(at, b)
 	case float64:
-		return lessthan.Float(at, b)
+		return lt.Float(at, b)
 	case string:
-		return lessthan.String(at, b)
+		return lt.String(at, b)
 	case fmt.Stringer:
-		return lessthan.String(at.String(), b)
+		return lt.String(at.String(), b)
 	case faces.Int:
-		return lessthan.Int(at.Int(), b)
+		return lt.Int(at.Int(), b)
 	case faces.Float:
-		return lessthan.Float(at.Float(), b)
+		return lt.Float(at.Float(), b)
 	}
-	return false, lessthan.Cant(a, b)
+	return false, lt.Cant(a, b)
 }

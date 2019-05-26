@@ -1,4 +1,4 @@
-package lessthan
+package gt
 
 import (
 	"fmt"
@@ -7,30 +7,29 @@ import (
 	"github.com/gobuffalo/lush/faces"
 )
 
-// Int ...
-func Int(at int, b interface{}) (bool, error) {
+// Float ...
+func Float(at float64, b interface{}) (bool, error) {
 	switch bt := b.(type) {
-	case int:
-		return at < bt, nil
 	case float64:
-		return float64(at) < bt, nil
-	case faces.Int:
-		return at < bt.Int(), nil
+		return float64(at) > bt, nil
+	case int:
+		return at > float64(bt), nil
 	case faces.Float:
-		return float64(at) < bt.Float(), nil
+		return float64(at) > bt.Float(), nil
+	case faces.Int:
+		return at > float64(bt.Int()), nil
 	case string:
 		toi, err := strconv.Atoi(bt)
 		if err != nil {
 			return false, err
 		}
-		return at < toi, nil
+		return at > float64(toi), nil
 	case fmt.Stringer:
 		toi, err := strconv.Atoi(bt.String())
 		if err != nil {
 			return false, err
 		}
-		return at < toi, nil
+		return at > float64(toi), nil
 	}
 	return false, Cant(at, b)
-
 }

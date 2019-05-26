@@ -11,8 +11,15 @@ import (
 // against the given type.
 // Supports:
 //	* string
+//	* int
+//	* float64
+//	* bool
 //	* fmt.Stringer
+//	* faces.Value
 //	* faces.Match
+//	* faces.Int
+//	* faces.Float
+//	* faces.Bool
 func Match(i interface{}, pattern string) (bool, error) {
 	switch s := i.(type) {
 	case faces.Match:

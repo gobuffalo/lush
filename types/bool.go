@@ -1,9 +1,4 @@
-package faces
-
-// Bool ...
-type Bool interface {
-	Bool() bool
-}
+package types
 
 // Booler ...
 type Booler bool

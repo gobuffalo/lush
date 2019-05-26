@@ -15,7 +15,6 @@ import (
 //	* float64
 //	* bool
 //	* fmt.Stringer
-//	* faces.Value
 //	* faces.Match
 //	* faces.Int
 //	* faces.Float
@@ -28,8 +27,6 @@ func Match(i interface{}, pattern string) (bool, error) {
 		return match.String(s, pattern)
 	case fmt.Stringer:
 		return match.String(s.String(), pattern)
-	case faces.Value:
-		return match.String(s.Value(), pattern)
 	case int:
 		return match.Int(s, pattern)
 	case faces.Int:

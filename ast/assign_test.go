@@ -40,6 +40,8 @@ func Test_Assign(t *testing.T) {
 			}
 
 			r.NoError(err)
+			r.NotNil(res)
+
 			r.Equal(tt.out, res.Value)
 		})
 	}
@@ -60,6 +62,8 @@ return x`
 
 	res, err := exec(in, c)
 	r.NoError(err)
+
+	r.NotNil(res)
 	r.Equal(42, res.Value)
 }
 

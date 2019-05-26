@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"bytes"
 	"fmt"
 )
 
@@ -20,7 +21,7 @@ func (s Script) Exec(c *Context) (*Returned, error) {
 	if !ok {
 		return nil, nil
 	}
-	return &ret, nil
+	return &ret, ret.Err()
 }
 
 func (a Script) Format(st fmt.State, verb rune) {
@@ -36,4 +37,20 @@ func (a Script) MarshalJSON() ([]byte, error) {
 
 func (s Script) String() string {
 	return s.Statements.String()
+}
+
+func (a Script) GoString() string {
+	bb := &bytes.Buffer{}
+
+	bb.WriteString(a.Statements.GoString())
+
+	for _, s := range a.Statements {
+		if _, ok := s.(Return); ok {
+			return bb.String()
+		}
+	}
+
+	bb.WriteString(Return{}.GoString())
+
+	return bb.String()
 }

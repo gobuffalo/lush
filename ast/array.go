@@ -19,6 +19,13 @@ func (a Array) Slice() []interface{} {
 	return a.Value
 }
 
+func (a Array) GoString() string {
+	if a.Value == nil {
+		a.Value = []interface{}{}
+	}
+	return fmt.Sprintf("%#v", a.Value)
+}
+
 func (a Array) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("[")
@@ -73,4 +80,16 @@ func (a Array) Bool(c *Context) (bool, error) {
 
 func NewArray(ii []interface{}) (Array, error) {
 	return Array{Value: ii}, nil
+}
+
+func (a Array) Len() int {
+	return len(a.Value)
+}
+
+func (a Array) Less(i, j int) bool {
+	return fmt.Sprint(a.Value[i]) < fmt.Sprint(a.Value[j])
+}
+
+func (a Array) Swap(i, j int) {
+	a.Value[i], a.Value[j] = a.Value[j], a.Value[i]
 }

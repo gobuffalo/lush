@@ -524,10 +524,12 @@ fmt.fmt.Printlnln(s) // another string
 
 ## [Errors](#errors)
 
-This is set by default when creating a new `Context`. It is a function mapped to [`fmt#Errorf`](https://godoc.org/fmt#Errorf).
+First you must import the `fmt` [built-in](#builtins) then you can use the [`github.com/gobuffalo/lush/builtins#Fmt.Errorf`](https://godoc.org/github.com/gobuffalo/lush/builtins#Fmt.Errorf) function to create a new error.
 
 ```lush
-return error("stop %s", "dragging my heart around")
+import "fmt"
+
+return fmt.Errorf("stop %s", "dragging my heart around")
 ```
 
 ---

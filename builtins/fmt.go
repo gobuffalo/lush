@@ -40,3 +40,7 @@ func (f Fmt) Sprintf(format string, a ...interface{}) string {
 func (f Fmt) Sprintln(a ...interface{}) string {
 	return fmt.Sprintln(a...)
 }
+
+func (f Fmt) GoString() string {
+	return "builtins.Fmt{Writer: c}"
+}

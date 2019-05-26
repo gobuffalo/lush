@@ -8,6 +8,11 @@ import (
 
 type Returned struct {
 	Value interface{}
+	err   error
+}
+
+func (r Returned) Err() error {
+	return r.err
 }
 
 func (r Returned) String() string {
@@ -17,7 +22,12 @@ func (r Returned) String() string {
 	return fmt.Sprint(r.Value)
 }
 
-func NewReturned(i interface{}) Returned {
+func NewReturned(i interface{}) (ret Returned) {
+	defer func() {
+		if err, ok := ret.Value.(error); ok {
+			ret.err = err
+		}
+	}()
 	if r, ok := i.(Returned); ok {
 		return r
 	}

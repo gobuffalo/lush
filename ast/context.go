@@ -34,6 +34,7 @@ func NewContext(ctx context.Context, w io.Writer) *Context {
 	c.Imports.Store("fmt", builtins.NewFmt(w))
 	c.Imports.Store("strings", builtins.Strings{})
 	c.Imports.Store("time", builtins.Time{})
+	c.Imports.Store("sort", builtins.Time{})
 
 	c.Set("error", fmt.Errorf)
 	return c

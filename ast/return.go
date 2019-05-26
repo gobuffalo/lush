@@ -25,9 +25,10 @@ func (r Return) String() string {
 func (r Return) Exec(c *Context) (interface{}, error) {
 	st, err := r.Statements.Exec(c)
 	if err != nil {
-		return nil, err
+		return NewReturned(err), err
 	}
-	return NewReturned(st), err
+	ret := NewReturned(st)
+	return ret, ret.Err()
 }
 
 func NewReturn(s Statements) (Return, error) {
@@ -46,4 +47,31 @@ func (r Return) MarshalJSON() ([]byte, error) {
 		"Meta":       r.Meta,
 	}
 	return toJSON(r, m)
+}
+
+func (r Return) GoString() string {
+	var args []string
+
+	if len(r.Statements) == 0 {
+		return "return nil, nil"
+	}
+
+	for _, s := range r.Statements {
+		if st, ok := s.(fmt.GoStringer); ok {
+			args = append(args, st.GoString())
+			continue
+		}
+		if st, ok := s.(fmt.Stringer); ok {
+			args = append(args, st.String())
+		}
+	}
+
+	const ret = `
+ret := ast.NewReturned([]interface {}{%s})
+if ret.Err() != nil {
+	return nil, ret.Err()
+}
+return &ret, nil
+`
+	return fmt.Sprintf(ret, strings.Join(args, ", "))
 }

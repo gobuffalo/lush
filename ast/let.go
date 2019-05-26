@@ -24,6 +24,13 @@ func (l Let) String() string {
 	return fmt.Sprintf("let %s = %s", l.Name, l.Value)
 }
 
+func (l Let) GoString() string {
+	return fmt.Sprintf(`
+%s := %#v
+_ = %s
+`, l.Name, l.Value, l.Name)
+}
+
 func (l *Let) Exec(c *Context) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil

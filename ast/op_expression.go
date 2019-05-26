@@ -107,8 +107,7 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 	case "==":
 		return opers.Equal(a, b)
 	case "!=":
-		res, err := opers.Equal(a, b)
-		return !res, err
+		return opers.NotEqual(a, b)
 	case "~=":
 		return opers.Match(a, types.String(b))
 	case "<":

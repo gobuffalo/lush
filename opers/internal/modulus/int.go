@@ -12,8 +12,8 @@ func Int(at int, b interface{}) (int, error) {
 		bi = bt
 	case faces.Int:
 		bi = bt.Int()
-	default:
-		return 0, Cant(at, b)
+	//default:
+	//	return 0, Cant(at, b)
 	}
 	if b == 0 {
 		return 0, nil

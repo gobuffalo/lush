@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+
+	"github.com/gobuffalo/lush/types"
 )
 
 type Map struct {
@@ -19,20 +21,14 @@ type Keyable interface {
 func NewMap(vals interface{}) (Map, error) {
 	m := Map{Values: map[Statement]interface{}{}}
 
-	sl, err := toII(vals)
-	if err != nil {
-		return m, err
-	}
+	sl := types.Slice(vals)
 
 	if len(sl) == 0 {
 		return m, nil
 	}
 
 	for _, xsl := range sl {
-		sl, err = toII(xsl)
-		if err != nil {
-			return m, err
-		}
+		sl = types.Slice(xsl)
 
 		k := sl[0]
 		v := sl[4]
@@ -50,8 +46,8 @@ func NewMap(vals interface{}) (Map, error) {
 func (m Map) Exec(c *Context) (interface{}, error) {
 	mm := map[interface{}]interface{}{}
 	for k, v := range m.Values {
-		var key interface{}
-		var value interface{}
+		var key interface{} = k
+		var value interface{} = v
 
 		if vv, ok := v.(interfacer); ok {
 			value = vv.Interface()
@@ -62,11 +58,6 @@ func (m Map) Exec(c *Context) (interface{}, error) {
 		}
 
 		value, err := exec(c, v)
-		if err != nil {
-			return nil, err
-		}
-
-		key, err = exec(c, k)
 		if err != nil {
 			return nil, err
 		}

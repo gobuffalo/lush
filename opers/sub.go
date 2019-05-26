@@ -10,8 +10,8 @@ import (
 //	* int
 //	* float64
 //	* faces.Sub
-//	* types.Floater
-//	* types.Integer
+//	* faces.Float
+//	* faces.Int
 func Sub(a, b interface{}) (interface{}, error) {
 	switch at := a.(type) {
 	case faces.Sub:

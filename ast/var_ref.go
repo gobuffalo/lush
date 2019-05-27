@@ -11,3 +11,7 @@ type VarRef struct {
 func (v VarRef) Visit(c *Context) (interface{}, error) {
 	return c.Value(v.Name), nil
 }
+
+func (v VarRef) String() string {
+	return v.Name
+}

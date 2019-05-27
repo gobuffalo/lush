@@ -64,7 +64,7 @@ IDENT <- [a-zA-Z]+ ( [0-9a-zA-Z_])* {
 
 NUMBER <- (FLOAT / INTEGER)
 
-/*LETV <- ( ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )*/
+LETV <- ( ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )
 
 // Operators
 
@@ -115,7 +115,7 @@ LET <- _ "let" _ name:IDENT _ "=" _ value:EXPR {
   return newLet(c, name, value)
 }
 
-VAR <- _ name:IDENT _ ":=" _ value:LETV {
+VAR <- _ name:REF _ ":=" _ value:LETV {
   return newVar(c, name, value)
 }
 

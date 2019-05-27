@@ -391,9 +391,9 @@ func newAssign(c *current, n, v interface{}) (ret *ast.Assign, err error) {
 }
 
 func newVar(c *current, n, v interface{}) (ret *ast.Var, err error) {
-	in, ok := n.(ast.Ident)
+	in, ok := n.(ast.VarRef)
 	if !ok {
-		return nil, fmt.Errorf("expected ast.Ident got %T", n)
+		return nil, fmt.Errorf("expected ast.VarRef got %T", n)
 	}
 
 	sv, err := toNode(v)

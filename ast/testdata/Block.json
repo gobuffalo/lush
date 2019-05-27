@@ -68,18 +68,14 @@
               }
             },
             "Name": {
-              "ast.Ident": {
-                "Meta": {
-                  "ast.Meta": {
-                    "Col": 0,
-                    "Filename": "",
-                    "Line": 0,
-                    "Offset": 0,
-                    "Original": ""
-                  }
-                },
-                "Name": {
-                  "string": "foo"
+              "Name": "FOO",
+              "Meta": {
+                "ast.Meta": {
+                  "Col": 0,
+                  "Filename": "",
+                  "Line": 0,
+                  "Offset": 0,
+                  "Original": ""
                 }
               }
             },

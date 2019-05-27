@@ -14,15 +14,6 @@ func (s Script) Exec(c *Context) (*Returned, error) {
 		return nil, err
 	}
 
-	go func() {
-		for g := range c.gor {
-			c.wg.Add(1)
-			go func() {
-				defer c.wg.Done()
-				g.Exec(c)
-			}()
-		}
-	}()
 	c.wg.Wait()
 
 	ret, ok := res.(Returned)

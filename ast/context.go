@@ -29,7 +29,7 @@ func NewContext(ctx context.Context, w io.Writer) *Context {
 	c := &Context{
 		Context: ctx,
 		Writer:  w,
-		gor:     make(chan Goroutine),
+		wg:      &sync.WaitGroup{},
 	}
 
 	c.Imports.Store("fmt", builtins.NewFmt(w))
@@ -47,15 +47,14 @@ type Context struct {
 	Block   *Block
 	data    sync.Map
 	Imports sync.Map
-	wg      sync.WaitGroup
-	gor     chan Goroutine
+	wg      *sync.WaitGroup
 }
 
 func (c *Context) Clone() *Context {
 	fhc := NewContext(c, c.Writer)
 	fhc.Context = c
 	fhc.Block = c.Block
-	fhc.gor = c.gor
+	fhc.wg = c.wg
 	c.Imports.Range(func(k, v interface{}) bool {
 		fhc.Imports.Store(k, v)
 		return true

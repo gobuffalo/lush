@@ -14,7 +14,7 @@ import (
 	"github.com/gobuffalo/lush"
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/ast/internal/quick"
-	"github.com/gobuffalo/lush/print/golang"
+	"github.com/gobuffalo/lush/print/goprint"
 )
 
 func main() {
@@ -118,8 +118,8 @@ func compileGoTests() {
 			}
 			bb := &bytes.Buffer{}
 
-			cp := golang.Printer{
-				Context: golang.Default.Context,
+			cp := goprint.Printer{
+				Context: goprint.Default.Context,
 				Writer:  bb,
 			}
 			if err := cp.Print(s); err != nil {
@@ -222,7 +222,7 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush"
 	"github.com/gobuffalo/lush/ast"
-	"github.com/gobuffalo/lush/print/golang"
+	"github.com/gobuffalo/lush/print/gop"
 )
 
 /*

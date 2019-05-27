@@ -4,7 +4,7 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
-	"github.com/gobuffalo/lush/print/golang"
+	"github.com/gobuffalo/lush/print/goprint"
 )
 
 /*
@@ -42,5 +42,5 @@ func rangeExec(c *ast.Context) (*ast.Returned, error) {
 		myNum = i
 		fmt.Print(i, x)
 	}
-	return golang.NewReturned(myArray, myNum)
+	return goprint.NewReturned(myArray, myNum)
 }

@@ -1,4 +1,4 @@
-package golang
+package goprint
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Printer) astLet(v *ast.Let) error {
+func (c Printer) astVar(v *ast.Var) error {
 	if err := c.astNode(v.Name); err != nil {
 		return err
 	}

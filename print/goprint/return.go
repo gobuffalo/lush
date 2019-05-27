@@ -1,4 +1,4 @@
-package golang
+package goprint
 
 import (
 	"fmt"
@@ -24,7 +24,7 @@ func (c Printer) astReturn(r ast.Return) error {
 			args = append(args, st.String())
 		}
 	}
-	fmt.Fprint(c, "return golang.NewReturned(")
+	fmt.Fprint(c, "return goprint.NewReturned(")
 	fmt.Fprint(c, strings.Join(args, ", "))
 	fmt.Fprintf(c, ")")
 	return nil

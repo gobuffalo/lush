@@ -3,7 +3,7 @@ package goexamples
 
 import (
 	"github.com/gobuffalo/lush/ast"
-	"github.com/gobuffalo/lush/print/goprint"
+	"github.com/gobuffalo/lush/compile/goc"
 )
 
 /*
@@ -28,5 +28,5 @@ func returnsExec(c *ast.Context) (*ast.Returned, error) {
 		}
 	}()
 	// hopefully 42!
-	return goprint.NewReturned("what do you get?", x)
+	return goc.NewReturned("what do you get?", x)
 }

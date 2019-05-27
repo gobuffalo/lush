@@ -4,7 +4,7 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
-	"github.com/gobuffalo/lush/print/goprint"
+	"github.com/gobuffalo/lush/compile/goc"
 )
 
 /*
@@ -41,5 +41,5 @@ func funcsExec(c *ast.Context) (*ast.Returned, error) {
 	}
 	_ = y
 
-	return goprint.NewReturned(y(1, 2, 3))
+	return goc.NewReturned(y(1, 2, 3))
 }

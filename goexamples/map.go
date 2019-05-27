@@ -4,7 +4,7 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
-	"github.com/gobuffalo/lush/print/goprint"
+	"github.com/gobuffalo/lush/compile/goc"
 )
 
 /*
@@ -40,5 +40,5 @@ func mapExec(c *ast.Context) (*ast.Returned, error) {
 		fmt.Println(k)
 		fmt.Println(v)
 	}
-	return goprint.NewReturned(myMap)
+	return goc.NewReturned(myMap)
 }

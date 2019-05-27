@@ -14,14 +14,12 @@ import (
 
 type Runner struct {
 	*flag.FlagSet
-	Imports flagSlice
-	Args    []string
+	Args []string
 }
 
 func NewRunner() *Runner {
 	r := &Runner{}
 	f := flag.NewFlagSet("run", flag.ExitOnError)
-	f.Var(&r.Imports, "import", "allows for importing of the specified package")
 
 	r.FlagSet = f
 
@@ -30,13 +28,10 @@ func NewRunner() *Runner {
 
 func (r Runner) Exec() error {
 	c := ast.NewContext(context.Background(), os.Stdout)
-	for _, i := range r.Imports {
-		imp, ok := builtins.Available.Load(i)
-		if !ok {
-			return fmt.Errorf("could not find import for %s", i)
-		}
-		c.Imports.Store(i, imp)
-	}
+	builtins.Available.Range(func(k, v interface{}) bool {
+		c.Imports.Store(k, v)
+		return true
+	})
 	for _, a := range r.FlagSet.Args() {
 		script, err := lush.ParseFile(a)
 		if err != nil {

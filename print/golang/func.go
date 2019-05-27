@@ -44,7 +44,7 @@ func returnFinder(s ast.Statement) (ast.Return, bool) {
 	case *ast.Block:
 		return returnFinder(t.Statements)
 	default:
-		(fmt.Printf("%T\n", s))
+		// (fmt.Printf("%T\n", s))
 		// panic(fmt.Sprintf("%T", s))
 	}
 

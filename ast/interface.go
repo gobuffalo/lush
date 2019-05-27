@@ -1,5 +1,9 @@
 package ast
 
+type interfacer interface {
+	Interface() interface{}
+}
+
 func flatten(ii []interface{}) []interface{} {
 	var res []interface{}
 	for _, i := range ii {

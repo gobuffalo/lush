@@ -28,10 +28,6 @@ type Func struct {
 	Meta      Meta
 }
 
-func (a Func) Visit(v Visitor) error {
-	return v(a.Meta)
-}
-
 func (f Func) Format(st fmt.State, verb rune) {
 	format(f, st, verb)
 }

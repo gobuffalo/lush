@@ -11,10 +11,6 @@ type Array struct {
 	Meta  Meta
 }
 
-func (a Array) Visit(v Visitor) error {
-	return v(a.Meta)
-}
-
 func (a Array) Interface() interface{} {
 	return a.Slice()
 }

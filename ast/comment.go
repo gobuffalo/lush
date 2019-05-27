@@ -36,7 +36,3 @@ func (a Comment) MarshalJSON() ([]byte, error) {
 	}
 	return toJSON(a, m)
 }
-
-func (a Comment) Visit(v Visitor) error {
-	return v(a.Meta)
-}

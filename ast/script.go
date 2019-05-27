@@ -8,10 +8,6 @@ type Script struct {
 	Statements Statements
 }
 
-func (a Script) Visit(v Visitor) error {
-	return v(a.Statements)
-}
-
 func (s Script) Exec(c *Context) (*Returned, error) {
 	res, err := s.Statements.Exec(c)
 	if err != nil {

@@ -8,10 +8,6 @@ type Nil struct {
 	Meta Meta
 }
 
-func (a Nil) Visit(v Visitor) error {
-	return v(a.Meta)
-}
-
 func (i Nil) IsZero() bool {
 	return true
 }

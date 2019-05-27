@@ -10,10 +10,6 @@ type Integer struct {
 	Meta  Meta
 }
 
-func (a Integer) Visit(v Visitor) error {
-	return v(a.Meta)
-}
-
 func (d Integer) Int() int {
 	return d.Value
 }

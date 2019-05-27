@@ -15,10 +15,6 @@ type Map struct {
 	Meta   Meta
 }
 
-func (a Map) Visit(v Visitor) error {
-	return v(a.Meta)
-}
-
 func (m Map) Map() map[string]interface{} {
 	mm := map[string]interface{}{}
 

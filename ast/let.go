@@ -20,10 +20,6 @@ type Let struct {
 	Meta  Meta
 }
 
-func (a Let) Visit(v Visitor) error {
-	return v(a.Name, a.Value, a.Meta)
-}
-
 func (l Let) String() string {
 	return fmt.Sprintf("let %s = %s", l.Name, l.Value)
 }

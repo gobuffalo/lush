@@ -19,10 +19,6 @@ type Access struct {
 	Meta Meta
 }
 
-func (a Access) Visit(v Visitor) error {
-	return v(a.Name, a.Meta)
-}
-
 func (a Access) String() string {
 	return fmt.Sprintf("%s[%v]", a.Name, a.Key)
 }

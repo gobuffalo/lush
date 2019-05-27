@@ -9,10 +9,6 @@ type Float struct {
 	Meta  Meta
 }
 
-func (a Float) Visit(v Visitor) error {
-	return v(a.Meta)
-}
-
 func (d Float) Interface() interface{} {
 	return d.Float()
 }

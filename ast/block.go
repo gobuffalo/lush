@@ -12,10 +12,6 @@ type Block struct {
 	Meta Meta
 }
 
-func (a *Block) Visit(v Visitor) error {
-	return v(a.Statements, a.Meta)
-}
-
 func (b Block) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("{")

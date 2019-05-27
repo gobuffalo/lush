@@ -38,10 +38,6 @@ type Call struct {
 	Concurrent bool
 }
 
-func (a Call) Visit(v Visitor) error {
-	return v(a.Name, a.FName, a.Arguments, a.Block, a.Meta)
-}
-
 func (f Call) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Name":       f.Name,

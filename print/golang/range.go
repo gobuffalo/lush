@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Compiler) astRange(f ast.Range) error {
+func (c Printer) astRange(f ast.Range) error {
 	fmt.Fprintf(c, "for ")
 	var args []string
 	for _, a := range f.Args {

@@ -1,0 +1,14 @@
+import "fmt"
+
+f := func(a) {
+	fmt.Println(a)
+}
+
+f(42)
+
+y := func(a, b, c) {
+	return (42 + 1)
+}
+
+return y(1, 2, 3)
+

@@ -4,7 +4,7 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
-	"github.com/gobuffalo/lush/compile/golang"
+	"github.com/gobuffalo/lush/print/golang"
 )
 
 /*

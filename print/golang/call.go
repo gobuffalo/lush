@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Compiler) astCall(f ast.Call) error {
+func (c Printer) astCall(f ast.Call) error {
 	if f.Concurrent {
 		fmt.Fprintf(c, "go ")
 	}

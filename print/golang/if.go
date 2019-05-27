@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Compiler) astIf(i ast.If) error {
+func (c Printer) astIf(i ast.If) error {
 
 	fmt.Fprintf(c, "if ")
 	if i.PreCondition != nil {

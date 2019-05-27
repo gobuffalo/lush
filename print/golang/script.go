@@ -4,7 +4,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Compiler) astScript(a ast.Script) error {
+func (c Printer) astScript(a ast.Script) error {
 	if err := c.astStatements(a.Statements); err != nil {
 		return err
 	}

@@ -8,16 +8,16 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-type Compiler struct {
+type Printer struct {
 	context.Context
 	io.Writer
 }
 
-var Default = Compiler{
+var Default = Printer{
 	Context: context.Background(),
 	Writer:  os.Stdout,
 }
 
-func (c Compiler) Compile(s ...ast.Statement) error {
+func (c Printer) Print(s ...ast.Statement) error {
 	return c.astStatements(s)
 }

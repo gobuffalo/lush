@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Compiler) astBlock(b *ast.Block) error {
+func (c Printer) astBlock(b *ast.Block) error {
 	if b == nil {
 		return nil
 	}

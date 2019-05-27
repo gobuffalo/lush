@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Compiler) astStatement(a ast.Statement) error {
+func (c Printer) astStatement(a ast.Statement) error {
 	switch v := a.(type) {
 	case ast.Script:
 		return c.astScript(v)
@@ -50,7 +50,8 @@ func (c Compiler) astStatement(a ast.Statement) error {
 	case ast.Array:
 		fmt.Fprintf(c, "%#v\n", v.Slice())
 		return nil
-
+	case ast.Func:
+		return c.astFunc(v)
 	default:
 		fmt.Fprintln(c, a)
 		return nil
@@ -59,7 +60,7 @@ func (c Compiler) astStatement(a ast.Statement) error {
 	return nil
 }
 
-func (c Compiler) astStatements(a ast.Statements) error {
+func (c Printer) astStatements(a ast.Statements) error {
 	for _, s := range a {
 		if err := c.astStatement(s); err != nil {
 			return err

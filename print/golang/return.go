@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Compiler) astReturn(r ast.Return) error {
+func (c Printer) astReturn(r ast.Return) error {
 	var args []string
 
 	if len(r.Statements) == 0 {

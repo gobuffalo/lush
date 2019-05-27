@@ -10,9 +10,19 @@ import (
 /*
 import "fmt"
 
-return fmt.Errorf("stop %s", "dragging my heart around")
+f := func(a) {
+	fmt.Println(a)
+}
+
+f(42)
+
+y := func(a, b, c) {
+	return (42 + 1)
+}
+
+return y(1, 2, 3)
 */
-func errorsExec(c *ast.Context) (*ast.Returned, error) {
+func funcsExec(c *ast.Context) (*ast.Returned, error) {
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {
@@ -20,5 +30,16 @@ func errorsExec(c *ast.Context) (*ast.Returned, error) {
 	}
 	_ = fmt
 
-	return golang.NewReturned(fmt.Errorf("stop %s", "dragging my heart around"))
+	f := func(a interface{}) {
+		fmt.Println(a)
+	}
+	_ = f
+
+	f(42)
+	y := func(a interface{}, b interface{}, c interface{}) interface{} {
+		return (42 + 1)
+	}
+	_ = y
+
+	return golang.NewReturned(y(1, 2, 3))
 }

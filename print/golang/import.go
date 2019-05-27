@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/lush/builtins"
 )
 
-func (c Compiler) astImport(i ast.Import) error {
+func (c Printer) astImport(i ast.Import) error {
 	x, ok := builtins.Available.Load(i.Name)
 	if ok {
 		s := `%si, _ := c.Imports.LoadOrStore(%q, %#v)

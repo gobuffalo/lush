@@ -1,7 +1,7 @@
 {
   "ast.Call": {
     "Arguments": {
-      "ast.Statements": [
+      "ast.Nodes": [
         {
           "ast.Integer": {
             "Meta": {
@@ -64,8 +64,8 @@
             "Original": ""
           }
         },
-        "Statements": {
-          "ast.Statements": [
+        "Nodes": {
+          "ast.Nodes": [
             {
               "ast.Assign": {
                 "Meta": {

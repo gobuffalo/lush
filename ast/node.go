@@ -4,6 +4,6 @@ import (
 	"fmt"
 )
 
-type Statement interface {
+type Node interface {
 	fmt.Stringer
 }

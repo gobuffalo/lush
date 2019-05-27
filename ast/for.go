@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func NewFor(n VisitableStatement, args interface{}, b *Block) (For, error) {
+func NewFor(n VisitableNode, args interface{}, b *Block) (For, error) {
 	f := For{
 		Block: b,
 		Name:  n,
@@ -39,7 +39,7 @@ func NewFor(n VisitableStatement, args interface{}, b *Block) (For, error) {
 }
 
 type For struct {
-	Name         VisitableStatement
+	Name         VisitableNode
 	Args         Idents
 	Block        *Block
 	Meta         Meta

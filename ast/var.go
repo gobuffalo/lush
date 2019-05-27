@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func NewVar(name Ident, value Statement) (*Var, error) {
+func NewVar(name Ident, value Node) (*Var, error) {
 	if name.String() == "nil" {
 		return nil, errors.New("can not set value for nil")
 	}
@@ -17,7 +17,7 @@ func NewVar(name Ident, value Statement) (*Var, error) {
 
 type Var struct {
 	Name  Ident
-	Value Statement
+	Value Node
 	Meta  Meta
 }
 

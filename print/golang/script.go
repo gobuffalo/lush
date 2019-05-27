@@ -5,11 +5,11 @@ import (
 )
 
 func (c Printer) astScript(a ast.Script) error {
-	if err := c.astStatements(a.Statements); err != nil {
+	if err := c.astNodes(a.Nodes); err != nil {
 		return err
 	}
 
-	for _, s := range a.Statements {
+	for _, s := range a.Nodes {
 		if _, ok := s.(ast.Return); ok {
 			return nil
 		}

@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func NewLet(name Ident, value Statement) (*Let, error) {
+func NewLet(name Ident, value Node) (*Let, error) {
 	if name.String() == "nil" {
 		return nil, name.Meta.Errorf("can not set value for nil")
 	}
@@ -16,7 +16,7 @@ func NewLet(name Ident, value Statement) (*Let, error) {
 
 type Let struct {
 	Name  Ident
-	Value Statement
+	Value Node
 	Meta  Meta
 }
 

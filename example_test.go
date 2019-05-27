@@ -49,7 +49,7 @@ fmt.Println(x)`
 	// 42
 }
 
-func ExampleExec_ifStatements() {
+func ExampleExec_ifNodes() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 
 	in := `

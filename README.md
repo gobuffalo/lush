@@ -19,7 +19,7 @@ Lush will provide the basis for [https://github.com/gobuffalo/plush](https://git
 * [Strings](#strings)
 * [Numbers](#numbers)
 * [Booleans](#booleans)
-* [If Statements](#if)
+* [If Nodes](#if)
 * [Operators](#operators)
 * [Arrays](#arrays)
 * [Maps](#maps)
@@ -194,7 +194,7 @@ nil
 
 ---
 
-## [`if` Statements](#if)
+## [`if` Nodes](#if)
 
 ```lush
 // with bool
@@ -218,7 +218,7 @@ if a := 1; a == 1 {
 }
 ```
 
-### `else` Statement
+### `else` Node
 
 An `if` statement can only have one `else` statement attached to it.
 
@@ -230,7 +230,7 @@ if (false) {
 }
 ```
 
-### `else if` Statements
+### `else if` Nodes
 
 An `if` statement can have `N` `else if` statements.
 

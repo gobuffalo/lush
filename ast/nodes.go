@@ -6,41 +6,41 @@ import (
 	"strings"
 )
 
-func NewStatements(i interface{}) (Statements, error) {
-	var states Statements
+func NewNodes(i interface{}) (Nodes, error) {
+	var states Nodes
 
 	ii := flatten([]interface{}{i})
 
 	for _, i := range ii {
 		switch t := i.(type) {
-		case Statement:
+		case Node:
 			states = append(states, t)
 		case []interface{}:
-			st, err := NewStatements(i)
+			st, err := NewNodes(i)
 			if err != nil {
 				return states, err
 			}
 			states = append(states, st)
 		default:
-			return nil, fmt.Errorf("expected Statement got %T", i)
+			return nil, fmt.Errorf("expected Node got %T", i)
 		}
 	}
 
 	return states, nil
 }
 
-type Statements []Statement
+type Nodes []Node
 
-func (t Statements) String() string {
+func (t Nodes) String() string {
 	var x []string
-	var last Statement
+	var last Node
 	for _, s := range t {
 		y := strings.TrimSpace(s.String())
 		if len(y) == 0 {
 			continue
 		}
 		switch t := s.(type) {
-		case Statements:
+		case Nodes:
 			x = append(x, t.String())
 		case Noop:
 		case Comment, Import:
@@ -56,7 +56,7 @@ func (t Statements) String() string {
 	return strings.Join(x, "")
 }
 
-func (t *Statements) Append(s Statement, err error) error {
+func (t *Nodes) Append(s Node, err error) error {
 	if err != nil {
 		return err
 	}
@@ -64,11 +64,11 @@ func (t *Statements) Append(s Statement, err error) error {
 	return nil
 }
 
-func (i Statements) Format(st fmt.State, verb rune) {
+func (i Nodes) Format(st fmt.State, verb rune) {
 	format(i, st, verb)
 }
 
-func (st Statements) Visit(c *Context) (interface{}, error) {
+func (st Nodes) Visit(c *Context) (interface{}, error) {
 	var stmts []interface{}
 	for _, s := range st {
 		switch r := s.(type) {
@@ -108,13 +108,13 @@ func (st Statements) Visit(c *Context) (interface{}, error) {
 	return stmts, nil
 }
 
-func (st Statements) MarshalJSON() ([]byte, error) {
+func (st Nodes) MarshalJSON() ([]byte, error) {
 	var a []interface{}
 	for _, s := range st {
 		a = append(a, s)
 	}
 	m := map[string]interface{}{
-		"ast.Statements": a,
+		"ast.Nodes": a,
 	}
 
 	return json.Marshal(m)

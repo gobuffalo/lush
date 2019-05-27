@@ -10,7 +10,7 @@ import (
 	"github.com/gobuffalo/lush/types"
 )
 
-func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error) {
+func NewCall(n Node, y interface{}, args Nodes, b *Block) (Call, error) {
 	c := Call{
 		Name:      n,
 		Arguments: args,
@@ -29,9 +29,9 @@ func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error
 }
 
 type Call struct {
-	Name      Statement
+	Name      Node
 	FName     Ident
-	Arguments Statements
+	Arguments Nodes
 	Block     *Block
 	Meta      Meta
 }

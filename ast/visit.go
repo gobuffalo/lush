@@ -4,7 +4,7 @@ type Visitable interface {
 	Visit(*Context) (interface{}, error)
 }
 
-type VisitableStatement interface {
+type VisitableNode interface {
 	Visitable
-	Statement
+	Node
 }

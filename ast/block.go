@@ -8,7 +8,7 @@ import (
 )
 
 type Block struct {
-	Statements
+	Nodes
 	Meta Meta
 }
 
@@ -16,16 +16,16 @@ func (b Block) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("{")
 	func() {
-		if len(b.Statements) > 0 {
-			if len(b.Statements) == 1 {
-				if st, ok := b.Statements[0].(Statements); ok {
+		if len(b.Nodes) > 0 {
+			if len(b.Nodes) == 1 {
+				if st, ok := b.Nodes[0].(Nodes); ok {
 					if len(st) == 0 {
 						return
 					}
 				}
 			}
 			bb.WriteString("\n")
-			x := b.Statements.String()
+			x := b.Nodes.String()
 			x = strings.TrimSpace(x)
 			scan := bufio.NewScanner(strings.NewReader(x))
 			for scan.Scan() {
@@ -42,9 +42,9 @@ func (b Block) String() string {
 	return bb.String()
 }
 
-func NewBlock(stmts ...Statement) (*Block, error) {
+func NewBlock(stmts ...Node) (*Block, error) {
 	t := &Block{
-		Statements: Statements(stmts),
+		Nodes: Nodes(stmts),
 	}
 	return t, nil
 }
@@ -55,7 +55,7 @@ func (a Block) Format(st fmt.State, verb rune) {
 
 func (a Block) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Statements": a.Statements,
+		"Nodes": a.Nodes,
 		"Meta":       a.Meta,
 	}
 	return toJSON(a, m)

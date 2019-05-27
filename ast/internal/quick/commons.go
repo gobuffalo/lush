@@ -16,7 +16,7 @@ var (
 	MAP     = NewMap(map[string]interface{}{
 		IDENT.String(): INT,
 	})
-	CALL   = NewCall(IDENT, NewIdent("Bar"), ast.Statements{INT, FLOAT, STRING}, BLOCK)
+	CALL   = NewCall(IDENT, NewIdent("Bar"), ast.Nodes{INT, FLOAT, STRING}, BLOCK)
 	IF     = NewIf(nil, ast.True, BLOCK, nil)
 	ELSE   = NewElse(BLOCK)
 	ELSEIF = NewElseIf(IF)

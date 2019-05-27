@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func NewIf(p Statement, e Expression, b *Block, elsa Statement) (If, error) {
+func NewIf(p Node, e Expression, b *Block, elsa Node) (If, error) {
 	fi := If{
 		PreCondition: p,
 		Block:        b,
@@ -18,9 +18,9 @@ func NewIf(p Statement, e Expression, b *Block, elsa Statement) (If, error) {
 }
 
 type If struct {
-	PreCondition Statement
+	PreCondition Node
 	Expression   Expression
-	Clause       Statement
+	Clause       Node
 	Block        *Block
 	Meta         Meta
 }

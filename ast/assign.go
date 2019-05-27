@@ -7,8 +7,8 @@ import (
 )
 
 type Assign struct {
-	Name  Statement
-	Value Statement
+	Name  Node
+	Value Node
 	Meta  Meta
 }
 
@@ -89,7 +89,7 @@ func (l *Assign) Visit(c *Context) (interface{}, error) {
 	return nil, nil
 }
 
-func NewAssign(name Statement, value Statement) (*Assign, error) {
+func NewAssign(name Node, value Node) (*Assign, error) {
 	if name.String() == "nil" {
 		return nil, fmt.Errorf("can not set value for nil")
 	}

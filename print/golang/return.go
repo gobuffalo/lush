@@ -10,12 +10,12 @@ import (
 func (c Printer) astReturn(r ast.Return) error {
 	var args []string
 
-	if len(r.Statements) == 0 {
+	if len(r.Nodes) == 0 {
 		fmt.Fprint(c, "\nreturn nil, nil")
 		return nil
 	}
 
-	for _, s := range r.Statements {
+	for _, s := range r.Nodes {
 		if st, ok := s.(fmt.GoStringer); ok {
 			args = append(args, st.GoString())
 			continue

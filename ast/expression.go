@@ -1,6 +1,6 @@
 package ast
 
 type Expression interface {
-	Statement
+	Node
 	Bool(c *Context) (bool, error)
 }

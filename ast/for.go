@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func NewFor(n ExecStringer, args interface{}, b *Block) (For, error) {
+func NewFor(n VisitableNode, args interface{}, b *Block) (For, error) {
 	f := For{
 		Block: b,
 		Name:  n,
@@ -39,7 +39,7 @@ func NewFor(n ExecStringer, args interface{}, b *Block) (For, error) {
 }
 
 type For struct {
-	Name         ExecStringer
+	Name         VisitableNode
 	Args         Idents
 	Block        *Block
 	Meta         Meta
@@ -85,13 +85,13 @@ func (f For) String() string {
 	return bb.String()
 }
 
-func (f For) Exec(c *Context) (interface{}, error) {
+func (f For) Visit(c *Context) (interface{}, error) {
 	c = c.Clone()
 
 	var v interface{}
 	var err error
 	if f.Name != nil {
-		v, err = f.Name.Exec(c)
+		v, err = f.Name.Visit(c)
 		if err != nil {
 			return nil, err
 		}
@@ -99,7 +99,7 @@ func (f For) Exec(c *Context) (interface{}, error) {
 
 	if v == nil {
 		for {
-			res, err := f.Block.Exec(c)
+			res, err := f.Block.Visit(c)
 			if err != nil {
 				return nil, err
 			}
@@ -189,7 +189,7 @@ func (f For) iterate(c *Context, rv reflect.Value, k interface{}, v interface{})
 	if f.Block == nil {
 		return nil, nil
 	}
-	r, err := f.Block.Exec(c)
+	r, err := f.Block.Visit(c)
 	if err != nil {
 		return nil, err
 	}

@@ -10,7 +10,7 @@ import (
 	"github.com/gobuffalo/lush/types"
 )
 
-func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error) {
+func NewCall(n Node, y interface{}, args Nodes, b *Block) (Call, error) {
 	c := Call{
 		Name:      n,
 		Arguments: args,
@@ -29,9 +29,9 @@ func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error
 }
 
 type Call struct {
-	Name      Statement
+	Name      Node
 	FName     Ident
-	Arguments Statements
+	Arguments Nodes
 	Block     *Block
 	Meta      Meta
 }
@@ -66,7 +66,7 @@ func (f Call) String() string {
 	return bb.String()
 }
 
-func (f Call) Exec(c *Context) (interface{}, error) {
+func (f Call) Visit(c *Context) (interface{}, error) {
 	return f.exec(c)
 }
 
@@ -153,8 +153,8 @@ func app(args []reflect.Value, mt reflect.Type, i int, c *Context, v interface{}
 		args = append(args, reflect.ValueOf(m.Interface()))
 		return args, nil
 	}
-	if ex, ok := v.(Execable); ok {
-		x, err := ex.Exec(c)
+	if ex, ok := v.(Visitable); ok {
+		x, err := ex.Visit(c)
 		if err != nil {
 			return args, err
 		}

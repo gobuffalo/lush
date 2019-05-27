@@ -7,7 +7,7 @@ import (
 	"github.com/gobuffalo/lush/types"
 )
 
-func NewOpExpression(a Statement, op string, b Statement) (*OpExpression, error) {
+func NewOpExpression(a Node, op string, b Node) (*OpExpression, error) {
 	e := OpExpression{
 		format: "%s %s %s",
 		A:      a,
@@ -17,15 +17,15 @@ func NewOpExpression(a Statement, op string, b Statement) (*OpExpression, error)
 	return &e, nil
 }
 
-func NewPopExpression(a Statement, op string, b Statement) (*OpExpression, error) {
+func NewPopExpression(a Node, op string, b Node) (*OpExpression, error) {
 	e, err := NewOpExpression(a, op, b)
 	e.format = "(%s %s %s)"
 	return e, err
 }
 
 type OpExpression struct {
-	A    Statement
-	B    Statement
+	A    Node
+	B    Node
 	Op   string
 	Meta Meta
 
@@ -51,7 +51,7 @@ func (e OpExpression) MarshalJSON() ([]byte, error) {
 	return toJSON(e, m)
 }
 
-func (e OpExpression) Exec(c *Context) (interface{}, error) {
+func (e OpExpression) Visit(c *Context) (interface{}, error) {
 	switch e.Op {
 	case "==", "!=", "~=", "<", ">", "<=", ">=", "&&":
 		return e.Bool(c)

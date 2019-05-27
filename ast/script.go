@@ -5,11 +5,11 @@ import (
 )
 
 type Script struct {
-	Statements Statements
+	Nodes Nodes
 }
 
 func (s Script) Exec(c *Context) (*Returned, error) {
-	res, err := s.Statements.Exec(c)
+	res, err := s.Nodes.Visit(c)
 	if err != nil {
 		return nil, err
 	}
@@ -29,11 +29,11 @@ func (a Script) Format(st fmt.State, verb rune) {
 
 func (a Script) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Statements": a.Statements,
+		"Nodes": a.Nodes,
 	}
 	return toJSON(a, m)
 }
 
 func (s Script) String() string {
-	return s.Statements.String()
+	return s.Nodes.String()
 }

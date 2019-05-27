@@ -31,12 +31,12 @@ func NewFloat(f float64) ast.Float {
 	return fl
 }
 
-func NewAssign(id ast.Ident, v ast.Statement) *ast.Assign {
+func NewAssign(id ast.Ident, v ast.Node) *ast.Assign {
 	an, _ := ast.NewAssign(id, v)
 	return an
 }
 
-func NewVar(id ast.Ident, v ast.Statement) *ast.Var {
+func NewVar(id ast.Ident, v ast.Node) *ast.Var {
 	x, _ := ast.NewVar(id, v)
 	return x
 }
@@ -46,7 +46,7 @@ func NewAccess(id ast.Ident, i interface{}) ast.Access {
 	return acc
 }
 
-func NewBlock(s ...ast.Statement) *ast.Block {
+func NewBlock(s ...ast.Node) *ast.Block {
 	bl, _ := ast.NewBlock(s...)
 	return bl
 }
@@ -63,7 +63,7 @@ func NewMap(m map[string]interface{}) ast.Map {
 	return mp
 }
 
-func NewCall(n ast.Statement, y interface{}, args ast.Statements, b *ast.Block) ast.Call {
+func NewCall(n ast.Node, y interface{}, args ast.Nodes, b *ast.Block) ast.Call {
 	c, _ := ast.NewCall(n, y, args, b)
 	return c
 }
@@ -78,19 +78,19 @@ func NewElseIf(fi ast.If) ast.ElseIf {
 	return el
 }
 
-func NewIf(p ast.Statement, e ast.Expression, b *ast.Block, elsa ast.Statement) ast.If {
+func NewIf(p ast.Node, e ast.Expression, b *ast.Block, elsa ast.Node) ast.If {
 	i, _ := ast.NewIf(p, e, b, elsa)
 
 	return i
 }
 
-func NewFor(n ast.ExecStringer, args interface{}, b *ast.Block) ast.For {
+func NewFor(n ast.VisitableNode, args interface{}, b *ast.Block) ast.For {
 	f, _ := ast.NewFor(n, args, b)
 
 	return f
 }
 
-func NewRange(n ast.ExecStringer, args interface{}, b *ast.Block) ast.Range {
+func NewRange(n ast.VisitableNode, args interface{}, b *ast.Block) ast.Range {
 	f, _ := ast.NewRange(n, args, b)
 
 	return f
@@ -101,19 +101,19 @@ func NewFunc(ax interface{}, b *ast.Block) ast.Func {
 	return f
 }
 
-func NewLet(name ast.Ident, value ast.Statement) *ast.Let {
+func NewLet(name ast.Ident, value ast.Node) *ast.Let {
 	l, _ := ast.NewLet(name, value)
 
 	return l
 }
 
-func NewOpExpression(a ast.Statement, op string, b ast.Statement) *ast.OpExpression {
+func NewOpExpression(a ast.Node, op string, b ast.Node) *ast.OpExpression {
 	o, _ := ast.NewOpExpression(a, op, b)
 
 	return o
 }
 
-func NewReturn(s ...ast.Statement) ast.Return {
+func NewReturn(s ...ast.Node) ast.Return {
 	r, _ := ast.NewReturn(s)
 	return r
 }

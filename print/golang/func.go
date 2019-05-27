@@ -19,7 +19,7 @@ func (c Printer) astFunc(f ast.Func) error {
 		r, ok := returnFinder(f.Block)
 		if ok {
 			var lines []string
-			for i := 0; i < len(r.Statements); i++ {
+			for i := 0; i < len(r.Nodes); i++ {
 				lines = append(lines, "interface{}")
 			}
 			fmt.Fprintf(c, "(%s)", strings.Join(lines, ", "))
@@ -35,9 +35,9 @@ func (c Printer) astFunc(f ast.Func) error {
 	return nil
 }
 
-func returnFinder(s ast.Statement) (ast.Return, bool) {
+func returnFinder(s ast.Node) (ast.Return, bool) {
 	switch t := s.(type) {
-	case ast.Statements:
+	case ast.Nodes:
 		for _, s := range t {
 			r, ok := returnFinder(s)
 			if ok {
@@ -47,7 +47,7 @@ func returnFinder(s ast.Statement) (ast.Return, bool) {
 	case ast.Return:
 		return t, true
 	case *ast.Block:
-		return returnFinder(t.Statements)
+		return returnFinder(t.Nodes)
 	default:
 	}
 

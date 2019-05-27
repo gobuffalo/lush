@@ -7,8 +7,8 @@ import (
 )
 
 type Assign struct {
-	Name  Statement
-	Value Statement
+	Name  Node
+	Value Node
 	Meta  Meta
 }
 
@@ -29,7 +29,7 @@ func (a Assign) MarshalJSON() ([]byte, error) {
 	return toJSON(a, m)
 }
 
-func (l *Assign) Exec(c *Context) (interface{}, error) {
+func (l *Assign) Visit(c *Context) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil
 	}
@@ -40,22 +40,22 @@ func (l *Assign) Exec(c *Context) (interface{}, error) {
 		if !c.Has(name) {
 			return nil, l.Meta.Errorf("can not assign %s to non-existent variable", name)
 		}
-		si, ok := l.Value.(Execable)
+		si, ok := l.Value.(Visitable)
 		if !ok {
 			c.setup(name, l.Value)
 			return nil, nil
 		}
-		i, err := si.Exec(c)
+		i, err := si.Visit(c)
 		if err != nil {
 			return nil, err
 		}
 		c.setup(name, i)
 
 	case Access:
-		si, ok := l.Value.(Execable)
+		si, ok := l.Value.(Visitable)
 		if !ok {
 		}
-		v, err := si.Exec(c)
+		v, err := si.Visit(c)
 		if err != nil {
 			return nil, err
 		}
@@ -89,7 +89,7 @@ func (l *Assign) Exec(c *Context) (interface{}, error) {
 	return nil, nil
 }
 
-func NewAssign(name Statement, value Statement) (*Assign, error) {
+func NewAssign(name Node, value Node) (*Assign, error) {
 	if name.String() == "nil" {
 		return nil, fmt.Errorf("can not set value for nil")
 	}

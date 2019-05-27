@@ -18,6 +18,6 @@ var Default = Printer{
 	Writer:  os.Stdout,
 }
 
-func (c Printer) Print(s ...ast.Statement) error {
-	return c.astStatements(s)
+func (c Printer) Print(s ...ast.Node) error {
+	return c.astNodes(s)
 }

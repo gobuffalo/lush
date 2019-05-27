@@ -22,7 +22,7 @@ import (
 // 	Block() (interface{}, error)
 // 	BlockWith(Context) (interface{}, error)
 // 	HasBlock() bool
-// 	Exec((c *Context)) (interface{}, error)
+// 	Visit((c *Context)) (interface{}, error)
 // }
 
 func NewContext(ctx context.Context, w io.Writer) *Context {

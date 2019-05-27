@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-func (c Printer) astStatement(a ast.Statement) error {
+func (c Printer) astNode(a ast.Node) error {
 	// fmt.Printf("%T\n", a)
 	switch v := a.(type) {
 	case ast.Script:
@@ -15,8 +15,8 @@ func (c Printer) astStatement(a ast.Statement) error {
 		return c.astLet(v)
 	case ast.Return:
 		return c.astReturn(v)
-	case ast.Statements:
-		return c.astStatements(v)
+	case ast.Nodes:
+		return c.astNodes(v)
 	case ast.Import:
 		return c.astImport(v)
 	case ast.Goroutine:
@@ -52,9 +52,9 @@ func (c Printer) astStatement(a ast.Statement) error {
 	return nil
 }
 
-func (c Printer) astStatements(a ast.Statements) error {
+func (c Printer) astNodes(a ast.Nodes) error {
 	for _, s := range a {
-		if err := c.astStatement(s); err != nil {
+		if err := c.astNode(s); err != nil {
 			return err
 		}
 	}

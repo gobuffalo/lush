@@ -43,7 +43,7 @@ func genericJSON(i interface{}) map[string]interface{} {
 	}
 }
 
-func toJSON(t Statement, i interface{}) ([]byte, error) {
+func toJSON(t Node, i interface{}) ([]byte, error) {
 	m := map[string]interface{}{
 		fmt.Sprintf("%T", t): i,
 	}

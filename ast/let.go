@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func NewLet(name Ident, value Statement) (*Let, error) {
+func NewLet(name Ident, value Node) (*Let, error) {
 	if name.String() == "nil" {
 		return nil, name.Meta.Errorf("can not set value for nil")
 	}
@@ -16,7 +16,7 @@ func NewLet(name Ident, value Statement) (*Let, error) {
 
 type Let struct {
 	Name  Ident
-	Value Statement
+	Value Node
 	Meta  Meta
 }
 
@@ -31,16 +31,16 @@ _ = %s
 `, l.Name, l.Value, l.Name)
 }
 
-func (l *Let) Exec(c *Context) (interface{}, error) {
+func (l *Let) Visit(c *Context) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil
 	}
-	si, ok := l.Value.(Execable)
+	si, ok := l.Value.(Visitable)
 	if !ok {
 		c.Set(l.Name.String(), l.Value)
 		return nil, nil
 	}
-	i, err := si.Exec(c)
+	i, err := si.Visit(c)
 	if err != nil {
 		return nil, err
 	}

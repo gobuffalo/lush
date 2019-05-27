@@ -54,11 +54,11 @@ func (a Array) MarshalJSON() ([]byte, error) {
 	return toJSON(a, m)
 }
 
-func (a Array) Exec(c *Context) (interface{}, error) {
+func (a Array) Visit(c *Context) (interface{}, error) {
 	var res []interface{}
 	for _, i := range a.Value {
-		if ex, ok := i.(Execable); ok {
-			r, err := ex.Exec(c)
+		if ex, ok := i.(Visitable); ok {
+			r, err := ex.Visit(c)
 			if err != nil {
 				return nil, err
 			}

@@ -9,12 +9,12 @@
   )
 }
 
-DOC <- stmts:(_ STATEMENT _)+ EOF {
-  s, err := ast.NewStatements(stmts)
-  return ast.Script{Statements: s}, err
+DOC <- stmts:(_ NODE _)+ EOF {
+  s, err := ast.NewNodes(stmts)
+  return ast.Script{Nodes: s}, err
 }
 
-STATEMENT <- s:( IMPORT / GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
+NODE <- s:( IMPORT / GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
   return s, nil
 }
 
@@ -82,7 +82,7 @@ ARG <- _ i:LETV _ ","? {
   return i, nil
 }
 
-BLOCK <- _ LC _ s:( CONTINUE / BREAK / STATEMENT )* _ RC {
+BLOCK <- _ LC _ s:( CONTINUE / BREAK / NODE )* _ RC {
   return newBlock(c, s)
 }
 

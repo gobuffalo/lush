@@ -160,9 +160,6 @@
         }
       }
     },
-    "Concurrent": {
-      "bool": false
-    },
     "FName": {
       "ast.Ident": {
         "Meta": {

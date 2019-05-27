@@ -54,6 +54,12 @@ sleeper := func(max) {
 			break
 		}
 	}
+
+	go func() {
+		time.Sleep(d)
+
+		fmt.Println(max, "yyy")
+	}()
 }
 
 go sleeper(5)

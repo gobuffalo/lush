@@ -8,9 +8,6 @@ import (
 )
 
 func (c Printer) astCall(f ast.Call) error {
-	if f.Concurrent {
-		fmt.Fprintf(c, "go ")
-	}
 	fmt.Fprintf(c, f.Name.String())
 	if (f.FName != ast.Ident{}) {
 		fmt.Fprintf(c, ".")
@@ -24,5 +21,10 @@ func (c Printer) astCall(f ast.Call) error {
 	}
 	fmt.Fprintf(c, strings.Join(args, ", "))
 	fmt.Fprintf(c, ")\n")
+	return nil
+}
+
+func (c Printer) astGoroutine(g ast.Goroutine) error {
+	fmt.Fprintf(c, "go %s\n", g.Call)
 	return nil
 }

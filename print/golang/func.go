@@ -24,7 +24,12 @@ func (c Printer) astFunc(f ast.Func) error {
 			}
 			fmt.Fprintf(c, "(%s)", strings.Join(lines, ", "))
 		}
-		fmt.Fprintf(c, f.Block.String())
+		fmt.Fprintf(c, "{")
+		if err := c.astBlock(f.Block); err != nil {
+			return err
+		}
+		fmt.Fprintf(c, "}")
+
 	}
 	fmt.Fprintln(c)
 	return nil
@@ -44,8 +49,6 @@ func returnFinder(s ast.Statement) (ast.Return, bool) {
 	case *ast.Block:
 		return returnFinder(t.Statements)
 	default:
-		// (fmt.Printf("%T\n", s))
-		// panic(fmt.Sprintf("%T", s))
 	}
 
 	return ast.Return{}, false

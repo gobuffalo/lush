@@ -7,15 +7,20 @@ import (
 )
 
 func (c Printer) astStatement(a ast.Statement) error {
+	// fmt.Printf("%T\n", a)
 	switch v := a.(type) {
 	case ast.Script:
 		return c.astScript(v)
+	case *ast.Let:
+		return c.astLet(v)
 	case ast.Return:
 		return c.astReturn(v)
 	case ast.Statements:
 		return c.astStatements(v)
 	case ast.Import:
 		return c.astImport(v)
+	case ast.Goroutine:
+		return c.astGoroutine(v)
 	case ast.Call:
 		return c.astCall(v)
 	case ast.Comment:

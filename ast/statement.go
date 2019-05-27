@@ -89,6 +89,12 @@ func (st Statements) Exec(c *Context) (interface{}, error) {
 			return r, nil
 		case Continue:
 			return r, nil
+		case Goroutine:
+			c.wg.Add(1)
+			go func() {
+				defer c.wg.Done()
+				r.Exec(c)
+			}()
 		case Execable:
 			i, err := r.Exec(c)
 			if err != nil {

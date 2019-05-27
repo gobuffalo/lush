@@ -32,10 +32,7 @@ func main() {
 	case "run":
 		args = args[1:]
 	case "fmt":
-		if err := fmtOptions.Flags.Parse(args[1:]); err != nil {
-			log.Fatal(err)
-		}
-		format(fmtOptions.Flags.Args())
+		format(args[1:])
 		return
 	case "ast":
 		printAST(args[1:])
@@ -48,8 +45,7 @@ func main() {
 }
 
 func run(args []string) {
-	r := commands.NewRunner()
-	r.FlagSet.Parse(args)
+	r := commands.NewRunner(args)
 	err := r.Exec()
 	if err != nil {
 		log.Fatal(err)

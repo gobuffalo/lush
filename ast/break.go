@@ -22,3 +22,7 @@ func (a Break) MarshalJSON() ([]byte, error) {
 	}
 	return toJSON(a, m)
 }
+
+func (a Break) Visit(v Visitor) error {
+	return v(a.Meta)
+}

@@ -40,10 +40,14 @@ func NewFor(n ExecStringer, args interface{}, b *Block) (For, error) {
 
 type For struct {
 	Name         ExecStringer
-	Args         []Ident
+	Args         Idents
 	Block        *Block
 	Meta         Meta
 	normalSingle bool
+}
+
+func (a For) Visit(v Visitor) error {
+	return v(a.Name, a.Args, a.Block, a.Meta)
 }
 
 func (f For) Format(st fmt.State, verb rune) {

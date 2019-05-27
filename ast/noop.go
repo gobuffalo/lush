@@ -7,6 +7,10 @@ type Noop struct {
 	Meta Meta
 }
 
+func (a Noop) Visit(v Visitor) error {
+	return v(a.Meta)
+}
+
 func (n Noop) String() string {
 	return ""
 }

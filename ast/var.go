@@ -21,6 +21,10 @@ type Var struct {
 	Meta  Meta
 }
 
+func (a Var) Visit(v Visitor) error {
+	return v(a.Name, a.Value, a.Meta)
+}
+
 func (l Var) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Name":  l.Name,

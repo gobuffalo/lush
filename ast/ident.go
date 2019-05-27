@@ -3,6 +3,7 @@ package ast
 import (
 	"fmt"
 	"reflect"
+	"strings"
 )
 
 func NewIdent(b []byte) (Ident, error) {
@@ -13,6 +14,29 @@ func NewIdent(b []byte) (Ident, error) {
 type Ident struct {
 	Name string
 	Meta Meta
+}
+
+func (a Ident) Visit(v Visitor) error {
+	return v(a.Meta)
+}
+
+type Idents []Ident
+
+func (ids Idents) String() string {
+	var lines []string
+	for _, i := range ids {
+		lines = append(lines, i.String())
+	}
+	return strings.Join(lines, ", ")
+}
+
+func (a Idents) Visit(v Visitor) error {
+	for _, i := range a {
+		if err := v(i); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (i Ident) IsZero() bool {

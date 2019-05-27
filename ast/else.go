@@ -10,6 +10,10 @@ type Else struct {
 	Meta  Meta
 }
 
+func (a Else) Visit(v Visitor) error {
+	return v(a.Block, a.Meta)
+}
+
 func (i Else) String() string {
 	bb := &bytes.Buffer{}
 

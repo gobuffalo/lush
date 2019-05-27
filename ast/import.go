@@ -15,6 +15,10 @@ func (i Import) String() string {
 	return fmt.Sprintf(`import "%s"`, i.Name)
 }
 
+func (a Import) Visit(v Visitor) error {
+	return v(a.Meta)
+}
+
 func (i Import) Exec(c *Context) (interface{}, error) {
 	imp, ok := c.Imports.Load(i.Name)
 	if !ok {

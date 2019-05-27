@@ -32,6 +32,10 @@ type OpExpression struct {
 	format string
 }
 
+func (a OpExpression) Visit(v Visitor) error {
+	return v(a.A, a.B, a.Meta)
+}
+
 func (e OpExpression) String() string {
 	return fmt.Sprintf("(%s %s %s)", e.A, e.Op, e.B)
 }

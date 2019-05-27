@@ -6,6 +6,10 @@ type ElseIf struct {
 	If
 }
 
+func (a ElseIf) Visit(v Visitor) error {
+	return v(a.If)
+}
+
 func (e ElseIf) String() string {
 	s := e.If.String()
 	return " else " + s

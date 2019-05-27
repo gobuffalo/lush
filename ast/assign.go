@@ -12,6 +12,10 @@ type Assign struct {
 	Meta  Meta
 }
 
+func (a Assign) Visit(v Visitor) error {
+	return v(a.Name, a.Value, a.Meta)
+}
+
 func (l Assign) String() string {
 	return fmt.Sprintf("%s = %s", l.Name, l.Value)
 }

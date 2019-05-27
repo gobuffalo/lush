@@ -35,6 +35,10 @@ type String struct {
 	Meta        Meta
 }
 
+func (a String) Visit(v Visitor) error {
+	return v(a.Meta)
+}
+
 func (s String) String() string {
 	return fmt.Sprintf(s.QuoteFormat, s.Original)
 }

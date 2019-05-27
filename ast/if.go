@@ -25,6 +25,10 @@ type If struct {
 	Meta         Meta
 }
 
+func (a If) Visit(v Visitor) error {
+	return v(a.PreCondition, a.Expression, a.Clause, a.Block, a.Meta)
+}
+
 func (i If) String() string {
 	bb := &bytes.Buffer{}
 

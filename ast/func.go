@@ -7,7 +7,7 @@ import (
 )
 
 func NewFunc(ax interface{}, b *Block) (Func, error) {
-	var args []Ident
+	var args Idents
 	for _, a := range ax.([]interface{}) {
 		zz, ok := a.(Ident)
 		if !ok {
@@ -23,9 +23,13 @@ func NewFunc(ax interface{}, b *Block) (Func, error) {
 }
 
 type Func struct {
-	Arguments []Ident
+	Arguments Idents
 	Block     *Block
 	Meta      Meta
+}
+
+func (a Func) Visit(v Visitor) error {
+	return v(a.Arguments, a.Block, a.Meta)
 }
 
 func (f Func) Format(st fmt.State, verb rune) {

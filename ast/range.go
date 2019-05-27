@@ -22,6 +22,10 @@ type Range struct {
 	Meta Meta
 }
 
+func (a Range) Visit(v Visitor) error {
+	return v(a.For, a.Meta)
+}
+
 func (f Range) Format(st fmt.State, verb rune) {
 	format(f, st, verb)
 }

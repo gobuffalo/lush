@@ -11,6 +11,10 @@ type Return struct {
 	Meta       Meta
 }
 
+func (a Return) Visit(v Visitor) error {
+	return v(a.Statements, a.Meta)
+}
+
 func (r Return) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("return ")

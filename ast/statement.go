@@ -40,6 +40,17 @@ func NewStatements(i interface{}) (Statements, error) {
 
 type Statements []Statement
 
+func (t Statements) Visit(v Visitor) error {
+	for _, s := range t {
+		if vs, ok := s.(Visitable); ok {
+			if err := vs.Visit(v); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func (t Statements) String() string {
 	var x []string
 	var last Statement

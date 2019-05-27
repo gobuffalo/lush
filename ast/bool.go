@@ -24,6 +24,10 @@ type Bool struct {
 	Meta  Meta
 }
 
+func (a Bool) Visit(v Visitor) error {
+	return v(a.Meta)
+}
+
 func (b Bool) String() string {
 	return fmt.Sprint(b.Value)
 }

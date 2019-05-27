@@ -10,7 +10,7 @@ import (
 /*
 import "fmt"
 
-return fmt.Errorf("stop %s", "dragging my heart around")
+return MethodCallExpr
 */
 func errorsExec(c *ast.Context) (*ast.Returned, error) {
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
@@ -20,5 +20,5 @@ func errorsExec(c *ast.Context) (*ast.Returned, error) {
 	}
 	_ = fmt
 
-	return golang.NewReturned(fmt.Errorf("stop %s", "dragging my heart around"))
+	return golang.NewReturned(MethodCallExpr)
 }

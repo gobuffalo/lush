@@ -40,3 +40,8 @@ func (m *MethodCallExpr) Visit(ctx *Context) (interface{}, error) {
 	callRes := meth.Call(args)
 	return callRes[0].Interface(), nil
 }
+
+func (m MethodCallExpr) String() string {
+	// fmt.Println(m.Callee, m.Method, m.Args, m.Meta)
+	return "MethodCallExpr"
+}

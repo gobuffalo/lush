@@ -68,7 +68,7 @@
               }
             },
             "Name": {
-              "Name": "FOO",
+              "Name": "foo",
               "Meta": {
                 "ast.Meta": {
                   "Col": 0,

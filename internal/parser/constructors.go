@@ -87,9 +87,8 @@ func newCallExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
 }
 
 func newVarRef(c *current, i interface{}) (ast.Visitable, error) {
-	ident := i.(ast.Ident)
 	return ast.VarRef{
-		Name: ident.Name,
+		Name: fmt.Sprintf("%s", i),
 		Meta: meta(c),
 	}, nil
 }

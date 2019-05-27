@@ -31,8 +31,8 @@ func (c Printer) astNode(a ast.Node) error {
 		return c.astVar(v)
 	case ast.Range:
 		return c.astRange(v)
-	case ast.Ident:
-		fmt.Fprint(c, v.Name)
+	case ast.Ident, ast.VarRef:
+		fmt.Fprint(c, v.String())
 		return nil
 	case ast.String:
 		fmt.Fprint(c, v)

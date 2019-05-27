@@ -36,7 +36,7 @@ POPEX <- _ LP _ a:(EXPRARG) _ op:OP _ b:(EXPRARG) _ RP _ ";"? {
   return newPopExpression(c, a, op, b)
 }
 
-IF <- _ "if" _ p:( (VAR / LET) )? _ ";"? _  s:(LP _ (BOOL / OPEX / POPEX ) _ RP / (BOOL / OPEX / POPEX) ) _ b:BLOCK _ e:(ELSEIF / ELSE)* {
+IF <- _ "if" _ p:( (VAR / LET) )? _ ";"? _  s:(LP _ (BOOL / EXPR ) _ RP / (BOOL / EXPR ) ) _ b:BLOCK _ e:(ELSEIF / ELSE)* {
   return newIf(c, p, s, b, e)
 }
 
@@ -99,11 +99,11 @@ UNARY <- num:NUMBER {
   return call, nil
 }
 
-CALLEXPR <- head:(REF / FCALL) tail:("." IDENT ARGS?)* {
+CALLEXPR <- head:(REF / FCALL / IDENT / VAR) tail:("." IDENT ARGS?)* {
   return newCallExpr(c, head, tail)
 }
 
-ARGS <- "(" head:EXPR? tail:("," _ EXPR )* ")" {
+ARGS <- "(" head:(NUMBER/STRING/EXPR)? tail:("," _ (STRING/NUMBER/EXPR) _ )* _ ")" _ {
   return newArglist(c, head, tail)
 }
 
@@ -151,7 +151,7 @@ ACCESS <- i:(IDENT) LB key:(NUMBER/IDENT/STRING) RB {
   return newAccess(c, i, key)
 }
 
-RETURN <- _ "return" _ s:EXPR {
+RETURN <- _ "return" _ s:(CALL / CALLEXPR / EXPR) _ {
   return newReturn(c, s)
 }
 

@@ -39,13 +39,14 @@ func Benchmark_errorsExec_Go(t *testing.B) {
 func Benchmark_errorsExec_Lush(t *testing.B) {
 	var r *ast.Returned
 
+	s, err := lush.ParseFile("errors.lush")
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	for i := 0; i < t.N; i++ {
 		c := ast.NewContext(context.Background(), nil)
 		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
-		s, err := lush.ParseFile("errors.lush")
-		if err != nil {
-			t.Fatal(err)
-		}
 
 		r, _ = s.Exec(c)
 	}

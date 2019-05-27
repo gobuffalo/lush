@@ -42,7 +42,7 @@ func Equal(c *ast.Context, a, b exec) bool {
 
 	if rr1 == nil || rr2 == nil {
 		if !(rr1 == nil && rr2 == nil) {
-			fmt.Printf("! %s != %s", rr1, rr2)
+			fmt.Printf("! %s (lush) != %s (go)", rr1, rr2)
 			res = false
 		}
 	} else if !cmp.Equal(rr1, rr2, cmpopts.IgnoreUnexported(rr1, rr2)) {

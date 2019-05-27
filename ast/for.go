@@ -40,7 +40,7 @@ func NewFor(n ExecStringer, args interface{}, b *Block) (For, error) {
 
 type For struct {
 	Name         ExecStringer
-	Args         []Ident
+	Args         Idents
 	Block        *Block
 	Meta         Meta
 	normalSingle bool
@@ -194,25 +194,4 @@ func (f For) iterate(c *Context, rv reflect.Value, k interface{}, v interface{})
 		return nil, err
 	}
 	return r, nil
-}
-
-func (f For) GoString() string {
-	bb := &bytes.Buffer{}
-	bb.WriteString("for ")
-	var args []string
-	for _, a := range f.Args {
-		args = append(args, a.String())
-	}
-	bb.WriteString(strings.Join(args, ", "))
-	bb.WriteString(" := range ")
-	bb.WriteString(f.Name.String() + " {\n")
-	for _, a := range f.Args {
-		fmt.Fprintf(bb, "\n\t_ = %s\n", a)
-	}
-	if f.Block != nil {
-		bb.WriteString(f.Block.GoString())
-	}
-
-	bb.WriteString("}")
-	return bb.String()
 }

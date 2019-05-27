@@ -55,13 +55,6 @@ func (l *Var) Exec(c *Context) (interface{}, error) {
 	return nil, nil
 }
 
-func (l Var) GoString() string {
-	return fmt.Sprintf(`
-%s := %#v
-_ = %s
-`, l.Name, l.Value, l.Name)
-}
-
 func (l Var) Format(st fmt.State, verb rune) {
 	format(l, st, verb)
 }

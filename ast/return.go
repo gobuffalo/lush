@@ -48,30 +48,3 @@ func (r Return) MarshalJSON() ([]byte, error) {
 	}
 	return toJSON(r, m)
 }
-
-func (r Return) GoString() string {
-	var args []string
-
-	if len(r.Statements) == 0 {
-		return "return nil, nil"
-	}
-
-	for _, s := range r.Statements {
-		if st, ok := s.(fmt.GoStringer); ok {
-			args = append(args, st.GoString())
-			continue
-		}
-		if st, ok := s.(fmt.Stringer); ok {
-			args = append(args, st.String())
-		}
-	}
-
-	const ret = `
-ret := ast.NewReturned([]interface {}{%s})
-if ret.Err() != nil {
-	return nil, ret.Err()
-}
-return &ret, nil
-`
-	return fmt.Sprintf(ret, strings.Join(args, ", "))
-}

@@ -12,34 +12,34 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func Test_errorsExec(t *testing.T) {
+func Test_mapExec(t *testing.T) {
 	r := require.New(t)
 
 	c := ast.NewContext(context.Background(), nil)
 
-	s, err := lush.ParseFile("errors.lush")
+	s, err := lush.ParseFile("map.lush")
 	r.NoError(err)
-	r.True(Equal(c, s.Exec, errorsExec))
+	r.True(Equal(c, s.Exec, mapExec))
 }
 
-var errorsBResult *ast.Returned
+var mapBResult *ast.Returned
 
-func Benchmark_errorsExec_Go(t *testing.B) {
+func Benchmark_mapExec_Go(t *testing.B) {
 	var r *ast.Returned
 
 	for i := 0; i < t.N; i++ {
 		c := ast.NewContext(context.Background(), nil)
 		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
 
-		r, _ = errorsExec(c)
+		r, _ = mapExec(c)
 	}
-	errorsBResult = r
+	mapBResult = r
 }
 
-func Benchmark_errorsExec_Lush(t *testing.B) {
+func Benchmark_mapExec_Lush(t *testing.B) {
 	var r *ast.Returned
 
-	s, err := lush.ParseFile("errors.lush")
+	s, err := lush.ParseFile("map.lush")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -50,5 +50,5 @@ func Benchmark_errorsExec_Lush(t *testing.B) {
 
 		r, _ = s.Exec(c)
 	}
-	errorsBResult = r
+	mapBResult = r
 }

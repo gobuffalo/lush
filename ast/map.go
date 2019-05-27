@@ -117,12 +117,3 @@ func (m Map) Bool(c *Context) (bool, error) {
 func (a Map) Format(st fmt.State, verb rune) {
 	format(a, st, verb)
 }
-
-func (a Map) GoString() string {
-	mm := map[interface{}]interface{}{}
-
-	for k, v := range a.Values {
-		mm[fmt.Sprintf("%#v", k)] = fmt.Sprintf("%#v", v)
-	}
-	return fmt.Sprintf("%#v", mm)
-}

@@ -28,7 +28,7 @@ func (b Bool) String() string {
 	return fmt.Sprint(b.Value)
 }
 
-func (b Bool) Exec(c *Context) (interface{}, error) {
+func (b Bool) Visit(c *Context) (interface{}, error) {
 	return b.Value, nil
 }
 

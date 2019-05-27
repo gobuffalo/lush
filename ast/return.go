@@ -22,8 +22,8 @@ func (r Return) String() string {
 	return bb.String()
 }
 
-func (r Return) Exec(c *Context) (interface{}, error) {
-	st, err := r.Statements.Exec(c)
+func (r Return) Visit(c *Context) (interface{}, error) {
+	st, err := r.Statements.Visit(c)
 	if err != nil {
 		return NewReturned(err), err
 	}

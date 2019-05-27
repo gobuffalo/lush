@@ -72,7 +72,7 @@ func (i If) Bool(c *Context) (bool, error) {
 	return i.Expression.Bool(c)
 }
 
-func (i If) Exec(c *Context) (interface{}, error) {
+func (i If) Visit(c *Context) (interface{}, error) {
 	if i.Block == nil {
 		return nil, i.Meta.Errorf("if statement missing block")
 	}
@@ -89,11 +89,11 @@ func (i If) Exec(c *Context) (interface{}, error) {
 		return nil, err
 	}
 	if b {
-		return i.Block.Exec(c)
+		return i.Block.Visit(c)
 	}
 
-	if ex, ok := i.Clause.(Execable); ok {
-		return ex.Exec(c)
+	if ex, ok := i.Clause.(Visitable); ok {
+		return ex.Visit(c)
 	}
 	return nil, nil
 }

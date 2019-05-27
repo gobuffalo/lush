@@ -84,13 +84,13 @@ func NewIf(p ast.Statement, e ast.Expression, b *ast.Block, elsa ast.Statement) 
 	return i
 }
 
-func NewFor(n ast.ExecStringer, args interface{}, b *ast.Block) ast.For {
+func NewFor(n ast.VisitableStatement, args interface{}, b *ast.Block) ast.For {
 	f, _ := ast.NewFor(n, args, b)
 
 	return f
 }
 
-func NewRange(n ast.ExecStringer, args interface{}, b *ast.Block) ast.Range {
+func NewRange(n ast.VisitableStatement, args interface{}, b *ast.Block) ast.Range {
 	f, _ := ast.NewRange(n, args, b)
 
 	return f

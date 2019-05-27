@@ -52,7 +52,7 @@ func NewMap(vals interface{}) (Map, error) {
 	return m, nil
 }
 
-func (m Map) Exec(c *Context) (interface{}, error) {
+func (m Map) Visit(c *Context) (interface{}, error) {
 	mm := map[string]interface{}{}
 	for k, v := range m.Values {
 		if vv, ok := v.(interfacer); ok {

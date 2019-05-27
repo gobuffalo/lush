@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func NewRange(n ExecStringer, args interface{}, b *Block) (Range, error) {
+func NewRange(n VisitableStatement, args interface{}, b *Block) (Range, error) {
 	r := Range{}
 	f, err := NewFor(n, args, b)
 	if err != nil {

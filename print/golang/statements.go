@@ -19,23 +19,11 @@ func (c Printer) astStatement(a ast.Statement) error {
 	case ast.Call:
 		return c.astCall(v)
 	case ast.Comment:
-		_, err := fmt.Fprintf(c, "// %s\n", v.Value)
-		return err
+		return c.astComment(v)
 	case ast.If:
 		return c.astIf(v)
 	case *ast.Var:
-		if err := c.astStatement(v.Name); err != nil {
-			return err
-		}
-		fmt.Fprintf(c, " := ")
-		if err := c.astStatement(v.Value); err != nil {
-			return err
-		}
-		fmt.Fprintf(c, "\t_ = ")
-		if err := c.astStatement(v.Name); err != nil {
-			return err
-		}
-		fmt.Fprintf(c, "\n\n")
+		return c.astVar(v)
 	case ast.Range:
 		return c.astRange(v)
 	case ast.Ident:
@@ -55,7 +43,6 @@ func (c Printer) astStatement(a ast.Statement) error {
 	default:
 		fmt.Fprintln(c, a)
 		return nil
-		// panic(fmt.Sprintf("%T", a))
 	}
 	return nil
 }

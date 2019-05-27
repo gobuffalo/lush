@@ -27,17 +27,17 @@ func NewRunner() *Runner {
 }
 
 func (r Runner) Exec() error {
-	c := ast.NewContext(context.Background(), os.Stdout)
-	builtins.Available.Range(func(k, v interface{}) bool {
-		c.Imports.Store(k, v)
-		return true
-	})
 	for _, a := range r.FlagSet.Args() {
 		script, err := lush.ParseFile(a)
 		if err != nil {
 			log.Fatal(err)
 		}
 
+		c := ast.NewContext(context.Background(), os.Stdout)
+		builtins.Available.Range(func(k, v interface{}) bool {
+			c.Imports.Store(k, v)
+			return true
+		})
 		res, err := script.Exec(c)
 		if err != nil {
 			return err

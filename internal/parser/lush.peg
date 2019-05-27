@@ -127,8 +127,7 @@ GO <- _ "go" _ s:( FCALL / CALL) _ {
   if !ok {
     return nil, fmt.Errorf("expected ast.Call got %T", s)
   }
-  ca.Concurrent = true
-  return ca, nil
+  return ast.NewGoroutine(ca)
 }
 
 CALL <- _ i:( IDENT ) ("."?) y:(IDENT)? LP ax:ARG* RP _ b:(BLOCK)? {

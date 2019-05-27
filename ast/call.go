@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
 
@@ -30,22 +29,20 @@ func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error
 }
 
 type Call struct {
-	Name       Statement
-	FName      Ident
-	Arguments  Statements
-	Block      *Block
-	Meta       Meta
-	Concurrent bool
+	Name      Statement
+	FName     Ident
+	Arguments Statements
+	Block     *Block
+	Meta      Meta
 }
 
 func (f Call) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Name":       f.Name,
-		"FName":      f.FName,
-		"Arguments":  f.Arguments,
-		"Block":      f.Block,
-		"Meta":       f.Meta,
-		"Concurrent": genericJSON(f.Concurrent),
+		"Name":      f.Name,
+		"FName":     f.FName,
+		"Arguments": f.Arguments,
+		"Block":     f.Block,
+		"Meta":      f.Meta,
 	}
 
 	return toJSON(f, m)
@@ -53,9 +50,6 @@ func (f Call) MarshalJSON() ([]byte, error) {
 
 func (f Call) String() string {
 	bb := &bytes.Buffer{}
-	if f.Concurrent {
-		bb.WriteString("go ")
-	}
 	bb.WriteString(f.Name.String())
 	if (f.FName != Ident{}) {
 		bb.WriteString(".")
@@ -73,17 +67,6 @@ func (f Call) String() string {
 }
 
 func (f Call) Exec(c *Context) (interface{}, error) {
-	if f.Concurrent {
-		c.wg.Add(1)
-		go func() {
-			defer c.wg.Done()
-			_, err := f.exec(c)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}()
-		return nil, nil
-	}
 	return f.exec(c)
 }
 

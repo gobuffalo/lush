@@ -32,6 +32,11 @@ test: peg
 	$(GO_BIN) test -cover -tags ${TAGS} ./...
 	make tidy
 
+cov: peg
+	$(GO_BIN) test -coverprofile=cover.out -tags ${TAGS} ./...
+	go tool cover -html=cover.out
+
+
 ci-deps:
 	$(GO_BIN) get -tags ${TAGS} -t ./...
 
@@ -56,4 +61,4 @@ release:
 	make tidy
 
 examples: install
-	lush ./examples/big.lush ./examples/returns.lush ./examples/errors.lush
+	lush run ./examples/big.lush ./examples/returns.lush ./examples/errors.lush

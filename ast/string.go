@@ -60,7 +60,7 @@ func (s String) MapKey() string {
 	return s.Original
 }
 
-func (s String) Exec(c *Context) (interface{}, error) {
+func (s String) Visit(c *Context) (interface{}, error) {
 	return s.Original, nil
 }
 

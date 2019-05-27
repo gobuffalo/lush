@@ -5,11 +5,13 @@ import (
 	"sync"
 )
 
-var Available = func() sync.Map {
-	m := sync.Map{}
-	m.Store("fmt", NewFmt(os.Stdout))
-	m.Store("strings", Strings{})
-	m.Store("time", Time{})
-	m.Store("os", OS{})
-	return m
+var Available sync.Map
+
+var _ = func() error {
+	Available.Store("fmt", NewFmt(os.Stdout))
+	Available.Store("strings", Strings{})
+	Available.Store("time", Time{})
+	Available.Store("os", OS{})
+	Available.Store("sort", Sort{})
+	return nil
 }()

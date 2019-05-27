@@ -14,16 +14,16 @@ func toIdent(i interface{}) (ast.Ident, error) {
 	return id, nil
 }
 
-func toExecString(i interface{}) (ast.ExecStringer, error) {
+func toExecString(i interface{}) (ast.VisitableNode, error) {
 	if i == nil {
 		return nil, nil
 	}
-	n, err := toStatement(i)
+	n, err := toNode(i)
 	if err != nil {
 		return nil, err
 	}
 
-	in, ok := n.(ast.ExecStringer)
+	in, ok := n.(ast.VisitableNode)
 	if !ok {
 		return nil, fmt.Errorf("expected ExecStringer, got %T", i)
 	}
@@ -70,23 +70,23 @@ func toII(i interface{}) ([]interface{}, error) {
 	return ii, nil
 }
 
-func toStatement(i interface{}) (ast.Statement, error) {
-	ii, ok := i.(ast.Statement)
+func toNode(i interface{}) (ast.Node, error) {
+	ii, ok := i.(ast.Node)
 	if !ok {
-		return ii, fmt.Errorf("expected ast.Statement got %T", i)
+		return ii, fmt.Errorf("expected ast.Node got %T", i)
 	}
 	return ii, nil
 }
 
-func toStatements(i interface{}) (ast.Statements, error) {
+func toNodes(i interface{}) (ast.Nodes, error) {
 	ii, err := toII(i)
 	if err != nil {
 		return nil, err
 	}
-	var states ast.Statements
+	var states ast.Nodes
 
 	for _, s := range ii {
-		st, err := toStatement(s)
+		st, err := toNode(s)
 		if err != nil {
 			return nil, err
 		}

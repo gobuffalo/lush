@@ -1,0 +1,14 @@
+import "fmt"
+// this is a comment
+// there are many like it
+// but this is mine
+if false {
+	fmt.Println("in if")
+} else if (1 == 2) {
+	fmt.Println("in else")
+} else if true {
+	fmt.Println("2 == 2")
+} else {
+	fmt.Println("in other else")
+}
+

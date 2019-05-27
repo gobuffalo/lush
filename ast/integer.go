@@ -10,15 +10,19 @@ type Integer struct {
 	Meta  Meta
 }
 
-func (d Integer) Interface() interface{} {
+func (d Integer) Int() int {
 	return d.Value
+}
+
+func (d Integer) Interface() interface{} {
+	return d.Int()
 }
 
 func (d Integer) String() string {
 	return strconv.Itoa(d.Value)
 }
 
-func (d Integer) Exec(c *Context) (interface{}, error) {
+func (d Integer) Visit(c *Context) (interface{}, error) {
 	return d.Value, nil
 }
 
@@ -42,4 +46,8 @@ func (a Integer) MarshalJSON() ([]byte, error) {
 		"Meta":  a.Meta,
 	}
 	return toJSON(a, m)
+}
+
+func (a Integer) GoString() string {
+	return fmt.Sprintf("%d", a.Value)
 }

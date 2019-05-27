@@ -10,6 +10,10 @@ type Float struct {
 }
 
 func (d Float) Interface() interface{} {
+	return d.Float()
+}
+
+func (d Float) Float() float64 {
 	return d.Value
 }
 
@@ -17,7 +21,7 @@ func (n Float) String() string {
 	return fmt.Sprint(n.Value)
 }
 
-func (n Float) Exec(c *Context) (interface{}, error) {
+func (n Float) Visit(c *Context) (interface{}, error) {
 	return n.Value, nil
 }
 

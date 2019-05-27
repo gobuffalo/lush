@@ -10,20 +10,20 @@ import (
 // expressions (e.g. 4 + (6 / 2))
 type BinaryExpr struct {
 	Op  string
-	LHS Execable
-	RHS Execable
+	LHS Visitable
+	RHS Visitable
 }
 
-// Exec applies the operation of the BinaryExpr to the left and right subtrees
-// (LHS and RHS) after recursively Exec-ing each subtree. This produces a
+// Visit applies the operation of the BinaryExpr to the left and right subtrees
+// (LHS and RHS) after recursively Visit-ing each subtree. This produces a
 // depth-first evaluation order.
-func (b BinaryExpr) Exec(c *Context) (interface{}, error) {
-	lhsVal, err := b.LHS.Exec(c)
+func (b BinaryExpr) Visit(c *Context) (interface{}, error) {
+	lhsVal, err := b.LHS.Visit(c)
 	if err != nil {
 		return nil, err
 	}
 
-	rhsVal, err := b.RHS.Exec(c)
+	rhsVal, err := b.RHS.Visit(c)
 	if err != nil {
 		return nil, err
 	}

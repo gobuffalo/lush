@@ -22,18 +22,20 @@ import (
 // 	Block() (interface{}, error)
 // 	BlockWith(Context) (interface{}, error)
 // 	HasBlock() bool
-// 	Exec((c *Context)) (interface{}, error)
+// 	Visit((c *Context)) (interface{}, error)
 // }
 
 func NewContext(ctx context.Context, w io.Writer) *Context {
 	c := &Context{
 		Context: ctx,
 		Writer:  w,
+		wg:      &sync.WaitGroup{},
 	}
 
 	c.Imports.Store("fmt", builtins.NewFmt(w))
 	c.Imports.Store("strings", builtins.Strings{})
 	c.Imports.Store("time", builtins.Time{})
+	c.Imports.Store("sort", builtins.Time{})
 
 	c.Set("error", fmt.Errorf)
 	return c
@@ -42,18 +44,21 @@ func NewContext(ctx context.Context, w io.Writer) *Context {
 type Context struct {
 	context.Context
 	io.Writer
-	data    sync.Map
 	Block   *Block
-	wg      sync.WaitGroup
+	data    sync.Map
 	Imports sync.Map
+	wg      *sync.WaitGroup
 }
 
 func (c *Context) Clone() *Context {
 	fhc := NewContext(c, c.Writer)
-	fhc.wg = c.wg
 	fhc.Context = c
 	fhc.Block = c.Block
-	fhc.Imports = c.Imports
+	fhc.wg = c.wg
+	c.Imports.Range(func(k, v interface{}) bool {
+		fhc.Imports.Store(k, v)
+		return true
+	})
 	c.data.Range(func(k, v interface{}) bool {
 		fhc.data.Store(k, v)
 		return true

@@ -13,6 +13,12 @@ type ASTMarshaler interface {
 func format(i fmt.Stringer, st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
+		if st.Flag('#') {
+			if gs, ok := i.(fmt.GoStringer); ok {
+				fmt.Fprint(st, gs.GoString())
+				return
+			}
+		}
 		if st.Flag('+') {
 			b, err := json.MarshalIndent(i, "", "  ")
 			if err != nil {
@@ -37,7 +43,7 @@ func genericJSON(i interface{}) map[string]interface{} {
 	}
 }
 
-func toJSON(t Statement, i interface{}) ([]byte, error) {
+func toJSON(t Node, i interface{}) ([]byte, error) {
 	m := map[string]interface{}{
 		fmt.Sprintf("%T", t): i,
 	}

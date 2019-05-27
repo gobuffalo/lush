@@ -38,30 +38,30 @@ func toIfaceSlice(v interface{}) []interface{} {
 	return v.([]interface{})
 }
 
-func newArglist(head, tail interface{}) ([]ast.Execable, error) {
+func newArglist(head, tail interface{}) ([]ast.Visitable, error) {
 	if head == nil {
-		return []ast.Execable{}, nil
+		return []ast.Visitable{}, nil
 	}
 
-	var args []ast.Execable
+	var args []ast.Visitable
 
-	args = append(args, head.(ast.Execable))
+	args = append(args, head.(ast.Visitable))
 
 	tailSlice := toIfaceSlice(tail)
 	for _, a := range tailSlice {
 		parts := toIfaceSlice(a)
-		args = append(args, parts[2].(ast.Execable))
+		args = append(args, parts[2].(ast.Visitable))
 	}
 	return args, nil
 }
 
-func newCallExpr(head, tail interface{}) (ast.Execable, error) {
+func newCallExpr(head, tail interface{}) (ast.Visitable, error) {
 	tailSlice := toIfaceSlice(tail)
 	if len(tailSlice) == 0 {
-		return head.(ast.Execable), nil
+		return head.(ast.Visitable), nil
 	}
 
-	var nextCallee ast.Execable = head.(ast.Execable)
+	var nextCallee ast.Visitable = head.(ast.Visitable)
 
 	for _, call := range tailSlice {
 		callParts := toIfaceSlice(call)
@@ -71,7 +71,7 @@ func newCallExpr(head, tail interface{}) (ast.Execable, error) {
 			nextCallee = &ast.MethodCallExpr{
 				Callee: nextCallee,
 				Method: name.Name,
-				Args:   callParts[2].([]ast.Execable),
+				Args:   callParts[2].([]ast.Visitable),
 			}
 		} else {
 			nextCallee = &ast.AccessExpr{
@@ -84,23 +84,23 @@ func newCallExpr(head, tail interface{}) (ast.Execable, error) {
 	return nextCallee, nil
 }
 
-func newVarRef(i interface{}) (ast.Execable, error) {
+func newVarRef(i interface{}) (ast.Visitable, error) {
 	ident := i.(ast.Ident)
 	return ast.VarRef{
 		Name: ident.Name,
 	}, nil
 }
 
-func newBinaryExpr(head, tail interface{}) (ast.Execable, error) {
+func newBinaryExpr(head, tail interface{}) (ast.Visitable, error) {
 	cur := &ast.BinaryExpr{
-		LHS: head.(ast.Execable),
+		LHS: head.(ast.Visitable),
 	}
 	var next *ast.BinaryExpr
 	restSl := toIfaceSlice(tail)
 	for _, v := range restSl {
 		tailParts := toIfaceSlice(v)
 		cur.Op = tailParts[1].(string)
-		cur.RHS = tailParts[3].(ast.Execable)
+		cur.RHS = tailParts[3].(ast.Visitable)
 		next = cur
 		cur = &ast.BinaryExpr{
 			LHS: next,
@@ -154,12 +154,12 @@ func newBool(c *current, b []byte) (ret ast.Bool, err error) {
 }
 
 func newCall(c *current, i interface{}, y interface{}, ax interface{}, b interface{}) (ret ast.Call, err error) {
-	s, err := toStatement(i)
+	s, err := toNode(i)
 	if err != nil {
 		return ast.Call{}, err
 	}
 
-	args, err := toStatements(ax)
+	args, err := toNodes(ax)
 	if err != nil {
 		return ast.Call{}, err
 	}
@@ -238,7 +238,7 @@ func newIdent(c *current, b []byte) (ret ast.Ident, err error) {
 }
 
 func newBlock(c *current, s interface{}) (ret *ast.Block, err error) {
-	states, err := toStatements(s)
+	states, err := toNodes(s)
 	if err != nil {
 		return nil, err
 	}
@@ -252,19 +252,19 @@ func newBlock(c *current, s interface{}) (ret *ast.Block, err error) {
 }
 
 func newIf(c *current, p interface{}, e interface{}, b interface{}, elsa interface{}) (ret ast.If, err error) {
-	var ps ast.Statement
+	var ps ast.Node
 
 	if p != nil {
 		switch t := p.(type) {
 		case []interface{}:
-			st, err := toStatements(p)
+			st, err := toNodes(p)
 			if err != nil {
 				return ast.If{}, err
 			}
 			if len(st) > 0 {
 				ps = st[0]
 			}
-		case ast.Statement:
+		case ast.Node:
 			ps = t
 		}
 	}
@@ -279,12 +279,12 @@ func newIf(c *current, p interface{}, e interface{}, b interface{}, elsa interfa
 		return ast.If{}, err
 	}
 
-	cls, err := toStatements(elsa)
+	cls, err := toNodes(elsa)
 	if err != nil {
 		return ast.If{}, err
 	}
 
-	var cl ast.Statement
+	var cl ast.Node
 	if len(cls) > 0 {
 		cl = cls[0]
 	}
@@ -313,7 +313,11 @@ func newElseIf(c *current, i interface{}) (ret ast.ElseIf, err error) {
 }
 
 func newReturn(c *current, i interface{}) (ret ast.Return, err error) {
-	ret, err = ast.NewReturn(i.(ast.Execable))
+	s, err := toNodes(i)
+	if err != nil {
+		return ast.Return{}, err
+	}
+	ret, err = ast.NewReturn(s)
 	if err != nil {
 		return ret, err
 	}
@@ -350,7 +354,7 @@ func newLet(c *current, n, v interface{}) (ret *ast.Let, err error) {
 		return nil, fmt.Errorf("expected ast.Ident got %T", n)
 	}
 
-	sv, err := toStatement(v)
+	sv, err := toNode(v)
 	if err != nil {
 		return nil, err
 	}
@@ -364,12 +368,12 @@ func newLet(c *current, n, v interface{}) (ret *ast.Let, err error) {
 }
 
 func newAssign(c *current, n, v interface{}) (ret *ast.Assign, err error) {
-	in, err := toStatement(n)
+	in, err := toNode(n)
 	if err != nil {
 		return nil, err
 	}
 
-	sv, err := toStatement(v)
+	sv, err := toNode(v)
 	if err != nil {
 		return nil, err
 	}
@@ -388,7 +392,7 @@ func newVar(c *current, n, v interface{}) (ret *ast.Var, err error) {
 		return nil, fmt.Errorf("expected ast.Ident got %T", n)
 	}
 
-	sv, err := toStatement(v)
+	sv, err := toNode(v)
 	if err != nil {
 		return nil, err
 	}
@@ -403,13 +407,13 @@ func newVar(c *current, n, v interface{}) (ret *ast.Var, err error) {
 
 func newOpExpression(c *current, a, op, b interface{}) (ret *ast.OpExpression, err error) {
 	// defer setMeta(&ret, c)
-	sa, ok := a.(ast.Statement)
+	sa, ok := a.(ast.Node)
 	if !ok {
-		return nil, fmt.Errorf("expected ast.Statement got %T", a)
+		return nil, fmt.Errorf("expected ast.Node got %T", a)
 	}
-	sb, ok := b.(ast.Statement)
+	sb, ok := b.(ast.Node)
 	if !ok {
-		return nil, fmt.Errorf("expected ast.Statement got %T", b)
+		return nil, fmt.Errorf("expected ast.Node got %T", b)
 	}
 	sop, ok := op.(string)
 	if !ok {

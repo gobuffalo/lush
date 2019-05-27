@@ -18,7 +18,7 @@ func Test_Return(t *testing.T) {
 		{in: `return "foo"`, out: "foo"},
 		{in: `return true`, out: true},
 		{in: `return [1, 2, 3]`, out: []interface{}{1, 2, 3}},
-		{in: `return {"a": "b", "c": 3}`, out: map[interface{}]interface{}{
+		{in: `return {"a": "b", "c": 3}`, out: map[string]interface{}{
 			"a": "b",
 			"c": 3,
 		}},

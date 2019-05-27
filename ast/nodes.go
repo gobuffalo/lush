@@ -6,49 +6,41 @@ import (
 	"strings"
 )
 
-type interfacer interface {
-	Interface() interface{}
-}
-
-type Statement interface {
-	fmt.Stringer
-}
-
-func NewStatements(i interface{}) (Statements, error) {
-	var states Statements
+func NewNodes(i interface{}) (Nodes, error) {
+	var states Nodes
 
 	ii := flatten([]interface{}{i})
 
 	for _, i := range ii {
 		switch t := i.(type) {
-		case Statement:
+		case Node:
 			states = append(states, t)
 		case []interface{}:
-			st, err := NewStatements(i)
+			st, err := NewNodes(i)
 			if err != nil {
 				return states, err
 			}
 			states = append(states, st)
 		default:
-			return nil, fmt.Errorf("expected Statement got %T", i)
+			return nil, fmt.Errorf("expected Node got %T", i)
 		}
 	}
 
 	return states, nil
 }
 
-type Statements []Statement
+type Nodes []Node
 
-func (t Statements) String() string {
+func (t Nodes) String() string {
 	var x []string
-	var last Statement
+	var last Node
 	for _, s := range t {
 		y := strings.TrimSpace(s.String())
 		if len(y) == 0 {
 			continue
 		}
 		switch t := s.(type) {
-		case Statements:
+		case Nodes:
 			x = append(x, t.String())
 		case Noop:
 		case Comment, Import:
@@ -64,31 +56,45 @@ func (t Statements) String() string {
 	return strings.Join(x, "")
 }
 
-func (i Statements) Format(st fmt.State, verb rune) {
+func (t *Nodes) Append(s Node, err error) error {
+	if err != nil {
+		return err
+	}
+	(*t) = append(*t, s)
+	return nil
+}
+
+func (i Nodes) Format(st fmt.State, verb rune) {
 	format(i, st, verb)
 }
 
-func (st Statements) Exec(c *Context) (interface{}, error) {
+func (st Nodes) Visit(c *Context) (interface{}, error) {
 	var stmts []interface{}
 	for _, s := range st {
 		switch r := s.(type) {
 		case Return:
-			res, err := r.Exec(c)
+			res, err := r.Visit(c)
 			return res, err
 		case Returned:
-			return r, nil
+			return r, r.Err()
 		case Break:
 			return r, nil
 		case Continue:
 			return r, nil
-		case Execable:
-			i, err := r.Exec(c)
+		case Goroutine:
+			c.wg.Add(1)
+			go func() {
+				defer c.wg.Done()
+				r.Visit(c)
+			}()
+		case Visitable:
+			i, err := r.Visit(c)
 			if err != nil {
 				return nil, err
 			}
 			switch t := i.(type) {
 			case Returned:
-				return t, nil
+				return t, t.Err()
 			case Break:
 				return t, nil
 			case Continue:
@@ -102,13 +108,13 @@ func (st Statements) Exec(c *Context) (interface{}, error) {
 	return stmts, nil
 }
 
-func (st Statements) MarshalJSON() ([]byte, error) {
+func (st Nodes) MarshalJSON() ([]byte, error) {
 	var a []interface{}
 	for _, s := range st {
 		a = append(a, s)
 	}
 	m := map[string]interface{}{
-		"ast.Statements": a,
+		"ast.Nodes": a,
 	}
 
 	return json.Marshal(m)

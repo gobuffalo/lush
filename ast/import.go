@@ -1,6 +1,8 @@
 package ast
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Import struct {
 	Name string
@@ -11,7 +13,7 @@ func (i Import) String() string {
 	return fmt.Sprintf(`import "%s"`, i.Name)
 }
 
-func (i Import) Exec(c *Context) (interface{}, error) {
+func (i Import) Visit(c *Context) (interface{}, error) {
 	imp, ok := c.Imports.Load(i.Name)
 	if !ok {
 		return nil, fmt.Errorf("could not find import for %s", i.Name)

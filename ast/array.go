@@ -12,7 +12,18 @@ type Array struct {
 }
 
 func (a Array) Interface() interface{} {
+	return a.Slice()
+}
+
+func (a Array) Slice() []interface{} {
 	return a.Value
+}
+
+func (a Array) GoString() string {
+	if a.Value == nil {
+		a.Value = []interface{}{}
+	}
+	return fmt.Sprintf("%#v", a.Value)
 }
 
 func (a Array) String() string {
@@ -43,11 +54,11 @@ func (a Array) MarshalJSON() ([]byte, error) {
 	return toJSON(a, m)
 }
 
-func (a Array) Exec(c *Context) (interface{}, error) {
+func (a Array) Visit(c *Context) (interface{}, error) {
 	var res []interface{}
 	for _, i := range a.Value {
-		if ex, ok := i.(Execable); ok {
-			r, err := ex.Exec(c)
+		if ex, ok := i.(Visitable); ok {
+			r, err := ex.Visit(c)
 			if err != nil {
 				return nil, err
 			}
@@ -69,4 +80,16 @@ func (a Array) Bool(c *Context) (bool, error) {
 
 func NewArray(ii []interface{}) (Array, error) {
 	return Array{Value: ii}, nil
+}
+
+func (a Array) Len() int {
+	return len(a.Value)
+}
+
+func (a Array) Less(i, j int) bool {
+	return fmt.Sprint(a.Value[i]) < fmt.Sprint(a.Value[j])
+}
+
+func (a Array) Swap(i, j int) {
+	a.Value[i], a.Value[j] = a.Value[j], a.Value[i]
 }

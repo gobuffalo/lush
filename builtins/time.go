@@ -54,6 +54,10 @@ func NewTime() Time {
 	}
 }
 
+func (Time) GoString() string {
+	return "builtins.Time{}"
+}
+
 func (Time) After(d int) <-chan time.Time {
 	return time.After(time.Duration(d))
 }

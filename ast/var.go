@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func NewVar(name Ident, value Statement) (*Var, error) {
+func NewVar(name Ident, value Node) (*Var, error) {
 	if name.String() == "nil" {
 		return nil, errors.New("can not set value for nil")
 	}
@@ -17,7 +17,7 @@ func NewVar(name Ident, value Statement) (*Var, error) {
 
 type Var struct {
 	Name  Ident
-	Value Statement
+	Value Node
 	Meta  Meta
 }
 
@@ -34,7 +34,7 @@ func (l Var) String() string {
 	return fmt.Sprintf("%s := %s", l.Name, l.Value)
 }
 
-func (l *Var) Exec(c *Context) (interface{}, error) {
+func (l *Var) Visit(c *Context) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil
 	}
@@ -42,12 +42,12 @@ func (l *Var) Exec(c *Context) (interface{}, error) {
 	if c.Has(name) {
 		return nil, l.Meta.Errorf("can not assign %s to existing variable", name)
 	}
-	si, ok := l.Value.(Execable)
+	si, ok := l.Value.(Visitable)
 	if !ok {
 		c.Set(name, l.Value)
 		return nil, nil
 	}
-	i, err := si.Exec(c)
+	i, err := si.Visit(c)
 	if err != nil {
 		return nil, l.Meta.Wrap(err)
 	}

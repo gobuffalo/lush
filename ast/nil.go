@@ -20,7 +20,7 @@ func (i Nil) Interface() interface{} {
 	return nil
 }
 
-func (i Nil) Exec(c *Context) (interface{}, error) {
+func (i Nil) Visit(c *Context) (interface{}, error) {
 	return nil, nil
 }
 

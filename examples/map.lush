@@ -1,0 +1,15 @@
+import "fmt"
+import "sort"
+
+let myMap = {"B": 1, "a": "A", "c": [1, 2, 3]}
+
+arr := []
+
+for (k, v) in myMap {
+	arr = ((arr + k) + v)
+}
+
+sort.Sort(arr)
+
+fmt.Println(arr)
+

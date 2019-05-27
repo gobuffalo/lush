@@ -1,6 +1,6 @@
 # Lush
 
-[![Build Status](https://dev.azure.com/markbates/buffalo/_apis/build/status/gobuffalo.lush?branchName=master)](https://dev.azure.com/markbates/buffalo/_build/latest?definitionId=50&branchName=master)[![GoDoc](https://godoc.org/github.com/gobuffalo/lush?status.svg)](https://godoc.org/github.com/gobuffalo/lush)
+[![Build Status](https://dev.azure.com/markbates/buffalo/_apis/build/status/gobuffalo.lush?branchName=master)](https://dev.azure.com/markbates/buffalo/_build/latest?definitionId=50&branchName=master)[![GoDoc](https://godoc.org/github.com/gobuffalo/lush?status.svg)](https://godoc.org/github.com/gobuffalo/lush) [![Go Report Card](https://goreportcard.com/badge/github.com/gobuffalo/lush)](https://goreportcard.com/report/github.com/gobuffalo/lush)
 
 Lush is an embeddable scripting language for Go with minimal dependencies.
 
@@ -19,7 +19,7 @@ Lush will provide the basis for [https://github.com/gobuffalo/plush](https://git
 * [Strings](#strings)
 * [Numbers](#numbers)
 * [Booleans](#booleans)
-* [If Statements](#if)
+* [If Nodes](#if)
 * [Operators](#operators)
 * [Arrays](#arrays)
 * [Maps](#maps)
@@ -194,7 +194,7 @@ nil
 
 ---
 
-## [`if` Statements](#if)
+## [`if` Nodes](#if)
 
 ```lush
 // with bool
@@ -218,7 +218,7 @@ if a := 1; a == 1 {
 }
 ```
 
-### `else` Statement
+### `else` Node
 
 An `if` statement can only have one `else` statement attached to it.
 
@@ -230,7 +230,7 @@ if (false) {
 }
 ```
 
-### `else if` Statements
+### `else if` Nodes
 
 An `if` statement can have `N` `else if` statements.
 
@@ -307,7 +307,7 @@ for (i, x) in myArray {
 
 ## [Maps](#maps)
 
-Maps are backed by `map[interface{}]interface{}` and can contain any legal Go value.
+Maps are backed by `map[string]interface{}` and can contain any legal Go value.
 
 ### Defining
 
@@ -524,10 +524,12 @@ fmt.fmt.Printlnln(s) // another string
 
 ## [Errors](#errors)
 
-This is set by default when creating a new `Context`. It is a function mapped to [`fmt#Errorf`](https://godoc.org/fmt#Errorf).
+First you must import the `fmt` [built-in](#builtins) then you can use the [`github.com/gobuffalo/lush/builtins#Fmt.Errorf`](https://godoc.org/github.com/gobuffalo/lush/builtins#Fmt.Errorf) function to create a new error.
 
 ```lush
-return error("stop %s", "dragging my heart around")
+import "fmt"
+
+return fmt.Errorf("stop %s", "dragging my heart around")
 ```
 
 ---

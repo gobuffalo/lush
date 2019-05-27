@@ -7,7 +7,7 @@ import (
 )
 
 func NewFunc(ax interface{}, b *Block) (Func, error) {
-	var args []Ident
+	var args Idents
 	for _, a := range ax.([]interface{}) {
 		zz, ok := a.(Ident)
 		if !ok {
@@ -23,7 +23,7 @@ func NewFunc(ax interface{}, b *Block) (Func, error) {
 }
 
 type Func struct {
-	Arguments []Ident
+	Arguments Idents
 	Block     *Block
 	Meta      Meta
 }
@@ -57,7 +57,7 @@ func (f Func) String() string {
 	return bb.String()
 }
 
-func (f Func) mExec(c *Context, args ...Statement) (interface{}, error) {
+func (f Func) mExec(c *Context, args ...Node) (interface{}, error) {
 	c = c.Clone()
 	if len(args) != len(f.Arguments) {
 		return nil, f.Meta.Errorf("expected %d arguments; received %d", len(f.Arguments), len(args))
@@ -66,7 +66,7 @@ func (f Func) mExec(c *Context, args ...Statement) (interface{}, error) {
 		c.Set(i.Name, args[x])
 	}
 	if f.Block != nil {
-		s, err := f.Block.Exec(c)
+		s, err := f.Block.Visit(c)
 		return s, err
 	}
 	return nil, nil

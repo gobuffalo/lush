@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"log"
 	"reflect"
 	"strings"
+
+	"github.com/gobuffalo/lush/types"
 )
 
-func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error) {
+func NewCall(n Node, y interface{}, args Nodes, b *Block) (Call, error) {
 	c := Call{
 		Name:      n,
 		Arguments: args,
@@ -28,22 +29,20 @@ func NewCall(n Statement, y interface{}, args Statements, b *Block) (Call, error
 }
 
 type Call struct {
-	Name       Statement
-	FName      Ident
-	Arguments  Statements
-	Block      *Block
-	Meta       Meta
-	Concurrent bool
+	Name      Node
+	FName     Ident
+	Arguments Nodes
+	Block     *Block
+	Meta      Meta
 }
 
 func (f Call) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
-		"Name":       f.Name,
-		"FName":      f.FName,
-		"Arguments":  f.Arguments,
-		"Block":      f.Block,
-		"Meta":       f.Meta,
-		"Concurrent": genericJSON(f.Concurrent),
+		"Name":      f.Name,
+		"FName":     f.FName,
+		"Arguments": f.Arguments,
+		"Block":     f.Block,
+		"Meta":      f.Meta,
 	}
 
 	return toJSON(f, m)
@@ -51,9 +50,6 @@ func (f Call) MarshalJSON() ([]byte, error) {
 
 func (f Call) String() string {
 	bb := &bytes.Buffer{}
-	if f.Concurrent {
-		bb.WriteString("go ")
-	}
 	bb.WriteString(f.Name.String())
 	if (f.FName != Ident{}) {
 		bb.WriteString(".")
@@ -70,18 +66,7 @@ func (f Call) String() string {
 	return bb.String()
 }
 
-func (f Call) Exec(c *Context) (interface{}, error) {
-	if f.Concurrent {
-		c.wg.Add(1)
-		go func() {
-			defer c.wg.Done()
-			_, err := f.exec(c)
-			if err != nil {
-				log.Fatal(err)
-			}
-		}()
-		return nil, nil
-	}
+func (f Call) Visit(c *Context) (interface{}, error) {
 	return f.exec(c)
 }
 
@@ -168,8 +153,8 @@ func app(args []reflect.Value, mt reflect.Type, i int, c *Context, v interface{}
 		args = append(args, reflect.ValueOf(m.Interface()))
 		return args, nil
 	}
-	if ex, ok := v.(Execable); ok {
-		x, err := ex.Exec(c)
+	if ex, ok := v.(Visitable); ok {
+		x, err := ex.Visit(c)
 		if err != nil {
 			return args, err
 		}
@@ -191,14 +176,9 @@ func app(args []reflect.Value, mt reflect.Type, i int, c *Context, v interface{}
 		args = append(args, ar)
 	}
 
-	if ii, err := toII(v); err == nil {
-		for _, x := range ii {
-			app(x)
-		}
-		return args, err
+	for _, x := range types.Slice(v) {
+		app(x)
 	}
-
-	app(v)
 	return args, nil
 }
 

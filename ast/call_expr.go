@@ -6,12 +6,12 @@ import (
 )
 
 type AccessExpr struct {
-	Callee   Execable
+	Callee   Visitable
 	Property string
 }
 
-func (c AccessExpr) Exec(ctx *Context) (interface{}, error) {
-	res, err := c.Callee.Exec(ctx)
+func (c AccessExpr) Visit(ctx *Context) (interface{}, error) {
+	res, err := c.Callee.Visit(ctx)
 	if err != nil {
 		return res, err
 	}

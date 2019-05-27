@@ -49,7 +49,7 @@ fmt.Println(x)`
 	// 42
 }
 
-func ExampleExec_ifStatements() {
+func ExampleExec_ifNodes() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 
 	in := `
@@ -151,7 +151,7 @@ func ExampleExec_customHelperOptionalContext() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 	c.Set("myFunc", func(s string, c *ast.Context) (string, error) {
 		if c.Block != nil {
-			res, err := c.Block.Exec(c)
+			res, err := c.Block.Visit(c)
 			if err != nil {
 				return "", err
 			}

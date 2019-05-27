@@ -29,7 +29,7 @@ type Func struct {
 }
 
 func (a Func) Visit(v Visitor) error {
-	return v(a.Arguments, a.Block, a.Meta)
+	return v(a.Meta)
 }
 
 func (f Func) Format(st fmt.State, verb rune) {

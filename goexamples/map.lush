@@ -1,0 +1,14 @@
+import "fmt"
+
+myMap := {"a": "A", "b": 2}
+
+fmt.Println(myMap)
+
+for k, v := range myMap {
+	fmt.Println(k)
+
+	fmt.Println(v)
+}
+
+return myMap
+

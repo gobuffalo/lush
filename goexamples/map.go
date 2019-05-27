@@ -10,9 +10,19 @@ import (
 /*
 import "fmt"
 
-return fmt.Errorf("stop %s", "dragging my heart around")
+myMap := {"a": "A", "b": 2}
+
+fmt.Println(myMap)
+
+for k, v := range myMap {
+	fmt.Println(k)
+
+	fmt.Println(v)
+}
+
+return myMap
 */
-func errorsExec(c *ast.Context) (*ast.Returned, error) {
+func mapExec(c *ast.Context) (*ast.Returned, error) {
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {
@@ -20,5 +30,15 @@ func errorsExec(c *ast.Context) (*ast.Returned, error) {
 	}
 	_ = fmt
 
-	return golang.NewReturned(fmt.Errorf("stop %s", "dragging my heart around"))
+	myMap := map[string]interface{}{"a": "A", "b": 2}
+	_ = myMap
+
+	fmt.Println(myMap)
+	for k, v := range myMap {
+		_ = k
+		_ = v
+		fmt.Println(k)
+		fmt.Println(v)
+	}
+	return golang.NewReturned(myMap)
 }

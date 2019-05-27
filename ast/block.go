@@ -64,22 +64,3 @@ func (a Block) MarshalJSON() ([]byte, error) {
 	}
 	return toJSON(a, m)
 }
-
-func (b Block) GoString() string {
-	bb := &bytes.Buffer{}
-	if len(b.Statements) > 0 {
-		bb.WriteString("\n")
-		x := b.Statements.GoString()
-		x = strings.TrimSpace(x)
-		scan := bufio.NewScanner(strings.NewReader(x))
-		for scan.Scan() {
-			s := scan.Text()
-			if len(strings.TrimSpace(s)) == 0 {
-				bb.WriteString("\n")
-				continue
-			}
-			bb.WriteString(fmt.Sprintf("\t%s\n", s))
-		}
-	}
-	return bb.String()
-}

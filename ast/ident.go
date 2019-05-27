@@ -47,10 +47,6 @@ func (i Ident) String() string {
 	return i.Name
 }
 
-func (i Ident) GoString() string {
-	return i.Name
-}
-
 func (a Ident) Format(st fmt.State, verb rune) {
 	format(a, st, verb)
 }

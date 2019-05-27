@@ -4,6 +4,7 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
+	"github.com/gobuffalo/lush/compile/golang"
 )
 
 /*
@@ -36,18 +37,10 @@ func rangeExec(c *ast.Context) (*ast.Returned, error) {
 	_ = myArray
 
 	for i, x := range myArray {
-
 		_ = i
-
 		_ = x
-
 		myNum = i
 		fmt.Print(i, x)
 	}
-
-	ret := ast.NewReturned([]interface{}{myArray, myNum})
-	if ret.Err() != nil {
-		return nil, ret.Err()
-	}
-	return &ret, nil
+	return golang.NewReturned(myArray, myNum)
 }

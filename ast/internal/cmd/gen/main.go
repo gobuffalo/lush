@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"log"
@@ -13,6 +14,7 @@ import (
 	"github.com/gobuffalo/lush"
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/ast/internal/quick"
+	"github.com/gobuffalo/lush/compile/golang"
 )
 
 func main() {
@@ -94,13 +96,12 @@ func compileGoTests() {
 
 		d := struct {
 			Original string
-			Name     string
 			GoCode   string
+			Name     string
 			File     string
 		}{
 			Original: strings.TrimSpace(s.String()),
 			Name:     name,
-			GoCode:   strings.TrimSpace(s.GoString()),
 			File:     filepath.Base(path),
 		}
 
@@ -110,6 +111,23 @@ func compileGoTests() {
 		}
 
 		for k, v := range m {
+			_, _ = k, v
+			s, err := lush.Parse(path, []byte(d.Original))
+			if err != nil {
+				return err
+			}
+			bb := &bytes.Buffer{}
+
+			cp := golang.Compiler{
+				Context: golang.Default.Context,
+				Writer:  bb,
+			}
+			if err := cp.Compile(s); err != nil {
+				return err
+			}
+
+			d.GoCode = bb.String()
+
 			fp := filepath.Join(filepath.Dir(path), k)
 			f, err := os.Create(fp)
 			if err != nil {
@@ -163,6 +181,37 @@ func Test_{{.Name}}Exec(t *testing.T) {
 	r.NoError(err)
 	r.True(Equal(c, s.Exec, {{.Name}}Exec))
 }
+
+var {{.Name}}BResult *ast.Returned
+
+func Benchmark_{{.Name}}Exec_Go(t *testing.B) {
+	var r *ast.Returned
+
+	for i := 0; i < t.N; i++ {
+		c := ast.NewContext(context.Background(), nil)
+		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
+
+		r, _ = {{.Name}}Exec(c)
+	}
+	{{.Name}}BResult = r
+}
+
+func Benchmark_{{.Name}}Exec_Lush(t *testing.B) {
+	var r *ast.Returned
+
+	for i := 0; i < t.N; i++ {
+		c := ast.NewContext(context.Background(), nil)
+		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
+		s, err := lush.ParseFile("{{.File}}")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		r, _ = s.Exec(c)
+	}
+	{{.Name}}BResult = r
+}
+
 `
 
 const goFile = `

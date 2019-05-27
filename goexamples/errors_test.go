@@ -3,10 +3,12 @@ package goexamples
 
 import (
 	"context"
+	"io/ioutil"
 	"testing"
 
 	"github.com/gobuffalo/lush"
 	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/builtins"
 	"github.com/stretchr/testify/require"
 )
 
@@ -18,4 +20,34 @@ func Test_errorsExec(t *testing.T) {
 	s, err := lush.ParseFile("errors.lush")
 	r.NoError(err)
 	r.True(Equal(c, s.Exec, errorsExec))
+}
+
+var errorsBResult *ast.Returned
+
+func Benchmark_errorsExec_Go(t *testing.B) {
+	var r *ast.Returned
+
+	for i := 0; i < t.N; i++ {
+		c := ast.NewContext(context.Background(), nil)
+		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
+
+		r, _ = errorsExec(c)
+	}
+	errorsBResult = r
+}
+
+func Benchmark_errorsExec_Lush(t *testing.B) {
+	var r *ast.Returned
+
+	for i := 0; i < t.N; i++ {
+		c := ast.NewContext(context.Background(), nil)
+		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
+		s, err := lush.ParseFile("errors.lush")
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		r, _ = s.Exec(c)
+	}
+	errorsBResult = r
 }

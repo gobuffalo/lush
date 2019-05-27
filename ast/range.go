@@ -23,7 +23,7 @@ type Range struct {
 }
 
 func (a Range) Visit(v Visitor) error {
-	return v(a.For, a.Meta)
+	return v(a.Meta)
 }
 
 func (f Range) Format(st fmt.State, verb rune) {
@@ -52,26 +52,5 @@ func (f Range) String() string {
 	if f.Block != nil {
 		bb.WriteString(f.Block.String())
 	}
-	return bb.String()
-}
-
-func (f Range) GoString() string {
-	bb := &bytes.Buffer{}
-	bb.WriteString("for ")
-	var args []string
-	for _, a := range f.Args {
-		args = append(args, a.String())
-	}
-	bb.WriteString(strings.Join(args, ", "))
-	bb.WriteString(" := range ")
-	bb.WriteString(f.Name.String() + " {\n")
-	for _, a := range f.Args {
-		fmt.Fprintf(bb, "\n\t_ = %s\n", a)
-	}
-	if f.Block != nil {
-		bb.WriteString(f.Block.GoString())
-	}
-
-	bb.WriteString("}")
 	return bb.String()
 }

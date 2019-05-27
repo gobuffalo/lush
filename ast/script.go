@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"bytes"
 	"fmt"
 )
 
@@ -41,20 +40,4 @@ func (a Script) MarshalJSON() ([]byte, error) {
 
 func (s Script) String() string {
 	return s.Statements.String()
-}
-
-func (a Script) GoString() string {
-	bb := &bytes.Buffer{}
-
-	bb.WriteString(a.Statements.GoString())
-
-	for _, s := range a.Statements {
-		if _, ok := s.(Return); ok {
-			return bb.String()
-		}
-	}
-
-	bb.WriteString(Return{}.GoString())
-
-	return bb.String()
 }

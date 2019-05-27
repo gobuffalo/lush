@@ -22,7 +22,7 @@ type Var struct {
 }
 
 func (a Var) Visit(v Visitor) error {
-	return v(a.Name, a.Value, a.Meta)
+	return v(a.Meta)
 }
 
 func (l Var) MarshalJSON() ([]byte, error) {
@@ -57,13 +57,6 @@ func (l *Var) Exec(c *Context) (interface{}, error) {
 	}
 	c.Set(name, i)
 	return nil, nil
-}
-
-func (l Var) GoString() string {
-	return fmt.Sprintf(`
-%s := %#v
-_ = %s
-`, l.Name, l.Value, l.Name)
 }
 
 func (l Var) Format(st fmt.State, verb rune) {

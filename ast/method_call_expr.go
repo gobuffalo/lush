@@ -11,6 +11,7 @@ type MethodCallExpr struct {
 	Callee Visitable
 	Method string
 	Args   []Visitable
+	Meta   Meta
 }
 
 // Visit invokes the method referred to by Method using the arguments derived

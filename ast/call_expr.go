@@ -8,6 +8,7 @@ import (
 type AccessExpr struct {
 	Callee   Visitable
 	Property string
+	Meta     Meta
 }
 
 func (c AccessExpr) Visit(ctx *Context) (interface{}, error) {

@@ -38,7 +38,7 @@ func toIfaceSlice(v interface{}) []interface{} {
 	return v.([]interface{})
 }
 
-func newArglist(head, tail interface{}) ([]ast.Visitable, error) {
+func newArglist(c *current, head, tail interface{}) ([]ast.Visitable, error) {
 	if head == nil {
 		return []ast.Visitable{}, nil
 	}
@@ -55,7 +55,7 @@ func newArglist(head, tail interface{}) ([]ast.Visitable, error) {
 	return args, nil
 }
 
-func newCallExpr(head, tail interface{}) (ast.Visitable, error) {
+func newCallExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
 	tailSlice := toIfaceSlice(tail)
 	if len(tailSlice) == 0 {
 		return head.(ast.Visitable), nil
@@ -72,11 +72,13 @@ func newCallExpr(head, tail interface{}) (ast.Visitable, error) {
 				Callee: nextCallee,
 				Method: name.Name,
 				Args:   callParts[2].([]ast.Visitable),
+				Meta:   meta(c),
 			}
 		} else {
 			nextCallee = &ast.AccessExpr{
 				Callee:   nextCallee,
 				Property: name.Name,
+				Meta:     meta(c),
 			}
 		}
 	}
@@ -84,31 +86,33 @@ func newCallExpr(head, tail interface{}) (ast.Visitable, error) {
 	return nextCallee, nil
 }
 
-func newVarRef(i interface{}) (ast.Visitable, error) {
+func newVarRef(c *current, i interface{}) (ast.Visitable, error) {
 	ident := i.(ast.Ident)
 	return ast.VarRef{
 		Name: ident.Name,
+		Meta: meta(c),
 	}, nil
 }
 
-func newBinaryExpr(head, tail interface{}) (ast.Visitable, error) {
+func newBinaryExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
 	cur := &ast.BinaryExpr{
-		LHS: head.(ast.Visitable),
+		A:    head.(ast.Visitable),
+		Meta: meta(c),
 	}
 	var next *ast.BinaryExpr
 	restSl := toIfaceSlice(tail)
 	for _, v := range restSl {
 		tailParts := toIfaceSlice(v)
 		cur.Op = tailParts[1].(string)
-		cur.RHS = tailParts[3].(ast.Visitable)
+		cur.B = tailParts[3].(ast.Visitable)
 		next = cur
 		cur = &ast.BinaryExpr{
-			LHS: next,
+			A: next,
 		}
 	}
 
 	// this will always overcount, so cut off the top BinaryExpr:
-	return cur.LHS, nil
+	return cur.A, nil
 }
 
 func newAccess(c *current, i interface{}, k interface{}) (ret ast.Access, err error) {

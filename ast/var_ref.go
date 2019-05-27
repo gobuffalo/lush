@@ -3,6 +3,7 @@ package ast
 // VarRef represents the reference of a variable
 type VarRef struct {
 	Name string // the name of the variable being accessed
+	Meta Meta
 }
 
 // Visit retrieves the named variable from the current lexical scope referred to

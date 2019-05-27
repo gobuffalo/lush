@@ -80,15 +80,15 @@ OPMUL <- ( "*" / "/" ) {
 }
 
 EXPR <- head:ADDITIVE tail:( _ COMPARATOR _ ADDITIVE )* {
-  return newBinaryExpr(head, tail)
+  return newBinaryExpr(c, head, tail)
 }
 
 ADDITIVE <- head:MULTITIVE tail:( _ OPADD _ MULTITIVE )* {
-  return newBinaryExpr(head, tail)
+  return newBinaryExpr(c, head, tail)
 }
 
 MULTITIVE <- head:UNARY tail:( _ OPMUL _ UNARY )* {
-  return newBinaryExpr(head, tail)
+  return newBinaryExpr(c, head, tail)
 }
 
 UNARY <- num:NUMBER {
@@ -100,15 +100,15 @@ UNARY <- num:NUMBER {
 }
 
 CALLEXPR <- head:(REF / FCALL) tail:("." IDENT ARGS?)* {
-  return newCallExpr(head, tail)
+  return newCallExpr(c, head, tail)
 }
 
 ARGS <- "(" head:EXPR? tail:("," _ EXPR )* ")" {
-  return newArglist(head, tail)
+  return newArglist(c, head, tail)
 }
 
 REF <- name:IDENT {
-  return newVarRef(name)
+  return newVarRef(c, name)
 }
 
 LET <- _ "let" _ name:IDENT _ "=" _ value:EXPR {

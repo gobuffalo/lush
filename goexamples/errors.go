@@ -4,7 +4,7 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
-	"github.com/gobuffalo/lush/compile/goc"
+	"github.com/gobuffalo/lush/runtime"
 )
 
 /*
@@ -20,5 +20,5 @@ func errorsExec(c *ast.Context) (*ast.Returned, error) {
 	}
 	_ = fmt
 
-	return goc.NewReturned(fmt.Errorf("stop %s", "dragging my heart around"))
+	return runtime.Current.NewReturned(fmt.Errorf("stop %s", "dragging my heart around"))
 }

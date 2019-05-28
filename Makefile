@@ -60,5 +60,15 @@ release:
 	release -y -f version.go
 	make tidy
 
+bench: gen
+	cd ./goexamples; go test -bench=.
+
 examples: install
-	lush run ./examples/big.lush ./examples/returns.lush ./examples/errors.lush
+	lush run ./examples/big.lush
+	lush run ./examples/returns.lush
+	lush run ./goexamples/funcs.lush
+	lush run ./goexamples/if.lush
+	lush run ./goexamples/map.lush
+	lush run ./goexamples/range.lush
+	lush run ./goexamples/returns.lush
+	lush run ./examples/errors.lush

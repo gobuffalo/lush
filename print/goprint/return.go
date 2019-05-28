@@ -24,7 +24,7 @@ func (c Printer) astReturn(r ast.Return) error {
 			args = append(args, st.String())
 		}
 	}
-	fmt.Fprint(c, "return goc.NewReturned(")
+	fmt.Fprint(c, "return runtime.Current.NewReturned(")
 	fmt.Fprint(c, strings.Join(args, ", "))
 	fmt.Fprintf(c, ")")
 	return nil

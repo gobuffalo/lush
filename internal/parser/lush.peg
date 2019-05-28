@@ -9,8 +9,12 @@
   )
 }
 
-DOC <- stmts:(_ NODE _)+ EOF {
+DOC <- b:SHEBANG? stmts:(_ NODE _)+ EOF {
   s, err := ast.NewNodes(stmts)
+  if b != nil {
+    bang := b.(ast.Shebang)
+    s = append(ast.Nodes{bang}, s...)
+  }
   return ast.Script{Nodes: s}, err
 }
 
@@ -168,6 +172,10 @@ MAP <- LC _ vals:( (IDENT/STRING) _ ':' _ (ARG) _ (',')* _ )*  _ RC {
 
 COMMENT <- ("#" / "//" ) a:[^\n\r]* {
   return newComment(c, c.text)
+}
+
+SHEBANG <- "#!" a:[^\n\r]* {
+  return ast.NewShebang(c.text)
 }
 
 LP <- '(' { return newNoop(c)}

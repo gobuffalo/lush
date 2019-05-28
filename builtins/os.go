@@ -2,12 +2,18 @@ package builtins
 
 import "os"
 
-type OS struct{}
+var OS = bos{
+	Args: os.Args,
+}
 
-func (OS) Environ() []string {
+type bos struct {
+	Args []string
+}
+
+func (bos) Environ() []string {
 	return os.Environ()
 }
 
-func (OS) GoString() string {
-	return "builtins.OS{}"
+func (bos) GoString() string {
+	return "builtins.OS"
 }

@@ -24,16 +24,8 @@ func (c Printer) astReturn(r ast.Return) error {
 			args = append(args, st.String())
 		}
 	}
-	fmt.Fprint(c, "return goprint.NewReturned(")
+	fmt.Fprint(c, "return goc.NewReturned(")
 	fmt.Fprint(c, strings.Join(args, ", "))
 	fmt.Fprintf(c, ")")
 	return nil
-}
-
-func NewReturned(i ...interface{}) (*ast.Returned, error) {
-	ret := ast.NewReturned(i)
-	if ret.Err() != nil {
-		return nil, ret.Err()
-	}
-	return &ret, nil
 }

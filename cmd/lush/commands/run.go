@@ -13,21 +13,29 @@ import (
 )
 
 type Runner struct {
-	*flag.FlagSet
-	Args []string
+	Flags *flag.FlagSet
+	Args  []string
 }
 
-func NewRunner() *Runner {
-	r := &Runner{}
+func NewRunner(args []string) *Runner {
+	r := &Runner{
+		Args: args,
+	}
 	f := flag.NewFlagSet("run", flag.ExitOnError)
 
-	r.FlagSet = f
+	r.Flags = f
 
 	return r
 }
 
 func (r Runner) Exec() error {
-	for _, a := range r.FlagSet.Args() {
+	if err := r.Flags.Parse(r.Args); err != nil {
+		return err
+	}
+
+	r.Args = r.Flags.Args()
+
+	for _, a := range r.Args {
 		script, err := lush.ParseFile(a)
 		if err != nil {
 			log.Fatal(err)

@@ -4,7 +4,7 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
-	"github.com/gobuffalo/lush/print/goprint"
+	"github.com/gobuffalo/lush/compile/goc"
 )
 
 /*
@@ -20,5 +20,5 @@ func errorsExec(c *ast.Context) (*ast.Returned, error) {
 	}
 	_ = fmt
 
-	return goprint.NewReturned(fmt.Errorf("stop %s", "dragging my heart around"))
+	return goc.NewReturned(fmt.Errorf("stop %s", "dragging my heart around"))
 }

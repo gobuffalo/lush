@@ -54,7 +54,7 @@ func (a Array) MarshalJSON() ([]byte, error) {
 	return toJSON(a, m)
 }
 
-func (a Array) Exec(c *Context) (interface{}, error) {
+func (a Array) Exec(c *Runtime) (interface{}, error) {
 	var res []interface{}
 	for _, i := range a.Value {
 		if ex, ok := i.(Execable); ok {
@@ -74,7 +74,7 @@ func (a Array) Exec(c *Context) (interface{}, error) {
 	return res, nil
 }
 
-func (a Array) Bool(c *Context) (bool, error) {
+func (a Array) Bool(c *Runtime) (bool, error) {
 	return len(a.Value) > 0, nil
 }
 

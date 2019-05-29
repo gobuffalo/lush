@@ -31,7 +31,7 @@ _ = %s
 `, l.Name, l.Value, l.Name)
 }
 
-func (l *Let) Exec(c *Context) (interface{}, error) {
+func (l *Let) Exec(c *Runtime) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil
 	}

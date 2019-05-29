@@ -24,7 +24,7 @@ var (
 	}
 )
 
-func NewContext() *ast.Context {
+func NewContext() *ast.Runtime {
 	var w io.Writer = ioutil.Discard
 	if testing.Verbose() {
 		w = os.Stdout
@@ -32,7 +32,7 @@ func NewContext() *ast.Context {
 	return ast.NewContext(context.Background(), w)
 }
 
-func exec(in string, c *ast.Context) (*ast.Returned, error) {
+func exec(in string, c *ast.Runtime) (*ast.Returned, error) {
 	st, err := parse(in)
 	if err != nil {
 		return nil, err

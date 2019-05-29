@@ -52,7 +52,7 @@ func NewMap(vals interface{}) (Map, error) {
 	return m, nil
 }
 
-func (m Map) Exec(c *Context) (interface{}, error) {
+func (m Map) Exec(c *Runtime) (interface{}, error) {
 	mm := map[string]interface{}{}
 	for k, v := range m.Values {
 		if vv, ok := v.(interfacer); ok {
@@ -110,7 +110,7 @@ func (m Map) MarshalJSON() ([]byte, error) {
 	return toJSON(m, mm)
 }
 
-func (m Map) Bool(c *Context) (bool, error) {
+func (m Map) Bool(c *Runtime) (bool, error) {
 	return len(m.Values) > 0, nil
 }
 

@@ -59,7 +59,7 @@ func (i If) MarshalJSON() ([]byte, error) {
 	return toJSON(i, m)
 }
 
-func (i If) Bool(c *Context) (bool, error) {
+func (i If) Bool(c *Runtime) (bool, error) {
 	if epc, ok := i.PreCondition.(Expression); ok {
 		b, err := epc.Bool(c)
 		if err != nil {
@@ -72,7 +72,7 @@ func (i If) Bool(c *Context) (bool, error) {
 	return i.Expression.Bool(c)
 }
 
-func (i If) Exec(c *Context) (interface{}, error) {
+func (i If) Exec(c *Runtime) (interface{}, error) {
 	if i.Block == nil {
 		return nil, i.Meta.Errorf("if statement missing block")
 	}

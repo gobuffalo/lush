@@ -22,7 +22,7 @@ func (r Return) String() string {
 	return bb.String()
 }
 
-func (r Return) Exec(c *Context) (interface{}, error) {
+func (r Return) Exec(c *Runtime) (interface{}, error) {
 	st, err := r.Nodes.Exec(c)
 	if err != nil {
 		return NewReturned(err), err

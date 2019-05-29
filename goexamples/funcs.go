@@ -22,7 +22,7 @@ y := func(a, b, c) {
 
 return y(1, 2, 3)
 */
-func funcsExec(c *ast.Context) (*ast.Returned, error) {
+func funcsExec(c *ast.Runtime) (*ast.Returned, error) {
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {

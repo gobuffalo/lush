@@ -1,7 +1,7 @@
 package ast
 
 type Execable interface {
-	Exec(*Context) (interface{}, error)
+	Exec(*Runtime) (interface{}, error)
 }
 
 type ExecableNode interface {
@@ -9,7 +9,7 @@ type ExecableNode interface {
 	Node
 }
 
-func exec(c *Context, i interface{}) (interface{}, error) {
+func exec(c *Runtime, i interface{}) (interface{}, error) {
 	ex, ok := i.(Execable)
 	if !ok {
 		return i, nil

@@ -51,7 +51,7 @@ func (e OpExpression) MarshalJSON() ([]byte, error) {
 	return toJSON(e, m)
 }
 
-func (e OpExpression) Exec(c *Context) (interface{}, error) {
+func (e OpExpression) Exec(c *Runtime) (interface{}, error) {
 	switch e.Op {
 	case "==", "!=", "~=", "<", ">", "<=", ">=", "&&":
 		return e.Bool(c)
@@ -70,19 +70,19 @@ func (e OpExpression) Exec(c *Context) (interface{}, error) {
 	return nil, nil
 }
 
-func (e OpExpression) And(c *Context) (bool, error) {
+func (e OpExpression) And(c *Runtime) (bool, error) {
 	a, _ := boolExec(e.A, c)
 	b, _ := boolExec(e.B, c)
 	return a && b, nil
 }
 
-func (e OpExpression) Or(c *Context) (bool, error) {
+func (e OpExpression) Or(c *Runtime) (bool, error) {
 	a, _ := boolExec(e.A, c)
 	b, _ := boolExec(e.B, c)
 	return a || b, nil
 }
 
-func (e OpExpression) Bool(c *Context) (bool, error) {
+func (e OpExpression) Bool(c *Runtime) (bool, error) {
 	if e.Op == "&&" {
 		return e.And(c)
 	}
@@ -122,7 +122,7 @@ func (e OpExpression) Bool(c *Context) (bool, error) {
 	return false, nil
 }
 
-func (e OpExpression) Add(c *Context) (interface{}, error) {
+func (e OpExpression) Add(c *Runtime) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
 		return nil, e.Meta.Wrap(err)
@@ -140,7 +140,7 @@ func (e OpExpression) Add(c *Context) (interface{}, error) {
 	return i, nil
 }
 
-func (e OpExpression) Sub(c *Context) (interface{}, error) {
+func (e OpExpression) Sub(c *Runtime) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
 		return nil, e.Meta.Wrap(err)
@@ -158,7 +158,7 @@ func (e OpExpression) Sub(c *Context) (interface{}, error) {
 	return i, nil
 }
 
-func (e OpExpression) Multiply(c *Context) (interface{}, error) {
+func (e OpExpression) Multiply(c *Runtime) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
 		return nil, e.Meta.Wrap(err)
@@ -176,7 +176,7 @@ func (e OpExpression) Multiply(c *Context) (interface{}, error) {
 	return i, nil
 }
 
-func (e OpExpression) Divide(c *Context) (interface{}, error) {
+func (e OpExpression) Divide(c *Runtime) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
 		return nil, e.Meta.Wrap(err)
@@ -194,7 +194,7 @@ func (e OpExpression) Divide(c *Context) (interface{}, error) {
 	return i, nil
 }
 
-func (e OpExpression) Modulus(c *Context) (interface{}, error) {
+func (e OpExpression) Modulus(c *Runtime) (interface{}, error) {
 	a, err := exec(c, e.A)
 	if err != nil {
 		return nil, e.Meta.Wrap(err)

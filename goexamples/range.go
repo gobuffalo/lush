@@ -22,7 +22,7 @@ for i, x := range myArray {
 
 return myArray, myNum
 */
-func rangeExec(c *ast.Context) (*ast.Returned, error) {
+func rangeExec(c *ast.Runtime) (*ast.Returned, error) {
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {

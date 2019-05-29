@@ -85,7 +85,7 @@ func (f For) String() string {
 	return bb.String()
 }
 
-func (f For) Exec(c *Context) (interface{}, error) {
+func (f For) Exec(c *Runtime) (interface{}, error) {
 	c = c.Clone()
 
 	var v interface{}
@@ -175,7 +175,7 @@ func (f For) Exec(c *Context) (interface{}, error) {
 	return nil, f.Meta.Errorf("can't iterate over %T", v)
 }
 
-func (f For) iterate(c *Context, rv reflect.Value, k interface{}, v interface{}) (interface{}, error) {
+func (f For) iterate(c *Runtime, rv reflect.Value, k interface{}, v interface{}) (interface{}, error) {
 	if len(f.Args) == 1 {
 		if !f.normalSingle {
 			k = v

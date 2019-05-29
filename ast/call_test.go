@@ -214,7 +214,7 @@ func Test_Call_Helper_Context(t *testing.T) {
 	var res []interface{}
 	c := NewContext()
 	c.Set("goes", "nose")
-	c.Set("foo", func(s interface{}, help *ast.Context) {
+	c.Set("foo", func(s interface{}, help *ast.Runtime) {
 		res = append(res, s)
 		res = append(res, help.Value("goes"))
 	})
@@ -234,7 +234,7 @@ func Test_Call_Helper_Context_Block(t *testing.T) {
 	r := require.New(t)
 
 	c := NewContext()
-	c.Set("foo", func(s interface{}, help *ast.Context) (string, error) {
+	c.Set("foo", func(s interface{}, help *ast.Runtime) (string, error) {
 		if help.Block == nil {
 			return "", errors.New("no block!")
 		}
@@ -260,7 +260,7 @@ func Test_Call_Helper_Context_Block_With_Context(t *testing.T) {
 	r := require.New(t)
 
 	c := NewContext()
-	c.Set("foo", func(s interface{}, help *ast.Context) (string, error) {
+	c.Set("foo", func(s interface{}, help *ast.Runtime) (string, error) {
 		if help.Block == nil {
 			return "", errors.New("no block!")
 		}
@@ -289,7 +289,7 @@ func Test_Call_Helper_Context_Block_Error(t *testing.T) {
 
 	c := NewContext()
 	c.Set("error", errors.New)
-	c.Set("foo", func(s interface{}, help *ast.Context) (string, error) {
+	c.Set("foo", func(s interface{}, help *ast.Runtime) (string, error) {
 		if help.Block == nil {
 			return "", errors.New("no block!")
 		}
@@ -339,7 +339,7 @@ func Test_Call_Helper_Options_Context(t *testing.T) {
 	var res []interface{}
 	c := NewContext()
 	c.Set("goes", "nose")
-	c.Set("foo", func(s interface{}, opts map[string]interface{}, help *ast.Context) {
+	c.Set("foo", func(s interface{}, opts map[string]interface{}, help *ast.Runtime) {
 		res = append(res, s)
 		res = append(res, help.Value("goes"))
 		if d, ok := opts["deep"]; ok {

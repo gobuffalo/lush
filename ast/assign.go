@@ -29,7 +29,7 @@ func (a Assign) MarshalJSON() ([]byte, error) {
 	return toJSON(a, m)
 }
 
-func (l *Assign) Exec(c *Context) (interface{}, error) {
+func (l *Assign) Exec(c *Runtime) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil
 	}

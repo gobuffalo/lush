@@ -21,11 +21,11 @@ func (i Else) String() string {
 	return bb.String()
 }
 
-func (i Else) Bool(c *Context) (bool, error) {
+func (i Else) Bool(c *Runtime) (bool, error) {
 	return true, nil
 }
 
-func (i Else) Exec(c *Context) (interface{}, error) {
+func (i Else) Exec(c *Runtime) (interface{}, error) {
 	if i.Block == nil {
 		return nil, i.Meta.Errorf("else statement missing block")
 	}

@@ -149,7 +149,7 @@ for {
 
 func ExampleExec_customHelperOptionalContext() {
 	c := ast.NewContext(context.Background(), os.Stdout)
-	c.Set("myFunc", func(s string, c *ast.Context) (string, error) {
+	c.Set("myFunc", func(s string, c *ast.Runtime) (string, error) {
 		if c.Block != nil {
 			res, err := c.Block.Exec(c)
 			if err != nil {

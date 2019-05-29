@@ -20,11 +20,11 @@ func (i Nil) Interface() interface{} {
 	return nil
 }
 
-func (i Nil) Exec(c *Context) (interface{}, error) {
+func (i Nil) Exec(c *Runtime) (interface{}, error) {
 	return nil, nil
 }
 
-func (i Nil) Bool(c *Context) (bool, error) {
+func (i Nil) Bool(c *Runtime) (bool, error) {
 	return false, nil
 }
 

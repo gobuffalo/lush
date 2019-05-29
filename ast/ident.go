@@ -50,7 +50,7 @@ func (i Ident) MapKey() string {
 	return i.Name
 }
 
-func (i Ident) Exec(c *Context) (interface{}, error) {
+func (i Ident) Exec(c *Runtime) (interface{}, error) {
 	if i.Name == "this" {
 		return c, nil
 	}
@@ -61,7 +61,7 @@ func (i Ident) Exec(c *Context) (interface{}, error) {
 	return c.Value(i.Name), nil
 }
 
-func (i Ident) Bool(c *Context) (bool, error) {
+func (i Ident) Bool(c *Runtime) (bool, error) {
 	v := c.Value(i.Name)
 
 	if v == nil {

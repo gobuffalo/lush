@@ -22,7 +22,7 @@ for k, v := range myMap {
 
 return myMap
 */
-func mapExec(c *ast.Context) (*ast.Returned, error) {
+func mapExec(c *ast.Runtime) (*ast.Returned, error) {
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {

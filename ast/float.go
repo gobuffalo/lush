@@ -21,7 +21,7 @@ func (n Float) String() string {
 	return fmt.Sprint(n.Value)
 }
 
-func (n Float) Exec(c *Context) (interface{}, error) {
+func (n Float) Exec(c *Runtime) (interface{}, error) {
 	return n.Value, nil
 }
 

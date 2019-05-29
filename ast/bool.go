@@ -5,7 +5,7 @@ import (
 )
 
 type Boolable interface {
-	Bool(*Context) (bool, error)
+	Bool(*Runtime) (bool, error)
 }
 
 var True = Bool{Value: true}
@@ -28,11 +28,11 @@ func (b Bool) String() string {
 	return fmt.Sprint(b.Value)
 }
 
-func (b Bool) Exec(c *Context) (interface{}, error) {
+func (b Bool) Exec(c *Runtime) (interface{}, error) {
 	return b.Value, nil
 }
 
-func (b Bool) Bool(c *Context) (bool, error) {
+func (b Bool) Bool(c *Runtime) (bool, error) {
 	return b.Value, nil
 }
 
@@ -52,7 +52,7 @@ func (a Bool) MarshalJSON() ([]byte, error) {
 	return toJSON(a, m)
 }
 
-func boolExec(s interface{}, c *Context) (bool, error) {
+func boolExec(s interface{}, c *Runtime) (bool, error) {
 	if b, ok := s.(Boolable); ok {
 		return b.Bool(c)
 	}

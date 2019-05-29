@@ -60,10 +60,10 @@ func (s String) MapKey() string {
 	return s.Original
 }
 
-func (s String) Exec(c *Context) (interface{}, error) {
+func (s String) Exec(c *Runtime) (interface{}, error) {
 	return s.Original, nil
 }
 
-func (s String) Bool(c *Context) (bool, error) {
+func (s String) Bool(c *Runtime) (bool, error) {
 	return len(s.Original) > 0, nil
 }

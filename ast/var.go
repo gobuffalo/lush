@@ -34,7 +34,7 @@ func (l Var) String() string {
 	return fmt.Sprintf("%s := %s", l.Name, l.Value)
 }
 
-func (l *Var) Exec(c *Context) (interface{}, error) {
+func (l *Var) Exec(c *Runtime) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil
 	}

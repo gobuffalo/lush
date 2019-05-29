@@ -10,9 +10,9 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
-type exec func(*ast.Context) (*ast.Returned, error)
+type exec func(*ast.Runtime) (*ast.Returned, error)
 
-func Equal(c *ast.Context, a, b exec) bool {
+func Equal(c *ast.Runtime, a, b exec) bool {
 	c1 := c.Clone()
 	c2 := c.Clone()
 

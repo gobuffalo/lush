@@ -57,7 +57,7 @@ func (f Func) String() string {
 	return bb.String()
 }
 
-func (f Func) mExec(c *Context, args ...Node) (interface{}, error) {
+func (f Func) mExec(c *Runtime, args ...Node) (interface{}, error) {
 	c = c.Clone()
 	if len(args) != len(f.Arguments) {
 		return nil, f.Meta.Errorf("expected %d arguments; received %d", len(f.Arguments), len(args))

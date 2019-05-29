@@ -22,11 +22,11 @@ func (d Integer) String() string {
 	return strconv.Itoa(d.Value)
 }
 
-func (d Integer) Exec(c *Context) (interface{}, error) {
+func (d Integer) Exec(c *Runtime) (interface{}, error) {
 	return d.Value, nil
 }
 
-func (d Integer) Bool(c *Context) (bool, error) {
+func (d Integer) Bool(c *Runtime) (bool, error) {
 	return true, nil
 }
 

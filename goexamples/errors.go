@@ -12,7 +12,7 @@ import "fmt"
 
 return fmt.Errorf("stop %s", "dragging my heart around")
 */
-func errorsExec(c *ast.Context) (*ast.Returned, error) {
+func errorsExec(c *ast.Runtime) (*ast.Returned, error) {
 	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {

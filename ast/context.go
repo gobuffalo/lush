@@ -9,24 +9,24 @@ import (
 	"github.com/gobuffalo/lush/builtins"
 )
 
-// type *Context interface {
-// 	context.Context
-// 	Clone() *Context
+// type *Runtime interface {
+// 	context.Runtime
+// 	Clone() *Runtime
 // 	Has(key string) bool
 // 	Set(key string, value interface{})
 // }
 
 //
 // type HelperContext interface {
-// 	Context
+// 	Runtime
 // 	Block() (interface{}, error)
-// 	BlockWith(Context) (interface{}, error)
+// 	BlockWith(Runtime) (interface{}, error)
 // 	HasBlock() bool
-// 	Exec((c *Context)) (interface{}, error)
+// 	Exec((c *Runtime)) (interface{}, error)
 // }
 
-func NewContext(ctx context.Context, w io.Writer) *Context {
-	c := &Context{
+func NewContext(ctx context.Context, w io.Writer) *Runtime {
+	c := &Runtime{
 		Context: ctx,
 		Writer:  w,
 		wg:      &sync.WaitGroup{},
@@ -41,7 +41,7 @@ func NewContext(ctx context.Context, w io.Writer) *Context {
 	return c
 }
 
-type Context struct {
+type Runtime struct {
 	context.Context
 	io.Writer
 	Block   *Block
@@ -50,7 +50,7 @@ type Context struct {
 	wg      *sync.WaitGroup
 }
 
-func (c *Context) Clone() *Context {
+func (c *Runtime) Clone() *Runtime {
 	fhc := NewContext(c, c.Writer)
 	fhc.Context = c
 	fhc.Block = c.Block
@@ -67,11 +67,11 @@ func (c *Context) Clone() *Context {
 	return fhc
 }
 
-func (c *Context) Has(key string) bool {
+func (c *Runtime) Has(key string) bool {
 	return c.Value(key) != nil
 }
 
-func (c *Context) Set(key string, value interface{}) {
+func (c *Runtime) Set(key string, value interface{}) {
 	c.data.Store(key, value)
 }
 
@@ -79,7 +79,7 @@ type upable interface {
 	setup(key string, value interface{})
 }
 
-func (c *Context) setup(key string, value interface{}) {
+func (c *Runtime) setup(key string, value interface{}) {
 	c.data.Store(key, value)
 	if c.Context.Value(key) != nil {
 		if up, ok := c.Context.(upable); ok {
@@ -88,7 +88,7 @@ func (c *Context) setup(key string, value interface{}) {
 	}
 }
 
-func (f *Context) Value(key interface{}) interface{} {
+func (f *Runtime) Value(key interface{}) interface{} {
 	v, ok := f.data.Load(key)
 	if ok {
 		return v

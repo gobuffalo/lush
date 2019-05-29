@@ -8,7 +8,7 @@ type Script struct {
 	Nodes Nodes
 }
 
-func (s Script) Exec(c *Context) (*Returned, error) {
+func (s Script) Exec(c *Runtime) (*Returned, error) {
 	res, err := s.Nodes.Exec(c)
 	if err != nil {
 		return nil, err

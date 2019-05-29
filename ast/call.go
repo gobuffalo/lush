@@ -66,11 +66,11 @@ func (f Call) String() string {
 	return bb.String()
 }
 
-func (f Call) Exec(c *Context) (interface{}, error) {
+func (f Call) Exec(c *Runtime) (interface{}, error) {
 	return f.exec(c)
 }
 
-func (f Call) exec(c *Context) (interface{}, error) {
+func (f Call) exec(c *Runtime) (interface{}, error) {
 	n, err := exec(c, f.Name)
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func (f Call) exec(c *Context) (interface{}, error) {
 	return f.mExec(rv, c)
 }
 
-func (f Call) mExec(m reflect.Value, c *Context) (interface{}, error) {
+func (f Call) mExec(m reflect.Value, c *Runtime) (interface{}, error) {
 	if !m.IsValid() {
 		return nil, f.Meta.Wrap(errors.New("invalid method call"))
 	}
@@ -116,7 +116,7 @@ func (f Call) mExec(m reflect.Value, c *Context) (interface{}, error) {
 			v := mt.In(i)
 			rv := reflect.Indirect(reflect.New(v))
 
-			if _, ok := rv.Interface().(*Context); ok {
+			if _, ok := rv.Interface().(*Runtime); ok {
 				ctx := c.Clone()
 				ctx.Block = f.Block
 				args = append(args, reflect.ValueOf(ctx))
@@ -148,7 +148,7 @@ func (f Call) mExec(m reflect.Value, c *Context) (interface{}, error) {
 	return ins, nil
 }
 
-func app(args []reflect.Value, mt reflect.Type, i int, c *Context, v interface{}) ([]reflect.Value, error) {
+func app(args []reflect.Value, mt reflect.Type, i int, c *Runtime, v interface{}) ([]reflect.Value, error) {
 	if m, ok := v.(Map); ok {
 		args = append(args, reflect.ValueOf(m.Interface()))
 		return args, nil

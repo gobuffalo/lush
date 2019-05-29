@@ -29,7 +29,7 @@ func NewContext() *ast.Runtime {
 	if testing.Verbose() {
 		w = os.Stdout
 	}
-	return ast.NewContext(context.Background(), w)
+	return ast.NewRuntime(context.Background(), w)
 }
 
 func exec(in string, c *ast.Runtime) (*ast.Returned, error) {

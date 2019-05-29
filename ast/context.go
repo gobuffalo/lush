@@ -25,7 +25,7 @@ import (
 // 	Exec((c *Runtime)) (interface{}, error)
 // }
 
-func NewContext(ctx context.Context, w io.Writer) *Runtime {
+func NewRuntime(ctx context.Context, w io.Writer) *Runtime {
 	c := &Runtime{
 		Context: ctx,
 		Writer:  w,
@@ -51,7 +51,7 @@ type Runtime struct {
 }
 
 func (c *Runtime) Clone() *Runtime {
-	fhc := NewContext(c, c.Writer)
+	fhc := NewRuntime(c, c.Writer)
 	fhc.Context = c
 	fhc.Block = c.Block
 	fhc.wg = c.wg

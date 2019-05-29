@@ -41,7 +41,7 @@ func (r Runner) Exec() error {
 			log.Fatal(err)
 		}
 
-		c := ast.NewContext(context.Background(), os.Stdout)
+		c := ast.NewRuntime(context.Background(), os.Stdout)
 		builtins.Available.Range(func(k, v interface{}) bool {
 			c.Imports.Store(k, v)
 			return true

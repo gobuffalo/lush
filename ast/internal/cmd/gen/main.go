@@ -175,7 +175,7 @@ import (
 func Test_{{.Name}}Exec(t *testing.T) {
 	r := require.New(t)
 
-	c := ast.NewContext(context.Background(), nil)
+	c := ast.NewRuntime(context.Background(), nil)
 
 	s, err := lush.ParseFile("{{.File}}")
 	r.NoError(err)
@@ -188,7 +188,7 @@ func Benchmark_{{.Name}}Exec_Go(t *testing.B) {
 	var r *ast.Returned
 
 	for i := 0; i < t.N; i++ {
-		c := ast.NewContext(context.Background(), nil)
+		c := ast.NewRuntime(context.Background(), nil)
 		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
 
 		r, _ = {{.Name}}Exec(c)
@@ -205,7 +205,7 @@ func Benchmark_{{.Name}}Exec_Lush(t *testing.B) {
 	}
 
 	for i := 0; i < t.N; i++ {
-		c := ast.NewContext(context.Background(), nil)
+		c := ast.NewRuntime(context.Background(), nil)
 		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
 
 		r, _ = s.Exec(c)

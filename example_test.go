@@ -11,7 +11,7 @@ import (
 )
 
 func ExampleExec() {
-	c := ast.NewContext(context.Background(), os.Stdout)
+	c := ast.NewRuntime(context.Background(), os.Stdout)
 
 	in := `return "hi"`
 
@@ -26,7 +26,7 @@ func ExampleExec() {
 }
 
 func ExampleExec_assignment() {
-	c := ast.NewContext(context.Background(), os.Stdout)
+	c := ast.NewRuntime(context.Background(), os.Stdout)
 
 	in := `
 import "fmt"
@@ -50,7 +50,7 @@ fmt.Println(x)`
 }
 
 func ExampleExec_ifNodes() {
-	c := ast.NewContext(context.Background(), os.Stdout)
+	c := ast.NewRuntime(context.Background(), os.Stdout)
 
 	in := `
 import "fmt"
@@ -76,7 +76,7 @@ if false {
 }
 
 func ExampleExec_arrays() {
-	c := ast.NewContext(context.Background(), os.Stdout)
+	c := ast.NewRuntime(context.Background(), os.Stdout)
 
 	in := `
 import "fmt"
@@ -100,7 +100,7 @@ for i, v := range a {
 }
 
 func ExampleExec_maps() {
-	c := ast.NewContext(context.Background(), os.Stdout)
+	c := ast.NewRuntime(context.Background(), os.Stdout)
 
 	in := `
 import "fmt"
@@ -119,7 +119,7 @@ for k, v := range m {
 }
 
 func ExampleExec_infiniteForLoop() {
-	c := ast.NewContext(context.Background(), os.Stdout)
+	c := ast.NewRuntime(context.Background(), os.Stdout)
 
 	in := `
 import "fmt"
@@ -148,7 +148,7 @@ for {
 }
 
 func ExampleExec_customHelperOptionalContext() {
-	c := ast.NewContext(context.Background(), os.Stdout)
+	c := ast.NewRuntime(context.Background(), os.Stdout)
 	c.Set("myFunc", func(s string, c *ast.Runtime) (string, error) {
 		if c.Block != nil {
 			res, err := c.Block.Exec(c)

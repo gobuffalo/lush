@@ -15,7 +15,7 @@ import (
 func Test_returnsExec(t *testing.T) {
 	r := require.New(t)
 
-	c := ast.NewContext(context.Background(), nil)
+	c := ast.NewRuntime(context.Background(), nil)
 
 	s, err := lush.ParseFile("returns.lush")
 	r.NoError(err)
@@ -28,7 +28,7 @@ func Benchmark_returnsExec_Go(t *testing.B) {
 	var r *ast.Returned
 
 	for i := 0; i < t.N; i++ {
-		c := ast.NewContext(context.Background(), nil)
+		c := ast.NewRuntime(context.Background(), nil)
 		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
 
 		r, _ = returnsExec(c)
@@ -45,7 +45,7 @@ func Benchmark_returnsExec_Lush(t *testing.B) {
 	}
 
 	for i := 0; i < t.N; i++ {
-		c := ast.NewContext(context.Background(), nil)
+		c := ast.NewRuntime(context.Background(), nil)
 		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
 
 		r, _ = s.Exec(c)

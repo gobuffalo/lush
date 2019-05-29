@@ -15,7 +15,7 @@ import (
 func Test_mapExec(t *testing.T) {
 	r := require.New(t)
 
-	c := ast.NewContext(context.Background(), nil)
+	c := ast.NewRuntime(context.Background(), nil)
 
 	s, err := lush.ParseFile("map.lush")
 	r.NoError(err)
@@ -28,7 +28,7 @@ func Benchmark_mapExec_Go(t *testing.B) {
 	var r *ast.Returned
 
 	for i := 0; i < t.N; i++ {
-		c := ast.NewContext(context.Background(), nil)
+		c := ast.NewRuntime(context.Background(), nil)
 		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
 
 		r, _ = mapExec(c)
@@ -45,7 +45,7 @@ func Benchmark_mapExec_Lush(t *testing.B) {
 	}
 
 	for i := 0; i < t.N; i++ {
-		c := ast.NewContext(context.Background(), nil)
+		c := ast.NewRuntime(context.Background(), nil)
 		c.Imports.Store("fmt", builtins.NewFmt(ioutil.Discard))
 
 		r, _ = s.Exec(c)

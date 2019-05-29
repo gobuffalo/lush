@@ -14,7 +14,7 @@ func toIdent(i interface{}) (ast.Ident, error) {
 	return id, nil
 }
 
-func toExecString(i interface{}) (ast.VisitableNode, error) {
+func toExecString(i interface{}) (ast.ExecableNode, error) {
 	if i == nil {
 		return nil, nil
 	}
@@ -23,7 +23,7 @@ func toExecString(i interface{}) (ast.VisitableNode, error) {
 		return nil, err
 	}
 
-	in, ok := n.(ast.VisitableNode)
+	in, ok := n.(ast.ExecableNode)
 	if !ok {
 		return nil, fmt.Errorf("expected ExecStringer, got %T", i)
 	}

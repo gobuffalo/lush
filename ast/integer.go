@@ -22,7 +22,7 @@ func (d Integer) String() string {
 	return strconv.Itoa(d.Value)
 }
 
-func (d Integer) Visit(c *Context) (interface{}, error) {
+func (d Integer) Exec(c *Context) (interface{}, error) {
 	return d.Value, nil
 }
 

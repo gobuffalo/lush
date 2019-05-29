@@ -31,16 +31,16 @@ _ = %s
 `, l.Name, l.Value, l.Name)
 }
 
-func (l *Let) Visit(c *Context) (interface{}, error) {
+func (l *Let) Exec(c *Context) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil
 	}
-	si, ok := l.Value.(Visitable)
+	si, ok := l.Value.(Execable)
 	if !ok {
 		c.Set(l.Name.String(), l.Value)
 		return nil, nil
 	}
-	i, err := si.Visit(c)
+	i, err := si.Exec(c)
 	if err != nil {
 		return nil, err
 	}

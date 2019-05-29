@@ -28,6 +28,6 @@ func (g Goroutine) MarshalJSON() ([]byte, error) {
 	return toJSON(g, m)
 }
 
-func (g Goroutine) Visit(c *Context) (interface{}, error) {
-	return g.Call.Visit(c)
+func (g Goroutine) Exec(c *Context) (interface{}, error) {
+	return g.Call.Exec(c)
 }

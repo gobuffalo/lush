@@ -66,7 +66,7 @@ func (f Func) mExec(c *Context, args ...Node) (interface{}, error) {
 		c.Set(i.Name, args[x])
 	}
 	if f.Block != nil {
-		s, err := f.Block.Visit(c)
+		s, err := f.Block.Exec(c)
 		return s, err
 	}
 	return nil, nil

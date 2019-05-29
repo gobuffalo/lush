@@ -151,7 +151,7 @@ func ExampleExec_customHelperOptionalContext() {
 	c := ast.NewContext(context.Background(), os.Stdout)
 	c.Set("myFunc", func(s string, c *ast.Context) (string, error) {
 		if c.Block != nil {
-			res, err := c.Block.Visit(c)
+			res, err := c.Block.Exec(c)
 			if err != nil {
 				return "", err
 			}

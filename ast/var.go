@@ -34,7 +34,7 @@ func (l Var) String() string {
 	return fmt.Sprintf("%s := %s", l.Name, l.Value)
 }
 
-func (l *Var) Visit(c *Context) (interface{}, error) {
+func (l *Var) Exec(c *Context) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil
 	}
@@ -42,12 +42,12 @@ func (l *Var) Visit(c *Context) (interface{}, error) {
 	if c.Has(name) {
 		return nil, l.Meta.Errorf("can not assign %s to existing variable", name)
 	}
-	si, ok := l.Value.(Visitable)
+	si, ok := l.Value.(Execable)
 	if !ok {
 		c.Set(name, l.Value)
 		return nil, nil
 	}
-	i, err := si.Visit(c)
+	i, err := si.Exec(c)
 	if err != nil {
 		return nil, l.Meta.Wrap(err)
 	}

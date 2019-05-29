@@ -238,7 +238,7 @@ func Test_Call_Helper_Context_Block(t *testing.T) {
 		if help.Block == nil {
 			return "", errors.New("no block!")
 		}
-		res, err := help.Block.Visit(help)
+		res, err := help.Block.Exec(help)
 		if err != nil {
 			return "", err
 		}
@@ -266,7 +266,7 @@ func Test_Call_Helper_Context_Block_With_Context(t *testing.T) {
 		}
 		nc := c.Clone()
 		nc.Set("b", "BB")
-		res, err := help.Block.Visit(nc)
+		res, err := help.Block.Exec(nc)
 		if err != nil {
 			return "", err
 		}
@@ -293,7 +293,7 @@ func Test_Call_Helper_Context_Block_Error(t *testing.T) {
 		if help.Block == nil {
 			return "", errors.New("no block!")
 		}
-		res, err := help.Block.Visit(help)
+		res, err := help.Block.Exec(help)
 		if err != nil {
 			return "", err
 		}

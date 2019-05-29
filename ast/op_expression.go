@@ -51,7 +51,7 @@ func (e OpExpression) MarshalJSON() ([]byte, error) {
 	return toJSON(e, m)
 }
 
-func (e OpExpression) Visit(c *Context) (interface{}, error) {
+func (e OpExpression) Exec(c *Context) (interface{}, error) {
 	switch e.Op {
 	case "==", "!=", "~=", "<", ">", "<=", ">=", "&&":
 		return e.Bool(c)

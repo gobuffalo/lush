@@ -36,8 +36,8 @@ func (a Access) MarshalJSON() ([]byte, error) {
 	return toJSON(a, m)
 }
 
-func (a Access) Visit(c *Context) (interface{}, error) {
-	v, err := a.Name.Visit(c)
+func (a Access) Exec(c *Context) (interface{}, error) {
+	v, err := a.Name.Exec(c)
 	if err != nil {
 		return nil, err
 	}

@@ -66,7 +66,7 @@ func (f Call) String() string {
 	return bb.String()
 }
 
-func (f Call) Visit(c *Context) (interface{}, error) {
+func (f Call) Exec(c *Context) (interface{}, error) {
 	return f.exec(c)
 }
 
@@ -153,8 +153,8 @@ func app(args []reflect.Value, mt reflect.Type, i int, c *Context, v interface{}
 		args = append(args, reflect.ValueOf(m.Interface()))
 		return args, nil
 	}
-	if ex, ok := v.(Visitable); ok {
-		x, err := ex.Visit(c)
+	if ex, ok := v.(Execable); ok {
+		x, err := ex.Exec(c)
 		if err != nil {
 			return args, err
 		}

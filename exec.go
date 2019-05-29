@@ -6,7 +6,7 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
-// Visit a script using the specified Context.
+// Exec a script using the specified Context.
 func Exec(c *ast.Context, s ast.Script) (*ast.Returned, error) {
 	return s.Exec(c)
 }

@@ -68,12 +68,12 @@ func (i Nodes) Format(st fmt.State, verb rune) {
 	format(i, st, verb)
 }
 
-func (st Nodes) Visit(c *Context) (interface{}, error) {
+func (st Nodes) Exec(c *Context) (interface{}, error) {
 	var stmts []interface{}
 	for _, s := range st {
 		switch r := s.(type) {
 		case Return:
-			res, err := r.Visit(c)
+			res, err := r.Exec(c)
 			return res, err
 		case Returned:
 			return r, r.Err()
@@ -85,10 +85,10 @@ func (st Nodes) Visit(c *Context) (interface{}, error) {
 			c.wg.Add(1)
 			go func() {
 				defer c.wg.Done()
-				r.Visit(c)
+				r.Exec(c)
 			}()
-		case Visitable:
-			i, err := r.Visit(c)
+		case Execable:
+			i, err := r.Exec(c)
 			if err != nil {
 				return nil, err
 			}

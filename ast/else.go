@@ -25,11 +25,11 @@ func (i Else) Bool(c *Context) (bool, error) {
 	return true, nil
 }
 
-func (i Else) Visit(c *Context) (interface{}, error) {
+func (i Else) Exec(c *Context) (interface{}, error) {
 	if i.Block == nil {
 		return nil, i.Meta.Errorf("else statement missing block")
 	}
-	return i.Block.Visit(c)
+	return i.Block.Exec(c)
 }
 
 func NewElse(b *Block) (Else, error) {

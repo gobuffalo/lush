@@ -84,13 +84,13 @@ func NewIf(p ast.Node, e ast.Expression, b *ast.Block, elsa ast.Node) ast.If {
 	return i
 }
 
-func NewFor(n ast.VisitableNode, args interface{}, b *ast.Block) ast.For {
+func NewFor(n ast.ExecableNode, args interface{}, b *ast.Block) ast.For {
 	f, _ := ast.NewFor(n, args, b)
 
 	return f
 }
 
-func NewRange(n ast.VisitableNode, args interface{}, b *ast.Block) ast.Range {
+func NewRange(n ast.ExecableNode, args interface{}, b *ast.Block) ast.Range {
 	f, _ := ast.NewRange(n, args, b)
 
 	return f

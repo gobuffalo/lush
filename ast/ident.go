@@ -50,7 +50,7 @@ func (i Ident) MapKey() string {
 	return i.Name
 }
 
-func (i Ident) Visit(c *Context) (interface{}, error) {
+func (i Ident) Exec(c *Context) (interface{}, error) {
 	if i.Name == "this" {
 		return c, nil
 	}

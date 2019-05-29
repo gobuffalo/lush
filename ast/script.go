@@ -9,7 +9,7 @@ type Script struct {
 }
 
 func (s Script) Exec(c *Context) (*Returned, error) {
-	res, err := s.Nodes.Visit(c)
+	res, err := s.Nodes.Exec(c)
 	if err != nil {
 		return nil, err
 	}

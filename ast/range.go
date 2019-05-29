@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func NewRange(n VisitableNode, args interface{}, b *Block) (Range, error) {
+func NewRange(n ExecableNode, args interface{}, b *Block) (Range, error) {
 	r := Range{}
 	f, err := NewFor(n, args, b)
 	if err != nil {

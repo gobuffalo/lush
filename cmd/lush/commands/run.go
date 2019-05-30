@@ -14,13 +14,10 @@ import (
 
 type Runner struct {
 	Flags *flag.FlagSet
-	Args  []string
 }
 
-func NewRunner(args []string) *Runner {
-	r := &Runner{
-		Args: args,
-	}
+func NewRunner() *Runner {
+	r := &Runner{}
 	f := flag.NewFlagSet("run", flag.ExitOnError)
 
 	r.Flags = f
@@ -28,14 +25,14 @@ func NewRunner(args []string) *Runner {
 	return r
 }
 
-func (r Runner) Exec() error {
-	if err := r.Flags.Parse(r.Args); err != nil {
+func (r Runner) Exec(args []string) error {
+	if err := r.Flags.Parse(args); err != nil {
 		return err
 	}
 
-	r.Args = r.Flags.Args()
+	args = r.Flags.Args()
 
-	for _, a := range r.Args {
+	for _, a := range args {
 		script, err := lush.ParseFile(a)
 		if err != nil {
 			log.Fatal(err)

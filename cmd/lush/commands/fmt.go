@@ -13,15 +13,12 @@ import (
 
 type Fmter struct {
 	Flags *flag.FlagSet
-	Args  []string
 	Write bool
 	Diffs bool
 }
 
-func NewFmter(args []string) *Fmter {
-	ft := &Fmter{
-		Args: args,
-	}
+func NewFmter() *Fmter {
+	ft := &Fmter{}
 	f := flag.NewFlagSet("fmt", flag.ExitOnError)
 	f.BoolVar(&ft.Write, "w", false, "write result to (source) file instead of stdout")
 	f.BoolVar(&ft.Diffs, "d", false, "display diffs instead of rewriting files")
@@ -30,18 +27,18 @@ func NewFmter(args []string) *Fmter {
 	return ft
 }
 
-func (f *Fmter) Exec() error {
-	if err := f.Flags.Parse(f.Args); err != nil {
+func (f *Fmter) Exec(args []string) error {
+	if err := f.Flags.Parse(args); err != nil {
 		return err
 	}
 
-	f.Args = f.Flags.Args()
+	args = f.Flags.Args()
 
-	if len(f.Args) == 0 {
+	if len(args) == 0 {
 		fmt.Println(strings.TrimSpace(fmtUsage))
 		os.Exit(1)
 	}
-	for _, a := range f.Args {
+	for _, a := range args {
 		script, err := lush.ParseFile(a)
 		if err != nil {
 			return err

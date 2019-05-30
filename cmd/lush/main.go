@@ -23,31 +23,31 @@ The commands are:
 	ast		print the AST for a .lush file
 `
 
+type runner interface {
+	Exec([]string) error
+}
+
 func main() {
 	args := os.Args[1:]
 	if len(args) < 1 {
 		args = append(args, "-h")
 	}
+	var r runner
 	switch args[0] {
 	case "run":
-		args = args[1:]
+		r = commands.NewRunner()
 	case "fmt":
-		format(args[1:])
-		return
+		r = commands.NewFmter()
 	case "ast":
-		printAST(args[1:])
-		return
+		r = commands.AstPrinter{}
 	case "-h":
+		fmt.Println(strings.TrimSpace(usage))
+	default:
 		fmt.Println(strings.TrimSpace(usage))
 		os.Exit(1)
 	}
-	run(args)
-}
 
-func run(args []string) {
-	r := commands.NewRunner(args)
-	err := r.Exec()
-	if err != nil {
+	if err := r.Exec(args[1:]); err != nil {
 		log.Fatal(err)
 	}
 }

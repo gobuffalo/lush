@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"os"
 
@@ -13,11 +14,14 @@ import (
 )
 
 type Runner struct {
+	io.Writer
 	Flags *flag.FlagSet
 }
 
-func NewRunner() *Runner {
-	r := &Runner{}
+func NewRunner(w io.Writer) *Runner {
+	r := &Runner{
+		Writer: w,
+	}
 	f := flag.NewFlagSet("run", flag.ExitOnError)
 
 	r.Flags = f

@@ -3,6 +3,7 @@ package commands
 import (
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -12,12 +13,13 @@ import (
 )
 
 type Fmter struct {
+	io.Writer
 	Flags *flag.FlagSet
 	Write bool
 	Diffs bool
 }
 
-func NewFmter() *Fmter {
+func NewFmter(w io.Writer) *Fmter {
 	ft := &Fmter{}
 	f := flag.NewFlagSet("fmt", flag.ExitOnError)
 	f.BoolVar(&ft.Write, "w", false, "write result to (source) file instead of stdout")
@@ -35,9 +37,9 @@ func (f *Fmter) Exec(args []string) error {
 	args = f.Flags.Args()
 
 	if len(args) == 0 {
-		fmt.Println(strings.TrimSpace(fmtUsage))
-		os.Exit(1)
+		return fmt.Errorf(strings.TrimSpace(fmtUsage))
 	}
+
 	for _, a := range args {
 		script, err := lush.ParseFile(a)
 		if err != nil {
@@ -50,7 +52,7 @@ func (f *Fmter) Exec(args []string) error {
 				return err
 			}
 			diff := cmp.Diff(string(b), script.String())
-			fmt.Print(diff)
+			fmt.Fprint(f.Writer, diff)
 			continue
 		}
 

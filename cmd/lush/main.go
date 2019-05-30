@@ -39,7 +39,13 @@ func main() {
 	case "fmt":
 		r = commands.NewFmter()
 	case "ast":
-		r = commands.AstPrinter{}
+		r = commands.Printer{
+			Kind: "ast",
+		}
+	case "print":
+		r = commands.Printer{
+			Kind: "print",
+		}
 	case "-h":
 		fmt.Println(strings.TrimSpace(usage))
 	default:

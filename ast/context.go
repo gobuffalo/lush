@@ -9,22 +9,6 @@ import (
 	"github.com/gobuffalo/lush/builtins"
 )
 
-// type *Context interface {
-// 	context.Context
-// 	Clone() *Context
-// 	Has(key string) bool
-// 	Set(key string, value interface{})
-// }
-
-//
-// type HelperContext interface {
-// 	Context
-// 	Block() (interface{}, error)
-// 	BlockWith(Context) (interface{}, error)
-// 	HasBlock() bool
-// 	Exec((c *Context)) (interface{}, error)
-// }
-
 func NewContext(ctx context.Context, w io.Writer) *Context {
 	c := &Context{
 		Context: ctx,

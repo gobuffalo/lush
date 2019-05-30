@@ -51,10 +51,6 @@ func (i Ident) MapKey() string {
 }
 
 func (i Ident) Exec(c *Context) (interface{}, error) {
-	if i.Name == "this" {
-		return c, nil
-	}
-
 	if !c.Has(i.Name) {
 		return nil, i.Meta.Errorf("could not find ident %s", i.Name)
 	}

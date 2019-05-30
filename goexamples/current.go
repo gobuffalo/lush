@@ -4,15 +4,14 @@ package goexamples
 import (
 	"github.com/gobuffalo/lush/ast"
 	"github.com/gobuffalo/lush/builtins"
-	"github.com/gobuffalo/lush/runtime"
 )
 
 /*
 import "fmt"
 
-return fmt.Errorf("stop %s", "dragging my heart around")
+fmt.Println(current)
 */
-func errorsExec(current *ast.Context) (*ast.Returned, error) {
+func currentExec(current *ast.Context) (*ast.Returned, error) {
 	fmti, _ := current.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: current})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {
@@ -20,5 +19,7 @@ func errorsExec(current *ast.Context) (*ast.Returned, error) {
 	}
 	_ = fmt
 
-	return runtime.Current.NewReturned(fmt.Errorf("stop %s", "dragging my heart around"))
+	fmt.Println(current)
+
+	return nil, nil
 }

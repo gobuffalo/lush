@@ -10,7 +10,7 @@ import (
 func (c Printer) astImport(i ast.Import) error {
 	x, ok := builtins.Available.Load(i.Name)
 	if ok {
-		s := `%si, _ := c.Imports.LoadOrStore(%q, %#v)
+		s := `%si, _ := current.Imports.LoadOrStore(%q, %#v)
 %s, ok := %si.(%T)
 if !ok {
 	return nil, fmt.Errorf("expected %T got %%T", %si)
@@ -21,7 +21,7 @@ _ = %s`
 		return nil
 	}
 
-	s := `if _, ok := c.Imports.Load(%q); ok {
+	s := `if _, ok := current.Imports.Load(%q); ok {
 		return nil, fmt.Errorf("could not find import for %q")
 	}`
 

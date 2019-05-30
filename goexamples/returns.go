@@ -18,7 +18,7 @@ func() {
 // hopefully 42!
 return "what do you get?", x
 */
-func returnsExec(c *ast.Context) (*ast.Returned, error) {
+func returnsExec(current *ast.Context) (*ast.Returned, error) {
 	x := 0
 	_ = x
 

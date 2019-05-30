@@ -22,8 +22,8 @@ for i, x := range myArray {
 
 return myArray, myNum
 */
-func rangeExec(c *ast.Context) (*ast.Returned, error) {
-	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
+func rangeExec(current *ast.Context) (*ast.Returned, error) {
+	fmti, _ := current.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: current})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {
 		return nil, fmt.Errorf("expected builtins.Fmt got %T", fmti)

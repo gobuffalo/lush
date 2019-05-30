@@ -19,7 +19,7 @@ shoe["evan"] = "Dando"
 
 fmt.Println(shoe)
 
-fmt.Println(this)
+fmt.Println(current)
 
 // this is a comment
 // there are many like it

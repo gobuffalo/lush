@@ -18,7 +18,7 @@ DOC <- b:SHEBANG? stmts:(_ NODE _)+ EOF {
   return ast.Script{Nodes: s}, err
 }
 
-NODE <- s:( IMPORT / GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
+NODE <- s:( CURRENT / IMPORT / GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
   return s, nil
 }
 
@@ -26,7 +26,11 @@ IMPORT <- _ "import" _ s:DQSTRING {
   return newImport(c, s)
 }
 
-EXPRARG <- (POPEX / CALL / NUMBER / STRING / BOOL / ARRAY / MAP / NULL / IDENT)
+CURRENT <- "current" {
+  return ast.Current{Meta: meta(c)}, nil
+}
+
+EXPRARG <- (CURRENT / POPEX / CALL / NUMBER / STRING / BOOL / ARRAY / MAP / NULL / IDENT)
 
 OP <- ( "&&" / "||" / "<=" / ">=" / "==" / "!=" / "~=" / "+" / "-" / "*" / "/" / "%" / ">" / "<") {
   return string(c.text), nil
@@ -68,7 +72,7 @@ IDENT <- [a-zA-Z]+ ( [0-9a-zA-Z_])* {
 
 NUMBER <- (FLOAT / INTEGER)
 
-LETV <- ( ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )
+LETV <- ( CURRENT /  ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )
 
 LET <- _ "let" _ name:IDENT _ "=" _ value:LETV {
   return newLet(c, name, value)
@@ -134,7 +138,7 @@ GO <- _ "go" _ s:( FCALL / CALL) _ {
   return ast.NewGoroutine(ca)
 }
 
-CALL <- _ i:( IDENT ) ("."?) y:(IDENT)? LP ax:ARG* RP _ b:(BLOCK)? {
+CALL <- _ i:( IDENT/CURRENT ) ("."?) y:(IDENT)? LP ax:ARG* RP _ b:(BLOCK)? {
   return newCall(c, i, y, ax, b)
 }
 

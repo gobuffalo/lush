@@ -26,9 +26,9 @@ func (a Printer) Exec(args []string) error {
 		return fmt.Errorf("you must pass at a least one argument")
 	}
 	switch a.Kind {
-	case "ast":
+	case "ast", "a":
 		return a.astExec(args)
-	case "print":
+	case "print", "p":
 		if len(args) == 0 {
 			return fmt.Errorf("you must pass at a least one argument and a language")
 		}

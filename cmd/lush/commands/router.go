@@ -33,11 +33,11 @@ func Route(args []string) error {
 	var r runner
 	a := args[0]
 	switch a {
-	case "run":
+	case "run", "r":
 		r = NewRunner(os.Stdout)
 	case "fmt":
 		r = NewFmter(os.Stdout)
-	case "ast", "print":
+	case "ast", "print", "a", "p":
 		r = NewPrinter(os.Stdout, a)
 	case "-h":
 		fmt.Println(u)

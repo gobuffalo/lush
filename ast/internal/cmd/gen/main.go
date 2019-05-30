@@ -228,7 +228,7 @@ import (
 /*
 {{.Original}}
 */
-func {{.Name}}Exec(c *ast.Context) (*ast.Returned, error) {
+func {{.Name}}Exec(current *ast.Context) (*ast.Returned, error) {
 	{{.GoCode}}
 }
 `

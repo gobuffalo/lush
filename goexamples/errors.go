@@ -12,8 +12,8 @@ import "fmt"
 
 return fmt.Errorf("stop %s", "dragging my heart around")
 */
-func errorsExec(c *ast.Context) (*ast.Returned, error) {
-	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
+func errorsExec(current *ast.Context) (*ast.Returned, error) {
+	fmti, _ := current.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: current})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {
 		return nil, fmt.Errorf("expected builtins.Fmt got %T", fmti)

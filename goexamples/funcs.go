@@ -22,8 +22,8 @@ y := func(a, b, c) {
 
 return y(1, 2, 3)
 */
-func funcsExec(c *ast.Context) (*ast.Returned, error) {
-	fmti, _ := c.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: c})
+func funcsExec(current *ast.Context) (*ast.Returned, error) {
+	fmti, _ := current.Imports.LoadOrStore("fmt", builtins.Fmt{Writer: current})
 	fmt, ok := fmti.(builtins.Fmt)
 	if !ok {
 		return nil, fmt.Errorf("expected builtins.Fmt got %T", fmti)

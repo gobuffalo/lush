@@ -42,5 +42,5 @@ func (f Fmt) Sprintln(a ...interface{}) string {
 }
 
 func (f Fmt) GoString() string {
-	return "builtins.Fmt{Writer: c}"
+	return "builtins.Fmt{Writer: current}"
 }

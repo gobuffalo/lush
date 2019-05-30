@@ -26,9 +26,27 @@ func (a Printer) Exec(args []string) error {
 		switch args[0] {
 		case "go":
 			return a.goExec(args[1:])
+		case "ast":
+			return a.astExec(args[1:])
+		case "lush":
+			return a.lushExec(args[1:])
 		}
 	}
 	return fmt.Errorf("unknown printer kind %q", a.Kind)
+}
+
+func (a Printer) lushExec(args []string) error {
+	if len(args) == 0 {
+		return fmt.Errorf("you must pass at a least one argument")
+	}
+	for _, a := range args {
+		script, err := lush.ParseFile(a)
+		if err != nil {
+			return err
+		}
+		fmt.Println(script)
+	}
+	return nil
 }
 
 func (a Printer) goExec(args []string) error {

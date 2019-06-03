@@ -3,6 +3,7 @@ package ast_test
 import (
 	"errors"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
@@ -367,8 +368,8 @@ func Test_Call(t *testing.T) {
 		format string
 		out    string
 	}{
-		{`%s`, `foo.Bar(42, 3.14, "hi")`},
-		{`%q`, `"foo.Bar(42, 3.14, \"hi\")"`},
+		{`%s`, "foo.Bar(42, 3.14, \"hi\") {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%q`, "\"foo.Bar(42, 3.14, \\\"hi\\\") {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 		{`%+v`, brv},
 	}
 
@@ -381,4 +382,27 @@ func Test_Call(t *testing.T) {
 			r.Equal(tt.out, ft)
 		})
 	}
+}
+
+func Test_Call_Format(t *testing.T) {
+	r := require.New(t)
+
+	in := `create_table("users") {
+	t.Column("id", "uuid", {"primary": true})
+
+	t.Column("name", "string", {})
+
+	t.Column("slug", "string", {})
+
+	t.Column("email", "string", {})
+
+	t.Column("token", "string", {"null": true})
+
+	t.Timestamps()
+}`
+
+	p, err := parse(in)
+	r.NoError(err)
+
+	r.Equal(strings.TrimSpace(in), strings.TrimSpace(p.String()))
 }

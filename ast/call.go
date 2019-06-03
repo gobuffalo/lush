@@ -62,7 +62,10 @@ func (f Call) String() string {
 		args = append(args, strings.TrimSpace(st.String()))
 	}
 	bb.WriteString(strings.Join(args, ", "))
-	bb.WriteString(")")
+	bb.WriteString(") ")
+	if f.Block != nil {
+		bb.WriteString(f.Block.String())
+	}
 	return bb.String()
 }
 

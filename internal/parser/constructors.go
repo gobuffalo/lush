@@ -7,6 +7,115 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
+func newCallExpr(c *current, head, tail, block interface{}) (ast.Node, error) {
+	tailSlice, err := toII(tail)
+	if err != nil {
+		return nil, err
+	}
+
+	hn, err := toNode(head)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(tailSlice) == 0 {
+		return hn, nil
+	}
+
+	cur := ast.Call{
+		Name: hn,
+	}
+
+	for _, t := range tailSlice {
+		parts, err := toII(t)
+		if err != nil {
+			return nil, err
+		}
+		fname, ok := parts[1].(ast.Ident)
+		if !ok {
+			return nil, fmt.Errorf("Expected ast.Ident, got %T", parts[1])
+		}
+		cur.FName = fname
+
+		args, ok := parts[2].(ast.Nodes)
+		if !ok {
+			return nil, fmt.Errorf("Expected ast.Nodes, got %T", parts[2])
+		}
+		cur.Arguments = args
+	}
+
+	blk, err := toBlock(block)
+	if err != nil {
+		return nil, err
+	}
+	cur.Block = blk
+	return cur, nil
+}
+
+func newArglist(c *current, head, tail interface{}) (ast.Nodes, error) {
+	hn, err := toNode(head)
+	if err != nil {
+		return nil, err
+	}
+
+	tailSlice, err := toII(tail)
+	if err != nil {
+		return nil, err
+	}
+
+	args := make([]ast.Node, 1, 1+len(tailSlice))
+	args[0] = hn
+
+	for _, t := range tailSlice {
+		parts, err := toII(t)
+		if err != nil {
+			return nil, err
+		}
+
+		tn, err := toNode(parts[2])
+		if err != nil {
+			return nil, err
+		}
+
+		args = append(args, tn)
+	}
+
+	return ast.Nodes(args), nil
+}
+
+func newBinaryExpr(c *current, head, tail interface{}) (ast.Node, error) {
+	hn, err := toNode(head)
+	if err != nil {
+		return nil, err
+	}
+	tailSlice, err := toII(tail)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(tailSlice) == 0 {
+		return hn, nil
+	}
+
+	cur := &ast.OpExpression{
+		A: hn,
+	}
+	for _, parts := range tailSlice {
+		tailParts, err := toII(parts)
+		if err != nil {
+			return nil, err
+		}
+		op, operand := tailParts[1], tailParts[3]
+
+		cur.B = operand.(ast.Node)
+		cur.Op = op.(string)
+		cur = &ast.OpExpression{
+			A: cur,
+		}
+	}
+	return cur.A, nil
+}
+
 func newImport(c *current, s interface{}) (ast.Import, error) {
 	n, ok := s.(ast.String)
 	if !ok {
@@ -121,13 +230,45 @@ func newRange(c *current, n interface{}, args interface{}, b interface{}) (ret a
 		return ast.Range{}, err
 	}
 
-	ret, err = ast.NewRange(ni, args, bl)
+	idents, err := toIdentSlice(args)
+	if err != nil {
+		return ast.Range{}, err
+	}
+	ret, err = ast.NewRange(ni, idents, bl)
 	if err != nil {
 		return ret, err
 	}
 
 	ret.Meta = meta(c)
 	return ret, nil
+}
+
+func newLHS(c *current, head interface{}, tail interface{}) ([]ast.Ident, error) {
+	h, err := toIdent(head)
+	if err != nil {
+		return []ast.Ident{}, err
+	}
+
+	lhs := []ast.Ident{h}
+
+	tailSlice, err := toII(tail)
+	if err != nil {
+		return []ast.Ident{}, err
+	}
+
+	for _, t := range tailSlice {
+		tp, err := toII(t)
+		if err != nil {
+			return []ast.Ident{}, err
+		}
+
+		ident, err := toIdent(tp[3])
+		if err != nil {
+			return []ast.Ident{}, err
+		}
+		lhs = append(lhs, ident)
+	}
+	return lhs, nil
 }
 
 func newFor(c *current, n interface{}, args interface{}, b interface{}) (ret ast.For, err error) {
@@ -139,7 +280,12 @@ func newFor(c *current, n interface{}, args interface{}, b interface{}) (ret ast
 	if err != nil {
 		return ast.For{}, err
 	}
-	ret, err = ast.NewFor(ni, args, bl)
+
+	idents, err := toIdentSlice(args)
+	if err != nil {
+		return ast.For{}, err
+	}
+	ret, err = ast.NewFor(ni, idents, bl)
 	if err != nil {
 		return ret, err
 	}
@@ -233,11 +379,11 @@ func newElseIf(c *current, i interface{}) (ret ast.ElseIf, err error) {
 }
 
 func newReturn(c *current, i interface{}) (ret ast.Return, err error) {
-	s, err := toNodes(i)
-	if err != nil {
-		return ast.Return{}, err
+	nodes, ok := i.(ast.Nodes)
+	if !ok {
+		return ast.Return{}, fmt.Errorf("Expected ast.Nodes, got %T", i)
 	}
-	ret, err = ast.NewReturn(s)
+	ret, err = ast.NewReturn(nodes)
 	if err != nil {
 		return ret, err
 	}

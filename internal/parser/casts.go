@@ -14,6 +14,14 @@ func toIdent(i interface{}) (ast.Ident, error) {
 	return id, nil
 }
 
+func toIdentSlice(i interface{}) ([]ast.Ident, error) {
+	ii, ok := i.([]ast.Ident)
+	if !ok {
+		return nil, fmt.Errorf("expected []ast.Ident, got %T", i)
+	}
+	return ii, nil
+}
+
 func toExecString(i interface{}) (ast.ExecableNode, error) {
 	if i == nil {
 		return nil, nil

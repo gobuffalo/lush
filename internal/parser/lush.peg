@@ -9,16 +9,12 @@
   )
 }
 
-DOC <- b:SHEBANG? stmts:(_ NODE _)+ EOF {
+DOC <- stmts:(_ NODE _)+ EOF {
   s, err := ast.NewNodes(stmts)
-  if b != nil {
-    bang := b.(ast.Shebang)
-    s = append(ast.Nodes{bang}, s...)
-  }
   return ast.Script{Nodes: s}, err
 }
 
-NODE <- s:( CURRENT / IMPORT / GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
+NODE <- s:( IMPORT / GO / COMMENT / NULL / LET / VAR / ASSIGN / IF / IFOR / FOR / RANGE / GO / FCALL / RETURN / CALL ) ";"? {
   return s, nil
 }
 
@@ -26,11 +22,7 @@ IMPORT <- _ "import" _ s:DQSTRING {
   return newImport(c, s)
 }
 
-CURRENT <- "current" {
-  return ast.Current{Meta: meta(c)}, nil
-}
-
-EXPRARG <- (CURRENT / POPEX / CALL / NUMBER / STRING / BOOL / ARRAY / MAP / NULL / IDENT)
+EXPRARG <- (POPEX / CALL / NUMBER / STRING / BOOL / ARRAY / MAP / NULL / IDENT)
 
 OP <- ( "&&" / "||" / "<=" / ">=" / "==" / "!=" / "~=" / "+" / "-" / "*" / "/" / "%" / ">" / "<") {
   return string(c.text), nil
@@ -44,7 +36,7 @@ POPEX <- _ LP _ a:(EXPRARG) _ op:OP _ b:(EXPRARG) _ RP _ ";"? {
   return newPopExpression(c, a, op, b)
 }
 
-IF <- _ "if" _ p:( (VAR / LET) )? _ ";"? _  s:(LP _ (BOOL / OPEX / POPEX ) _ RP / (BOOL / OPEX / POPEX) ) _ b:BLOCK _ e:(ELSEIF / ELSE)* {
+IF <- _ "if" _ p:( (VAR / LET) )? _ ";"? _  s:(LP _ EXPR _ RP / EXPR ) _ b:BLOCK _ e:(ELSEIF / ELSE)* {
   return newIf(c, p, s, b, e)
 }
 
@@ -72,9 +64,56 @@ IDENT <- [a-zA-Z]+ ( [0-9a-zA-Z_])* {
 
 NUMBER <- (FLOAT / INTEGER)
 
-LETV <- ( CURRENT /  ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )
+LETV <- ( ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )
 
-LET <- _ "let" _ name:IDENT _ "=" _ value:LETV {
+// Operators
+
+COMPARATOR <- ( "&&" / "||" / "<=" / ">=" / "==" / "!=" / "~=" / ">" / "<" ) {
+  return string(c.text), nil
+}
+
+OPADD <- ( "+" / "-" ) {
+  return string(c.text), nil
+}
+OPMUL <- ( "*" / "/" ) {
+  return string(c.text), nil
+}
+
+EXPR <- head:ADDITIVE tail:( _ COMPARATOR _ ADDITIVE )* {
+  return newBinaryExpr(c, head, tail)
+}
+
+ADDITIVE <- head:MULTITIVE tail:( _ OPADD _ MULTITIVE )* {
+  return newBinaryExpr(c, head, tail)
+}
+
+MULTITIVE <- head:UNARY tail:( _ OPMUL _ UNARY )* {
+  return newBinaryExpr(c, head, tail)
+}
+
+UNARY <- lit:LITERAL {
+  return lit, nil
+} / call:CALLEXPR {
+  return call, nil
+} / "(" expr:EXPR ")" {
+  return expr, nil
+}
+
+LITERAL <- NUMBER / STRING / BOOL / ARRAY / MAP / FUNC
+
+CALLEXPR <- head:(FCALL / IDENT) tail:("." IDENT ARGS?)* b:BLOCK? {
+  return newCallExpr(c, head, tail, b)
+}
+
+ARGS <- "(" head:EXPR? tail:("," _ EXPR _ )* _ ")" _ {
+  return newArglist(c, head, tail)
+}
+
+REF <- name:IDENT {
+  return name, nil
+}
+
+LET <- _ "let" _ name:IDENT _ "=" _ value:EXPR {
   return newLet(c, name, value)
 }
 
@@ -86,20 +125,25 @@ ASSIGN <- _ name:(ACCESS/IDENT) _ "=" _ value:LETV {
   return newAssign(c, name, value)
 }
 
-ARG <- _ i:LETV _ ","? {
+ARG <- _ i:EXPR _ ","? {
   return i, nil
+}
+
+// LHS = Left-Hand Side of an assignment
+LHS <- head:IDENT tail:(_ "," _ IDENT)* {
+  return newLHS(c, head, tail)
 }
 
 BLOCK <- _ LC _ s:( CONTINUE / BREAK / NODE )* _ RC {
   return newBlock(c, s)
 }
 
-FOR <- _ "for " ax:( LP ARG+ RP ) _ "in" _ i:(IDENT / ARRAY / MAP)  _ s:BLOCK {
-  return newFor(c, i, ax, s)
+FOR <- _ "for " "(" lhs:LHS ")" _ "in" _ i:(IDENT / ARRAY / MAP)  _ s:BLOCK {
+  return newFor(c, i, lhs, s)
 }
 
-RANGE <- _ "for " ax:( ARG+) _ ":=" _ "range" _ i:(IDENT / ARRAY / MAP)  _ s:BLOCK {
-  return newRange(c, i, ax, s)
+RANGE <- _ "for " lhs:LHS _ ":=" _ "range" _ i:(IDENT / ARRAY / MAP)  _ s:BLOCK {
+  return newRange(c, i, lhs, s)
 }
 
 IFOR <- _ "for" _ s:BLOCK {
@@ -110,11 +154,12 @@ ARRAY <- LB _ ax:ARG* _ RB {
   return newArray(c, ax)
 }
 
+// TODO: needs to change to be more general
 ACCESS <- i:(IDENT) LB key:(NUMBER/IDENT/STRING) RB {
   return newAccess(c, i, key)
 }
 
-RETURN <- _ "return" _ s:ARG* {
+RETURN <- _ "return" _ s:EXPR _ {
   return newReturn(c, s)
 }
 
@@ -138,7 +183,7 @@ GO <- _ "go" _ s:( FCALL / CALL) _ {
   return ast.NewGoroutine(ca)
 }
 
-CALL <- _ i:( IDENT/CURRENT ) ("."?) y:(IDENT)? LP ax:ARG* RP _ b:(BLOCK)? {
+CALL <- _ i:( IDENT ) ("."?) y:(IDENT)? LP ax:ARG* RP _ b:(BLOCK)? {
   return newCall(c, i, y, ax, b)
 }
 
@@ -176,10 +221,6 @@ MAP <- LC _ vals:( (IDENT/STRING) _ ':' _ (ARG) _ (',')* _ )*  _ RC {
 
 COMMENT <- ("#" / "//" ) a:[^\n\r]* {
   return newComment(c, c.text)
-}
-
-SHEBANG <- "#!" a:[^\n\r]* {
-  return ast.NewShebang(c.text)
 }
 
 LP <- '(' { return newNoop(c)}

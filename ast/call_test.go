@@ -246,11 +246,9 @@ func Test_Call_Helper_Context_Block(t *testing.T) {
 		return fmt.Sprint(res), nil
 	})
 
-	in := `
-		return foo("a") {
-			return "B"
-		}
-	`
+	in := `return foo("a") {
+	return "B"
+}`
 
 	res, err := exec(in, c)
 	r.NoError(err)

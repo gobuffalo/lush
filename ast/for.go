@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func NewFor(n ExecableNode, args interface{}, b *Block) (For, error) {
+func NewFor(n ExecableNode, args []Ident, b *Block) (For, error) {
 	f := For{
 		Block: b,
 		Name:  n,
@@ -18,22 +18,14 @@ func NewFor(n ExecableNode, args interface{}, b *Block) (For, error) {
 		return f, nil
 	}
 
-	ii := flatten([]interface{}{args})
-
-	if len(ii) == 0 {
+	if len(args) == 0 {
 		return f, errors.New("for requires at least one var name")
 	}
-	if len(ii) > 2 {
+	if len(args) > 2 {
 		return f, errors.New("for can not take more than 2 variables")
 	}
 
-	for _, a := range ii {
-		i, ok := a.(Ident)
-		if !ok {
-			return f, fmt.Errorf("expected Ident, got %T", a)
-		}
-		f.Args = append(f.Args, i)
-	}
+	f.Args = Idents(args)
 
 	return f, nil
 }

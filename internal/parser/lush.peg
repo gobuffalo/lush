@@ -75,7 +75,7 @@ COMPARATOR <- ( "&&" / "||" / "<=" / ">=" / "==" / "!=" / "~=" / ">" / "<" ) {
 OPADD <- ( "+" / "-" ) {
   return string(c.text), nil
 }
-OPMUL <- ( "*" / "/" ) {
+OPMUL <- ( "*" / "/" / "%" ) {
   return string(c.text), nil
 }
 
@@ -95,13 +95,13 @@ UNARY <- lit:LITERAL {
   return lit, nil
 } / call:CALLEXPR {
   return call, nil
-} / "(" expr:EXPR ")" {
+} / "(" _ expr:EXPR _ ")" {
   return expr, nil
 }
 
-LITERAL <- NUMBER / STRING / BOOL / ARRAY / MAP / FUNC
+LITERAL <- NUMBER / STRING / BOOL / ARRAY / MAP / FUNC / NULL
 
-CALLEXPR <- head:(FCALL / IDENT) tail:("." IDENT ARGS?)* b:BLOCK? {
+CALLEXPR <- head:IDENT tail:("." IDENT ARGS?)* b:BLOCK? {
   return newCallExpr(c, head, tail, b)
 }
 
@@ -159,8 +159,8 @@ ACCESS <- i:(IDENT) LB key:(NUMBER/IDENT/STRING) RB {
   return newAccess(c, i, key)
 }
 
-RETURN <- _ "return" _ s:EXPR _ {
-  return newReturn(c, s)
+RETURN <- _ "return" _ head:EXPR _ tail:("," _ EXPR _)* {
+  return newReturn(c, head, tail)
 }
 
 FARG <- _ i:(IDENT) _ ","? {

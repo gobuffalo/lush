@@ -103,6 +103,33 @@ func toNodes(i interface{}) (ast.Nodes, error) {
 	return states, nil
 }
 
+func toNodesFromList(head, tail interface{}) (ast.Nodes, error) {
+	hn, err := toNode(head)
+	if err != nil {
+		return nil, err
+	}
+	tailSlice, err := toII(tail)
+	if err != nil {
+		return nil, err
+	}
+	out := make([]ast.Node, 1, len(tailSlice)+1)
+	out[0] = hn
+
+	for _, p := range tailSlice {
+		parts, err := toII(p)
+		if err != nil {
+			return ast.Nodes([]ast.Node{}), err
+		}
+		node, err := toNode(parts[2])
+		if err != nil {
+			return ast.Nodes([]ast.Node{}), err
+		}
+		out = append(out, node)
+	}
+
+	return ast.Nodes(out), nil
+}
+
 func toIf(i interface{}) (ast.If, error) {
 	fi, ok := i.(ast.If)
 	if !ok {

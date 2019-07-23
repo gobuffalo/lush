@@ -378,10 +378,10 @@ func newElseIf(c *current, i interface{}) (ret ast.ElseIf, err error) {
 	return ret, nil
 }
 
-func newReturn(c *current, i interface{}) (ret ast.Return, err error) {
-	nodes, ok := i.(ast.Nodes)
-	if !ok {
-		return ast.Return{}, fmt.Errorf("Expected ast.Nodes, got %T", i)
+func newReturn(c *current, head, tail interface{}) (ret ast.Return, err error) {
+	nodes, err := toNodesFromList(head, tail)
+	if err != nil {
+		return ast.Return{}, err
 	}
 	ret, err = ast.NewReturn(nodes)
 	if err != nil {

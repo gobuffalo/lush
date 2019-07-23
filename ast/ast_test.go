@@ -42,6 +42,7 @@ func exec(in string, c *ast.Context) (*ast.Returned, error) {
 
 func parse(in string) (ast.Script, error) {
 	p, err := parser.Parse("x.plush", []byte(in))
+	//p, err := parser.Parse("x.plush", []byte(in), parser.Debug(true))
 	if err != nil {
 		return ast.Script{}, err
 	}

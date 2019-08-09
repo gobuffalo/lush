@@ -137,8 +137,8 @@ func Test_OpExpression_Add(t *testing.T) {
 		{`return "a" + 4`, nil, true},
 		{`return {a: 1, b: "hi"} + {c: true}`, map[string]interface{}{"a": 1, "b": "hi", "c": true}, false},
 		{`return "a" + "b" + "c"`, "abc", false},
-		{`return ( "a" + "b" ) + ("c" + "d")`, "abcd", true}, // TODO
-		{`return ( ( "a" + "b" ) + "c" + "d" )`, nil, true},  // TODO
+		{`return ( "a" + "b" ) + ("c" + "d")`, "abcd", false},
+		{`return ( ( "a" + "b" ) + "c" + "d" )`, "abcd", false},
 	}
 
 	for _, tt := range table {

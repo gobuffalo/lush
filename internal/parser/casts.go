@@ -87,6 +87,11 @@ func toNode(i interface{}) (ast.Node, error) {
 }
 
 func toNodes(i interface{}) (ast.Nodes, error) {
+	nds, ok := i.(ast.Nodes)
+	if ok {
+		return nds, nil
+	}
+
 	ii, err := toII(i)
 	if err != nil {
 		return nil, err

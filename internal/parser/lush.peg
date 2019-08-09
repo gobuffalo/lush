@@ -79,7 +79,21 @@ OPMUL <- ( "*" / "/" / "%" ) {
   return string(c.text), nil
 }
 
-EXPR <- head:ADDITIVE tail:( _ COMPARATOR _ ADDITIVE )* {
+EXPR <- e:(FUNCLIT / CURRENT / COMPARATIVE) {
+  return e, nil
+}
+
+CURRENT <- "current" {
+  return newCurrent(c)
+}
+
+// this rule is purely to avoid writing more constructors to
+// deal with []interface{} nonsense
+FUNCLIT <- f:FUNC !ARGS {
+  return f, nil
+}
+
+COMPARATIVE <- head:ADDITIVE tail:( _ COMPARATOR _ ADDITIVE )* {
   return newBinaryExpr(c, head, tail)
 }
 
@@ -93,16 +107,32 @@ MULTITIVE <- head:UNARY tail:( _ OPMUL _ UNARY )* {
 
 UNARY <- lit:LITERAL {
   return lit, nil
+} / access:ACCESS {
+  return access, nil
 } / call:CALLEXPR {
   return call, nil
 } / "(" _ expr:EXPR _ ")" {
   return expr, nil
 }
 
-LITERAL <- NUMBER / STRING / BOOL / ARRAY / MAP / FUNC / NULL
+LITERAL <- NUMBER / STRING / BOOL / ARRAY / MAP / NULL
 
-CALLEXPR <- head:IDENT tail:("." IDENT ARGS?)* b:BLOCK? {
+CALLEXPR <- head:(AFINVOC / IDENT) tail:(METHODCALL / PROPACCESS / FUNCCALL)* b:BLOCK? {
   return newCallExpr(c, head, tail, b)
+}
+
+AFINVOC <- f:FUNC a:ARGS {
+  return newCall(c, f, nil, a, nil)
+}
+
+METHODCALL <- "." IDENT ARGS
+
+PROPACCESS <- "." i:IDENT {
+  return []interface{}{nil, i, nil}, nil
+}
+
+FUNCCALL <- a:ARGS {
+  return []interface{}{nil, nil, a}, nil
 }
 
 ARGS <- "(" head:EXPR? tail:("," _ EXPR _ )* _ ")" _ {
@@ -155,7 +185,7 @@ ARRAY <- LB _ ax:ARG* _ RB {
 }
 
 // TODO: needs to change to be more general
-ACCESS <- i:(IDENT) LB key:(NUMBER/IDENT/STRING) RB {
+ACCESS <- i:(IDENT) "[" key:(NUMBER/IDENT/STRING) "]" {
   return newAccess(c, i, key)
 }
 

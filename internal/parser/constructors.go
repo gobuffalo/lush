@@ -7,6 +7,10 @@ import (
 	"github.com/gobuffalo/lush/ast"
 )
 
+func newCurrent(c *current) (*ast.Current, error) {
+	return &ast.Current{}, nil
+}
+
 func newCallExpr(c *current, head, tail, block interface{}) (ast.Node, error) {
 	tailSlice, err := toII(tail)
 	if err != nil {
@@ -31,17 +35,19 @@ func newCallExpr(c *current, head, tail, block interface{}) (ast.Node, error) {
 		if err != nil {
 			return nil, err
 		}
-		fname, ok := parts[1].(ast.Ident)
-		if !ok {
-			return nil, fmt.Errorf("Expected ast.Ident, got %T", parts[1])
+		fname, fok := parts[1].(ast.Ident)
+		if fok {
+			cur.FName = fname
 		}
-		cur.FName = fname
 
-		args, ok := parts[2].(ast.Nodes)
-		if !ok {
-			return nil, fmt.Errorf("Expected ast.Nodes, got %T", parts[2])
+		args, aok := parts[2].(ast.Nodes)
+		if aok {
+			cur.Arguments = args
 		}
-		cur.Arguments = args
+
+		if !fok && !aok {
+			return nil, fmt.Errorf("method name and arguments missing")
+		}
 	}
 
 	blk, err := toBlock(block)
@@ -55,7 +61,7 @@ func newCallExpr(c *current, head, tail, block interface{}) (ast.Node, error) {
 func newArglist(c *current, head, tail interface{}) (ast.Nodes, error) {
 	hn, err := toNode(head)
 	if err != nil {
-		return nil, err
+		return ast.Nodes([]ast.Node{}), nil
 	}
 
 	tailSlice, err := toII(tail)
@@ -283,8 +289,15 @@ func newFor(c *current, n interface{}, args interface{}, b interface{}) (ret ast
 
 	idents, err := toIdentSlice(args)
 	if err != nil {
-		return ast.For{}, err
+		// no arguments, aka "infinite" for
+		ret, err = ast.NewFor(ni, nil, bl)
+		if err != nil {
+			return ret, err
+		}
+		ret.Meta = meta(c)
+		return ret, nil
 	}
+
 	ret, err = ast.NewFor(ni, idents, bl)
 	if err != nil {
 		return ret, err

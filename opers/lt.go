@@ -28,12 +28,12 @@ func LessThan(a, b interface{}) (bool, error) {
 		return lt.Float(at, b)
 	case string:
 		return lt.String(at, b)
-	case fmt.Stringer:
-		return lt.String(at.String(), b)
 	case faces.Int:
 		return lt.Int(at.Int(), b)
 	case faces.Float:
 		return lt.Float(at.Float(), b)
+	case fmt.Stringer:
+		return lt.String(at.String(), b)
 	}
 	return false, lt.Cant(a, b)
 }

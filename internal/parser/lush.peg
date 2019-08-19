@@ -249,7 +249,7 @@ MAP <- LC _ vals:( (IDENT/STRING) _ ':' _ (ARG) _ (',')* _ )*  _ RC {
   return newMap(c, vals)
 }
 
-COMMENT <- ("#" / "//" ) a:[^\n\r]* {
+COMMENT <- _ ("#" / "//" ) a:[^\n\r]* {
   return newComment(c, c.text)
 }
 

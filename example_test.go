@@ -180,3 +180,26 @@ fmt.Println(s) // another string
 	// A STRING
 	// another string
 }
+
+func ExampleExec_fib() {
+	const fib = `import "fmt"
+
+fib := func(n) {
+	if (n <= 1) {
+		return 1
+	}
+
+	return (fib((n - 1))  + fib((n - 2)) )
+}
+
+fmt.Println(fib(5)) `
+
+	c := ast.NewContext(context.Background(), os.Stdout)
+	_, err := ExecReader(c, "fib.lush", strings.NewReader(fib))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// output:
+	// asdf
+}

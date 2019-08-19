@@ -36,14 +36,14 @@ func Add(a, b interface{}) (interface{}, error) {
 		return add.Map(at, b)
 	case faces.Map:
 		return add.Map(at.Map(), b)
-	case fmt.Stringer:
-		return add.String(at.String(), b)
 	case faces.Int:
 		return add.Int(at.Int(), b)
 	case faces.Float:
 		return add.Float(at.Float(), b)
 	case faces.Slice:
 		return add.Slice(at.Slice(), b)
+	case fmt.Stringer:
+		return add.String(at.String(), b)
 	}
 
 	return nil, add.Cant(a, b)

@@ -28,12 +28,12 @@ func GreaterThan(a, b interface{}) (bool, error) {
 		return gt.Float(at, b)
 	case string:
 		return gt.String(at, b)
-	case fmt.Stringer:
-		return gt.String(at.String(), b)
 	case faces.Int:
 		return gt.Int(at.Int(), b)
 	case faces.Float:
 		return gt.Float(at.Float(), b)
+	case fmt.Stringer:
+		return gt.String(at.String(), b)
 	}
 	return false, gt.Cant(a, b)
 }

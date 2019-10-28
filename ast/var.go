@@ -34,6 +34,10 @@ func (l Var) String() string {
 	return fmt.Sprintf("%s := %s", l.Name, l.Value)
 }
 
+func (l Var) GoString() string {
+	return fmt.Sprintf("%#v := %#v", l.Name, l.Value)
+}
+
 func (l *Var) Exec(c *Context) (interface{}, error) {
 	if l.Value == nil {
 		return nil, nil

@@ -170,7 +170,7 @@ func Test_For_Format(t *testing.T) {
 		{`%q`, "\"for (i, n) in [1, 2, 3] {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 		{`%v`, "for (i, n) in [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%+v`, "for (i, n) in [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
-		{`%#v`, "for (i, n) in [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "for i, n := range []interface {}{1, 2, \"3\"}  {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 	}
 
 	for _, tt := range table {

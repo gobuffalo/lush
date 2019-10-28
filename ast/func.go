@@ -57,6 +57,21 @@ func (f Func) String() string {
 	return bb.String()
 }
 
+func (f Func) GoString() string {
+	bb := &bytes.Buffer{}
+	bb.WriteString("func(")
+	var args []string
+	for _, a := range f.Arguments {
+		args = append(args, fmt.Sprintf("%#v", a))
+	}
+	bb.WriteString(strings.Join(args, ", "))
+	bb.WriteString(") ")
+	if f.Block != nil {
+		bb.WriteString(fmt.Sprintf("%#v", f.Block))
+	}
+	return bb.String()
+}
+
 func (f Func) mExec(c *Context, args ...Node) (interface{}, error) {
 	c = c.Clone()
 	if len(args) != len(f.Arguments) {

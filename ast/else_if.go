@@ -11,6 +11,10 @@ func (e ElseIf) String() string {
 	return " else " + s
 }
 
+func (e ElseIf) GoString() string {
+	return fmt.Sprintf(" else %#v", e.If)
+}
+
 func NewElseIf(fi If) (ElseIf, error) {
 	return ElseIf{
 		If: fi,

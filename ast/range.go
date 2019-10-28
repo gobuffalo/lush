@@ -50,3 +50,19 @@ func (f Range) String() string {
 	}
 	return bb.String()
 }
+
+func (f Range) GoString() string {
+	bb := &bytes.Buffer{}
+	bb.WriteString("for ")
+	var args []string
+	for _, a := range f.Args {
+		args = append(args, fmt.Sprintf("%#v", a))
+	}
+	bb.WriteString(strings.Join(args, ", "))
+	bb.WriteString(" := range ")
+	bb.WriteString(fmt.Sprintf("%#v  ", f.Name))
+	if f.Block != nil {
+		bb.WriteString(fmt.Sprintf("%#v", f.Block))
+	}
+	return bb.String()
+}

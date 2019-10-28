@@ -162,17 +162,15 @@ func Test_For_Infinite_String(t *testing.T) {
 }
 
 func Test_For_Format(t *testing.T) {
-	blv, err := jsonFixture("For")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, "for (i, n) in [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%q`, "\"for (i, n) in [1, 2, 3] {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
-		{`%+v`, blv},
+		{`%v`, "for (i, n) in [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%+v`, "for (i, n) in [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "for (i, n) in [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 	}
 
 	for _, tt := range table {

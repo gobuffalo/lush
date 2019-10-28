@@ -9,17 +9,15 @@ import (
 )
 
 func Test_Break_Format(t *testing.T) {
-	brv, err := jsonFixture("Break")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `break`},
 		{`%q`, `"break"`},
-		{`%+v`, brv},
+		{`%v`, `break`},
+		{`%+v`, `break`},
+		{`%#v`, `break`},
 	}
 
 	for _, tt := range table {

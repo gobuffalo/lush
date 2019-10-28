@@ -72,17 +72,15 @@ func Test_Array_String(t *testing.T) {
 }
 
 func Test_Array_Format(t *testing.T) {
-	arrayv, err := jsonFixture("Array")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{"%s", `[1, 2, 3]`},
 		{"%q", `"[1, 2, 3]"`},
-		{"%+v", arrayv},
+		{"%v", `[1, 2, 3]`},
+		{"%+v", `[1, 2, 3]`},
+		{"%#v", `[]interface {}{1, 2, "3"}`},
 	}
 
 	for _, tt := range table {

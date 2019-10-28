@@ -21,17 +21,15 @@ func Test_Map_String(t *testing.T) {
 }
 
 func Test_Map_Format(t *testing.T) {
-	nlv, err := jsonFixture("Map")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `{"foo": 42}`},
 		{`%q`, `"{\"foo\": 42}"`},
-		{`%+v`, nlv},
+		{`%v`, `{"foo": 42}`},
+		{`%+v`, `{"foo": 42}`},
+		{`%#v`, `map[string]interface {}{"foo":42}`},
 	}
 
 	for _, tt := range table {

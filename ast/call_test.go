@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/gobuffalo/lush/ast"
-	"github.com/gobuffalo/lush/ast/internal/quick"
 	"github.com/stretchr/testify/require"
 )
 
@@ -359,32 +358,7 @@ func Test_Call_Helper_Options_Context(t *testing.T) {
 	r.Equal([]interface{}{"a", "nose", true, 42, "nose", "prize", 3.14, "nose"}, res)
 }
 
-func Test_Call(t *testing.T) {
-	brv, err := jsonFixture("Call")
-	if err != nil {
-		t.Fatal(err)
-	}
-	table := []struct {
-		format string
-		out    string
-	}{
-		{`%s`, "foo.Bar(42, 3.14, \"hi\") {\n\tfoo = 42\n\n\tfoo := 42\n}"},
-		{`%q`, "\"foo.Bar(42, 3.14, \\\"hi\\\") {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
-		{`%+v`, brv},
-	}
-
-	for _, tt := range table {
-		t.Run(fmt.Sprintf("%s_%s", tt.format, tt.out), func(st *testing.T) {
-			r := require.New(st)
-
-			ft := fmt.Sprintf(tt.format, quick.CALL)
-
-			r.Equal(tt.out, ft)
-		})
-	}
-}
-
-func Test_Call_Format(t *testing.T) {
+func Test_Call_parse(t *testing.T) {
 	r := require.New(t)
 
 	in := `create_table("users") {

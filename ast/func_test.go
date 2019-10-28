@@ -23,17 +23,15 @@ func Test_Func_Immediate_Call(t *testing.T) {
 }
 
 func Test_Func_Format(t *testing.T) {
-	blv, err := jsonFixture("Func")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, "func(foo) {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%q`, "\"func(foo) {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
-		{`%+v`, blv},
+		{`%v`, "func(foo) {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%+v`, "func(foo) {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "func(foo) {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 	}
 
 	for _, tt := range table {

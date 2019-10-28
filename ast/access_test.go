@@ -80,17 +80,15 @@ func Test_Access_Map(t *testing.T) {
 }
 
 func Test_Access_Format(t *testing.T) {
-	accessv, err := jsonFixture("Access")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `foo[42]`},
+		{`%v`, `foo[42]`},
+		{`%+v`, `foo[42]`},
+		{`%#v`, `foo[42]`},
 		{`%q`, `"foo[42]"`},
-		{`%+v`, accessv},
 	}
 
 	for _, tt := range table {

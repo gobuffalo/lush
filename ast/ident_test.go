@@ -42,17 +42,15 @@ func Test_Ident(t *testing.T) {
 }
 
 func Test_Ident_Format(t *testing.T) {
-	brv, err := jsonFixture("Ident")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `foo`},
 		{`%q`, `"foo"`},
-		{`%+v`, brv},
+		{`%v`, `foo`},
+		{`%+v`, `foo`},
+		{`%#v`, `foo`},
 	}
 
 	for _, tt := range table {

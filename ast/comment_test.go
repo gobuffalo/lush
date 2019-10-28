@@ -52,17 +52,15 @@ func Test_Comment_MultiLine(t *testing.T) {
 }
 
 func Test_Comment_Format(t *testing.T) {
-	ctv, err := jsonFixture("Comment")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `// i've got blisters on my fingers`},
 		{`%q`, `"// i've got blisters on my fingers"`},
-		{`%+v`, ctv},
+		{`%v`, `// i've got blisters on my fingers`},
+		{`%+v`, `// i've got blisters on my fingers`},
+		{`%#v`, `// i've got blisters on my fingers`},
 	}
 
 	for _, tt := range table {

@@ -9,17 +9,15 @@ import (
 )
 
 func Test_Continue_Format(t *testing.T) {
-	brv, err := jsonFixture("Continue")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `continue`},
 		{`%q`, `"continue"`},
-		{`%+v`, brv},
+		{`%v`, `continue`},
+		{`%+v`, `continue`},
+		{`%#v`, `continue`},
 	}
 
 	for _, tt := range table {

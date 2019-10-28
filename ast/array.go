@@ -26,6 +26,10 @@ func (a Array) GoString() string {
 	return fmt.Sprintf("%#v", a.Value)
 }
 
+func (a Array) LushString() string {
+	return a.String()
+}
+
 func (a Array) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("[")

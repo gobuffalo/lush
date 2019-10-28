@@ -9,16 +9,15 @@ import (
 )
 
 func Test_Else_Format(t *testing.T) {
-	stringv, err := jsonFixture("Else")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, " else {\n\tfoo = 42\n\n\tfoo := 42\n}"},
-		{`%+v`, stringv},
+		{`%v`, " else {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%+v`, " else {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, " else {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%q`, "\" else {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 	}
 
 	for _, tt := range table {

@@ -20,17 +20,15 @@ func Test_Nil(t *testing.T) {
 }
 
 func Test_Nil_Format(t *testing.T) {
-	nlv, err := jsonFixture("Nil")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `nil`},
+		{`%v`, `nil`},
+		{`%+v`, `nil`},
+		{`%#v`, `nil`},
 		{`%q`, `"nil"`},
-		{`%+v`, nlv},
 	}
 
 	for _, tt := range table {

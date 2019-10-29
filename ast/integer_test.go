@@ -58,8 +58,10 @@ func Test_Integer_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `42`},
-		{`%q`, `"42"`},
+		{`%v`, `42`},
+		{`%#v`, `42`},
 		{`%+v`, intv},
+		{`%q`, `"42"`},
 	}
 
 	for _, tt := range table {

@@ -359,7 +359,7 @@ func Test_Call_Helper_Options_Context(t *testing.T) {
 	r.Equal([]interface{}{"a", "nose", true, 42, "nose", "prize", 3.14, "nose"}, res)
 }
 
-func Test_Call(t *testing.T) {
+func Test_Call_Format(t *testing.T) {
 	brv, err := jsonFixture("Call")
 	if err != nil {
 		t.Fatal(err)
@@ -369,8 +369,10 @@ func Test_Call(t *testing.T) {
 		out    string
 	}{
 		{`%s`, "foo.Bar(42, 3.14, \"hi\") {\n\tfoo = 42\n\n\tfoo := 42\n}"},
-		{`%q`, "\"foo.Bar(42, 3.14, \\\"hi\\\") {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
+		{`%v`, "foo.Bar(42, 3.14, \"hi\") {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "foo.Bar(42, 3.14, \"hi\") {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%+v`, brv},
+		{`%q`, "\"foo.Bar(42, 3.14, \\\"hi\\\") {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 	}
 
 	for _, tt := range table {
@@ -384,7 +386,7 @@ func Test_Call(t *testing.T) {
 	}
 }
 
-func Test_Call_Format(t *testing.T) {
+func Test_Call_fizz(t *testing.T) {
 	r := require.New(t)
 
 	in := `create_table("users") {

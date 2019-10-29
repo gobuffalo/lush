@@ -18,8 +18,10 @@ func Test_Break_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `break`},
-		{`%q`, `"break"`},
+		{`%v`, `break`},
+		{`%#v`, `break`},
 		{`%+v`, brv},
+		{`%q`, `"break"`},
 	}
 
 	for _, tt := range table {

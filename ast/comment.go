@@ -14,6 +14,14 @@ func (c Comment) String() string {
 	return fmt.Sprintf("// %s", c.Value)
 }
 
+func (c Comment) Interface() interface{} {
+	return c.Value
+}
+
+func (c Comment) LushString() string {
+	return c.String()
+}
+
 func NewComment(b []byte) (Comment, error) {
 	c := Comment{
 		Value: string(b),
@@ -26,6 +34,17 @@ func NewComment(b []byte) (Comment, error) {
 }
 
 func (a Comment) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('+') {
+			break
+		}
+		if st.Flag('#') {
+			break
+		}
+		fmt.Fprintf(st, a.Value)
+		return
+	}
 	format(a, st, verb)
 }
 

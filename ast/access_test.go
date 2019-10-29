@@ -89,8 +89,10 @@ func Test_Access_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `foo[42]`},
-		{`%q`, `"foo[42]"`},
+		{`%v`, `foo[42]`},
+		{`%#v`, `foo[42]`},
 		{`%+v`, accessv},
+		{`%q`, `"foo[42]"`},
 	}
 
 	for _, tt := range table {

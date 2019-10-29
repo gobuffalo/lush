@@ -46,7 +46,10 @@ func Test_Let_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, "let foo = 42"},
+		{`%v`, "let foo = 42"},
+		{`%#v`, "let foo = 42"},
 		{`%+v`, stringv},
+		{`%q`, "\"let foo = 42\""},
 	}
 
 	for _, tt := range table {

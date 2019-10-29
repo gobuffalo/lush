@@ -30,8 +30,10 @@ func Test_Map_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `{"foo": 42}`},
-		{`%q`, `"{\"foo\": 42}"`},
+		{`%v`, `{"foo": 42}`},
+		{`%#v`, `{"foo": 42}`},
 		{`%+v`, nlv},
+		{`%q`, `"{\"foo\": 42}"`},
 	}
 
 	for _, tt := range table {

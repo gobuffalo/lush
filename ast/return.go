@@ -8,7 +8,7 @@ import (
 
 type Return struct {
 	Nodes Nodes
-	Meta       Meta
+	Meta  Meta
 }
 
 func (r Return) String() string {
@@ -38,13 +38,24 @@ func NewReturn(s Nodes) (Return, error) {
 }
 
 func (r Return) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('+') {
+			break
+		}
+		if st.Flag('#') {
+			break
+		}
+		fmt.Fprintf(st, r.String())
+		return
+	}
 	format(r, st, verb)
 }
 
 func (r Return) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Nodes": r.Nodes,
-		"Meta":       r.Meta,
+		"Meta":  r.Meta,
 	}
 	return toJSON(r, m)
 }

@@ -111,7 +111,10 @@ func Test_If_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, "if true {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%v`, "if true {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "if true {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%+v`, stringv},
+		{`%q`, "\"if true {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 	}
 
 	for _, tt := range table {

@@ -10,12 +10,21 @@ type ASTMarshaler interface {
 	MarshalJSON() ([]byte, error)
 }
 
+// LushStringer is implemented by any value that has a LushString method, which defines the Lush syntax for that value. The LushString method is used to print values passed as an operand to a %#v format.
+type LushStringer interface {
+	LushString() string
+}
+
 func format(i fmt.Stringer, st fmt.State, verb rune) {
 	switch verb {
 	case 'v':
 		if st.Flag('#') {
-			if gs, ok := i.(fmt.GoStringer); ok {
-				fmt.Fprint(st, gs.GoString())
+			if gs, ok := i.(LushStringer); ok {
+				fmt.Fprint(st, gs.LushString())
+				return
+			}
+			if gs, ok := i.(interfacer); ok {
+				fmt.Fprintf(st, "%#v", gs.Interface())
 				return
 			}
 		}
@@ -28,12 +37,11 @@ func format(i fmt.Stringer, st fmt.State, verb rune) {
 			fmt.Fprint(st, string(b))
 			return
 		}
-		fmt.Fprint(st, i.String())
 	case 'q':
 		fmt.Fprintf(st, "%q", i.String())
-	default:
-		fmt.Fprint(st, i.String())
+		return
 	}
+	fmt.Fprint(st, i.String())
 }
 
 func genericJSON(i interface{}) map[string]interface{} {

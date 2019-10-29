@@ -18,7 +18,10 @@ func Test_Else_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, " else {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%v`, " else {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, " else {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%+v`, stringv},
+		{`%q`, "\" else {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 	}
 
 	for _, tt := range table {

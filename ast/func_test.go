@@ -32,8 +32,10 @@ func Test_Func_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, "func(foo) {\n\tfoo = 42\n\n\tfoo := 42\n}"},
-		{`%q`, "\"func(foo) {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
+		{`%v`, "func(foo) {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "func(foo) {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%+v`, blv},
+		{`%q`, "\"func(foo) {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 	}
 
 	for _, tt := range table {

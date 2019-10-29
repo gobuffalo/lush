@@ -64,7 +64,10 @@ func Test_String_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `"hi"`},
+		{`%v`, `hi`},
+		{`%#v`, `"hi"`},
 		{`%+v`, stringv},
+		{`%q`, `"\"hi\""`},
 	}
 
 	for _, tt := range table {

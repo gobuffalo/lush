@@ -61,8 +61,10 @@ func Test_Comment_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `// i've got blisters on my fingers`},
-		{`%q`, `"// i've got blisters on my fingers"`},
+		{`%v`, `i've got blisters on my fingers`},
+		{`%#v`, `// i've got blisters on my fingers`},
 		{`%+v`, ctv},
+		{`%q`, `"// i've got blisters on my fingers"`},
 	}
 
 	for _, tt := range table {

@@ -32,7 +32,7 @@ a := func() {
 	r.Equal(strings.TrimSpace(out), strings.TrimSpace(s.String()))
 }
 
-func Test_Block_format(t *testing.T) {
+func Test_Block_Format(t *testing.T) {
 	blv, err := jsonFixture("Block")
 	if err != nil {
 		t.Fatal(err)
@@ -42,8 +42,10 @@ func Test_Block_format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, "{\n\tfoo = 42\n\n\tfoo := 42\n}"},
-		{`%q`, "\"{\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
+		{`%v`, "{\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "{\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%+v`, blv},
+		{`%q`, "\"{\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 	}
 
 	for _, tt := range table {

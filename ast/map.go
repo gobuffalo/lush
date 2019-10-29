@@ -69,6 +69,10 @@ func (m Map) Exec(c *Context) (interface{}, error) {
 	return mm, nil
 }
 
+func (m Map) LushString() string {
+	return m.String()
+}
+
 func (m Map) String() string {
 	var keys []string
 

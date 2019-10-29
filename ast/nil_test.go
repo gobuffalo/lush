@@ -29,8 +29,10 @@ func Test_Nil_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `nil`},
-		{`%q`, `"nil"`},
+		{`%v`, `nil`},
+		{`%#v`, `nil`},
 		{`%+v`, nlv},
+		{`%q`, `"nil"`},
 	}
 
 	for _, tt := range table {

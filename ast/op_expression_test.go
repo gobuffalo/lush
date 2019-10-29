@@ -582,7 +582,7 @@ func Test_OpExpression_Or(t *testing.T) {
 	}
 }
 
-func Test_OpExpression_OpExpressionmat(t *testing.T) {
+func Test_OpExpression_Format(t *testing.T) {
 	blv, err := jsonFixture("OpExpression")
 	if err != nil {
 		t.Fatal(err)
@@ -592,6 +592,8 @@ func Test_OpExpression_OpExpressionmat(t *testing.T) {
 		out    string
 	}{
 		{`%s`, "(42 == 3.14)"},
+		{`%v`, "(42 == 3.14)"},
+		{`%#v`, "(42 == 3.14)"},
 		{`%q`, "\"(42 == 3.14)\""},
 		{`%+v`, blv},
 	}

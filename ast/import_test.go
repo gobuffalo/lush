@@ -51,6 +51,8 @@ func Test_Import_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `import "fmt"`},
+		{`%v`, `fmt`},
+		{`%#v`, `import "fmt"`},
 		{`%q`, `"import \"fmt\""`},
 		{`%+v`, blv},
 	}

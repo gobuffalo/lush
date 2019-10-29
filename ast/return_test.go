@@ -52,8 +52,10 @@ func Test_Return_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, "return 42"},
-		{`%q`, "\"return 42\""},
+		{`%v`, "return 42"},
+		{`%#v`, "return 42"},
 		{`%+v`, blv},
+		{`%q`, "\"return 42\""},
 	}
 
 	for _, tt := range table {

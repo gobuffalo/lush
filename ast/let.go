@@ -24,6 +24,17 @@ func (l Let) String() string {
 	return fmt.Sprintf("let %s = %s", l.Name, l.Value)
 }
 
+func (l Let) LushString() string {
+	return l.String()
+}
+
+func (l Let) Interface() interface{} {
+	if i, ok := l.Value.(interfacer); ok {
+		return i.Interface()
+	}
+	return l.Value
+}
+
 func (l Let) GoString() string {
 	return fmt.Sprintf(`
 %s := %#v

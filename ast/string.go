@@ -40,6 +40,17 @@ func (s String) String() string {
 }
 
 func (a String) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('#') {
+			break
+		}
+		if st.Flag('+') {
+			break
+		}
+		fmt.Fprintf(st, a.Original)
+		return
+	}
 	format(a, st, verb)
 }
 

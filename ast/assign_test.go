@@ -77,8 +77,10 @@ func Test_Assign_Format(t *testing.T) {
 		out    string
 	}{
 		{"%s", `foo = 42`},
-		{"%q", `"foo = 42"`},
+		{"%v", `foo = 42`},
+		{"%#v", `foo = 42`},
 		{"%+v", assignv},
+		{"%q", `"foo = 42"`},
 	}
 
 	for _, tt := range table {

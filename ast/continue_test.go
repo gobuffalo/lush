@@ -18,8 +18,10 @@ func Test_Continue_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `continue`},
-		{`%q`, `"continue"`},
+		{`%v`, `continue`},
+		{`%#v`, `continue`},
 		{`%+v`, brv},
+		{`%q`, `"continue"`},
 	}
 
 	for _, tt := range table {

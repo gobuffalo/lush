@@ -29,6 +29,14 @@ func (i Nil) Bool(c *Context) (bool, error) {
 }
 
 func (a Nil) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('+') {
+			break
+		}
+		fmt.Fprintf(st, a.String())
+		return
+	}
 	format(a, st, verb)
 }
 

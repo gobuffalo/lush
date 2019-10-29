@@ -51,8 +51,10 @@ func Test_Ident_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `foo`},
-		{`%q`, `"foo"`},
+		{`%v`, `foo`},
+		{`%#v`, `foo`},
 		{`%+v`, brv},
+		{`%q`, `"foo"`},
 	}
 
 	for _, tt := range table {

@@ -18,8 +18,10 @@ func Test_Bool_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, `true`},
-		{`%q`, `"true"`},
+		{`%v`, `true`},
+		{`%#v`, `true`},
 		{`%+v`, boolv},
+		{`%q`, `"true"`},
 	}
 
 	for _, tt := range table {

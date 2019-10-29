@@ -81,8 +81,10 @@ func Test_Array_Format(t *testing.T) {
 		out    string
 	}{
 		{"%s", `[1, 2, 3]`},
-		{"%q", `"[1, 2, 3]"`},
+		{"%v", `[1, 2, 3]`},
+		{"%#v", `[1, 2, 3]`},
 		{"%+v", arrayv},
+		{"%q", `"[1, 2, 3]"`},
 	}
 
 	for _, tt := range table {

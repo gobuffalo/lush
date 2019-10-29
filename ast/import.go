@@ -13,6 +13,14 @@ func (i Import) String() string {
 	return fmt.Sprintf(`import "%s"`, i.Name)
 }
 
+func (i Import) LushString() string {
+	return i.String()
+}
+
+func (i Import) Interface() interface{} {
+	return i.Name
+}
+
 func (i Import) Exec(c *Context) (interface{}, error) {
 	imp, ok := c.Imports.Load(i.Name)
 	if !ok {
@@ -23,6 +31,17 @@ func (i Import) Exec(c *Context) (interface{}, error) {
 }
 
 func (i Import) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('#') {
+			break
+		}
+		if st.Flag('+') {
+			break
+		}
+		fmt.Fprintf(st, i.Name)
+		return
+	}
 	format(i, st, verb)
 }
 

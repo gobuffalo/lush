@@ -19,11 +19,8 @@ func (a Array) Slice() []interface{} {
 	return a.Value
 }
 
-func (a Array) GoString() string {
-	if a.Value == nil {
-		a.Value = []interface{}{}
-	}
-	return fmt.Sprintf("%#v", a.Value)
+func (a Array) LushString() string {
+	return a.String()
 }
 
 func (a Array) String() string {

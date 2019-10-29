@@ -146,8 +146,10 @@ func Test_Range_Format(t *testing.T) {
 		out    string
 	}{
 		{`%s`, "for i, n := range [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
-		{`%q`, "\"for i, n := range [1, 2, 3] {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
+		{`%v`, "for i, n := range [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "for i, n := range [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%+v`, blv},
+		{`%q`, "\"for i, n := range [1, 2, 3] {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
 	}
 
 	for _, tt := range table {

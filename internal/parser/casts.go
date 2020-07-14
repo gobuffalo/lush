@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/gobuffalo/lush/ast"
+	"github.com/gobuffalo/lush/types"
 )
 
 func toIdent(i interface{}) (ast.Ident, error) {
@@ -79,13 +80,20 @@ func toNode(i interface{}) (ast.Node, error) {
 }
 
 func toNodes(i interface{}) (ast.Nodes, error) {
-	ii, err := toII(i)
-	if err != nil {
-		return nil, err
-	}
+	ii := types.Slicer{i}
 	var states ast.Nodes
 
 	for _, s := range ii {
+		if si, ok := s.([]interface{}); ok {
+			for _, ss := range si {
+				n, err := toNodes(ss)
+				if err != nil {
+					return nil, err
+				}
+				states = append(states, n...)
+			}
+			continue
+		}
 		st, err := toNode(s)
 		if err != nil {
 			return nil, err

@@ -8,12 +8,13 @@ import (
 
 type Return struct {
 	Nodes Nodes
-	Meta       Meta
+	Meta  Meta
 }
 
 func (r Return) String() string {
 	bb := &bytes.Buffer{}
 	bb.WriteString("return ")
+
 	var lines []string
 	for _, s := range r.Nodes {
 		lines = append(lines, s.String())
@@ -44,7 +45,7 @@ func (r Return) Format(st fmt.State, verb rune) {
 func (r Return) MarshalJSON() ([]byte, error) {
 	m := map[string]interface{}{
 		"Nodes": r.Nodes,
-		"Meta":       r.Meta,
+		"Meta":  r.Meta,
 	}
 	return toJSON(r, m)
 }

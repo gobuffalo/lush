@@ -44,7 +44,7 @@ POPEX <- _ LP _ a:(EXPRARG) _ op:OP _ b:(EXPRARG) _ RP _ ";"? {
   return newPopExpression(c, a, op, b)
 }
 
-IF <- _ "if" _ p:( (VAR / LET) )? _ ";"? _  s:(LP _ (BOOL / OPEX / POPEX ) _ RP / (BOOL / OPEX / POPEX) ) _ b:BLOCK _ e:(ELSEIF / ELSE)* {
+IF <- _ "if" _ p:( (VAR / LET) )? _ ";"? _  s:(LP _ (BOOL / EXPR ) _ RP / (BOOL / EXPR ) ) _ b:BLOCK _ e:(ELSEIF / ELSE)* {
   return newIf(c, p, s, b, e)
 }
 
@@ -74,11 +74,56 @@ NUMBER <- (FLOAT / INTEGER)
 
 LETV <- ( CURRENT /  ACCESS / NULL / POPEX / OPEX / FCALL / FUNC / CALL / MAP / ARRAY /BOOL / STRING / NUMBER / NULL / IDENT / FOR / RANGE  )
 
-LET <- _ "let" _ name:IDENT _ "=" _ value:LETV {
+// Operators
+
+COMPARATOR <- "&&" / "||" / "<=" / ">=" / "==" / "!=" / "~=" {
+  return string(c.text), nil
+}
+
+OPADD <- ( "+" / "-" ) {
+  return string(c.text), nil
+}
+OPMUL <- ( "*" / "/" ) {
+  return string(c.text), nil
+}
+
+EXPR <- head:ADDITIVE tail:( _ COMPARATOR _ ADDITIVE )* {
+  return newBinaryExpr(c, head, tail)
+}
+
+ADDITIVE <- head:MULTITIVE tail:( _ OPADD _ MULTITIVE )* {
+  return newBinaryExpr(c, head, tail)
+}
+
+MULTITIVE <- head:UNARY tail:( _ OPMUL _ UNARY )* {
+  return newBinaryExpr(c, head, tail)
+}
+
+UNARY <- num:NUMBER {
+  return num, nil
+} / "(" expr:EXPR ")" {
+  return expr, nil
+} / call:CALLEXPR {
+  return call, nil
+}
+
+CALLEXPR <- head:(REF / FCALL / IDENT / VAR) tail:("." IDENT ARGS?)* {
+  return newCallExpr(c, head, tail)
+}
+
+ARGS <- "(" head:(NUMBER/STRING/EXPR)? tail:("," _ (STRING/NUMBER/EXPR) _ )* _ ")" _ {
+  return newArglist(c, head, tail)
+}
+
+REF <- name:IDENT {
+  return newVarRef(c, name)
+}
+
+LET <- _ "let" _ name:IDENT _ "=" _ value:EXPR {
   return newLet(c, name, value)
 }
 
-VAR <- _ name:IDENT _ ":=" _ value:LETV {
+VAR <- _ name:REF _ ":=" _ value:LETV {
   return newVar(c, name, value)
 }
 
@@ -86,7 +131,7 @@ ASSIGN <- _ name:(ACCESS/IDENT) _ "=" _ value:LETV {
   return newAssign(c, name, value)
 }
 
-ARG <- _ i:LETV _ ","? {
+ARG <- _ i:EXPR _ ","? {
   return i, nil
 }
 
@@ -114,7 +159,7 @@ ACCESS <- i:(IDENT) LB key:(NUMBER/IDENT/STRING) RB {
   return newAccess(c, i, key)
 }
 
-RETURN <- _ "return" _ s:ARG* {
+RETURN <- _ "return" _ s:(CALL / CALLEXPR / EXPR) _ {
   return newReturn(c, s)
 }
 
@@ -174,7 +219,7 @@ MAP <- LC _ vals:( (IDENT/STRING) _ ':' _ (ARG) _ (',')* _ )*  _ RC {
   return newMap(c, vals)
 }
 
-COMMENT <- ("#" / "//" ) a:[^\n\r]* {
+COMMENT <- _ ("#" / "//" ) a:[^\n\r]* {
   return newComment(c, c.text)
 }
 

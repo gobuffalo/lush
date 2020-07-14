@@ -38,30 +38,30 @@ func toIfaceSlice(v interface{}) []interface{} {
 	return v.([]interface{})
 }
 
-func newArglist(c *current, head, tail interface{}) ([]ast.Visitable, error) {
+func newArglist(c *current, head, tail interface{}) ([]ast.Execable, error) {
 	if head == nil {
-		return []ast.Visitable{}, nil
+		return []ast.Execable{}, nil
 	}
 
-	var args []ast.Visitable
+	var args []ast.Execable
 
-	args = append(args, head.(ast.Visitable))
+	args = append(args, head.(ast.Execable))
 
 	tailSlice := toIfaceSlice(tail)
 	for _, a := range tailSlice {
 		parts := toIfaceSlice(a)
-		args = append(args, parts[2].(ast.Visitable))
+		args = append(args, parts[2].(ast.Execable))
 	}
 	return args, nil
 }
 
-func newCallExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
+func newCallExpr(c *current, head, tail interface{}) (ast.Execable, error) {
 	tailSlice := toIfaceSlice(tail)
 	if len(tailSlice) == 0 {
-		return head.(ast.Visitable), nil
+		return head.(ast.Execable), nil
 	}
 
-	var nextCallee ast.Visitable = head.(ast.Visitable)
+	var nextCallee ast.Execable = head.(ast.Execable)
 
 	for _, call := range tailSlice {
 		callParts := toIfaceSlice(call)
@@ -71,7 +71,7 @@ func newCallExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
 			nextCallee = &ast.MethodCallExpr{
 				Callee: nextCallee,
 				Method: name.Name,
-				Args:   callParts[2].([]ast.Visitable),
+				Args:   callParts[2].([]ast.Execable),
 				Meta:   meta(c),
 			}
 		} else {
@@ -86,16 +86,16 @@ func newCallExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
 	return nextCallee, nil
 }
 
-func newVarRef(c *current, i interface{}) (ast.Visitable, error) {
+func newVarRef(c *current, i interface{}) (ast.Execable, error) {
 	return ast.VarRef{
 		Name: fmt.Sprintf("%s", i),
 		Meta: meta(c),
 	}, nil
 }
 
-func newBinaryExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
+func newBinaryExpr(c *current, head, tail interface{}) (ast.Execable, error) {
 	cur := &ast.BinaryExpr{
-		A:    head.(ast.Visitable),
+		A:    head.(ast.Execable),
 		Meta: meta(c),
 	}
 	var next *ast.BinaryExpr
@@ -103,7 +103,7 @@ func newBinaryExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
 	for _, v := range restSl {
 		tailParts := toIfaceSlice(v)
 		cur.Op = tailParts[1].(string)
-		cur.B = tailParts[3].(ast.Visitable)
+		cur.B = tailParts[3].(ast.Execable)
 		next = cur
 		cur = &ast.BinaryExpr{
 			A: next,

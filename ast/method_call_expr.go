@@ -8,16 +8,16 @@ import (
 // MethodCallExpr represents the invocation of a method on something that
 // returns a struct.
 type MethodCallExpr struct {
-	Callee Visitable
+	Callee Execable
 	Method string
-	Args   []Visitable
+	Args   []Execable
 	Meta   Meta
 }
 
-// Visit invokes the method referred to by Method using the arguments derived
+// Exec invokes the method referred to by Method using the arguments derived
 // from Args, after evaluation them sequentially (left-to-right order)
-func (m *MethodCallExpr) Visit(ctx *Context) (interface{}, error) {
-	res, err := m.Callee.Visit(ctx)
+func (m *MethodCallExpr) Exec(ctx *Context) (interface{}, error) {
+	res, err := m.Callee.Exec(ctx)
 	if err != nil {
 		return res, err
 	}
@@ -29,7 +29,7 @@ func (m *MethodCallExpr) Visit(ctx *Context) (interface{}, error) {
 
 	var args []reflect.Value
 	for _, arg := range m.Args {
-		val, err := arg.Visit(ctx)
+		val, err := arg.Exec(ctx)
 		if err != nil {
 			return nil, err
 		}

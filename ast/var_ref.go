@@ -6,9 +6,9 @@ type VarRef struct {
 	Meta Meta
 }
 
-// Visit retrieves the named variable from the current lexical scope referred to
+// Exec retrieves the named variable from the current lexical scope referred to
 // by the passed in context
-func (v VarRef) Visit(c *Context) (interface{}, error) {
+func (v VarRef) Exec(c *Context) (interface{}, error) {
 	return c.Value(v.Name), nil
 }
 

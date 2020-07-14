@@ -12,8 +12,8 @@ import (
 // expressions (e.g. 4 + (6 / 2))
 type BinaryExpr struct {
 	Op   string
-	A    Visitable
-	B    Visitable
+	A    Execable
+	B    Execable
 	Meta Meta
 }
 
@@ -35,10 +35,10 @@ func (e BinaryExpr) MarshalJSON() ([]byte, error) {
 	return toJSON(e, m)
 }
 
-// Visit applies the operation of the BinaryExpr to the left and right subtrees
-// (LHS and RHS) after recursively Visit-ing each subtree. This produces a
+// Exec applies the operation of the BinaryExpr to the left and right subtrees
+// (LHS and RHS) after recursively Exec-ing each subtree. This produces a
 // depth-first evaluation order.
-func (e BinaryExpr) Visit(c *Context) (interface{}, error) {
+func (e BinaryExpr) Exec(c *Context) (interface{}, error) {
 	switch e.Op {
 	case "==", "!=", "~=", "<", ">", "<=", ">=", "&&":
 		return e.Bool(c)

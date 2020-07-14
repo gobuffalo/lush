@@ -7,13 +7,13 @@ import (
 )
 
 type AccessExpr struct {
-	Callee   Visitable
+	Callee   Execable
 	Property string
 	Meta     Meta
 }
 
-func (c AccessExpr) Visit(ctx *Context) (interface{}, error) {
-	res, err := c.Callee.Visit(ctx)
+func (c AccessExpr) Exec(ctx *Context) (interface{}, error) {
+	res, err := c.Callee.Exec(ctx)
 	if err != nil {
 		return res, err
 	}

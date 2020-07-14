@@ -1,6 +1,6 @@
 module github.com/gobuffalo/lush
 
-go 1.13
+go 1.14
 
 require (
 	github.com/google/go-cmp v0.5.0

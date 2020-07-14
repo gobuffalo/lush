@@ -31,6 +31,89 @@ func newString(c *current) (ast.String, error) {
 	return s, nil
 }
 
+func toIfaceSlice(v interface{}) []interface{} {
+	if v == nil {
+		return nil
+	}
+	return v.([]interface{})
+}
+
+func newArglist(c *current, head, tail interface{}) ([]ast.Visitable, error) {
+	if head == nil {
+		return []ast.Visitable{}, nil
+	}
+
+	var args []ast.Visitable
+
+	args = append(args, head.(ast.Visitable))
+
+	tailSlice := toIfaceSlice(tail)
+	for _, a := range tailSlice {
+		parts := toIfaceSlice(a)
+		args = append(args, parts[2].(ast.Visitable))
+	}
+	return args, nil
+}
+
+func newCallExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
+	tailSlice := toIfaceSlice(tail)
+	if len(tailSlice) == 0 {
+		return head.(ast.Visitable), nil
+	}
+
+	var nextCallee ast.Visitable = head.(ast.Visitable)
+
+	for _, call := range tailSlice {
+		callParts := toIfaceSlice(call)
+		name := callParts[1].(ast.Ident)
+
+		if callParts[2] != nil {
+			nextCallee = &ast.MethodCallExpr{
+				Callee: nextCallee,
+				Method: name.Name,
+				Args:   callParts[2].([]ast.Visitable),
+				Meta:   meta(c),
+			}
+		} else {
+			nextCallee = &ast.AccessExpr{
+				Callee:   nextCallee,
+				Property: name.Name,
+				Meta:     meta(c),
+			}
+		}
+	}
+
+	return nextCallee, nil
+}
+
+func newVarRef(c *current, i interface{}) (ast.Visitable, error) {
+	return ast.VarRef{
+		Name: fmt.Sprintf("%s", i),
+		Meta: meta(c),
+	}, nil
+}
+
+func newBinaryExpr(c *current, head, tail interface{}) (ast.Visitable, error) {
+	cur := &ast.BinaryExpr{
+		A:    head.(ast.Visitable),
+		Meta: meta(c),
+	}
+	var next *ast.BinaryExpr
+	restSl := toIfaceSlice(tail)
+	for _, v := range restSl {
+		tailParts := toIfaceSlice(v)
+		cur.Op = tailParts[1].(string)
+		cur.B = tailParts[3].(ast.Visitable)
+		next = cur
+		cur = &ast.BinaryExpr{
+			A: next,
+		}
+	}
+
+	// this will always overcount, so cut off the top BinaryExpr:
+	return cur.A, nil
+}
+
 func newAccess(c *current, i interface{}, k interface{}) (ret ast.Access, err error) {
 	id, err := toIdent(i)
 	if err != nil {
@@ -307,9 +390,9 @@ func newAssign(c *current, n, v interface{}) (ret *ast.Assign, err error) {
 }
 
 func newVar(c *current, n, v interface{}) (ret *ast.Var, err error) {
-	in, ok := n.(ast.Ident)
+	in, ok := n.(ast.VarRef)
 	if !ok {
-		return nil, fmt.Errorf("expected ast.Ident got %T", n)
+		return nil, fmt.Errorf("expected ast.VarRef got %T", n)
 	}
 
 	sv, err := toNode(v)

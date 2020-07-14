@@ -36,9 +36,15 @@ func NewAssign(id ast.Ident, v ast.Node) *ast.Assign {
 	return an
 }
 
-func NewVar(id ast.Ident, v ast.Node) *ast.Var {
+func NewVar(id ast.VarRef, v ast.Node) *ast.Var {
 	x, _ := ast.NewVar(id, v)
 	return x
+}
+
+func NewVarRef(name string) ast.VarRef {
+	return ast.VarRef{
+		Name: name,
+	}
 }
 
 func NewAccess(id ast.Ident, i interface{}) ast.Access {

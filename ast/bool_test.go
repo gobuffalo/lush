@@ -9,17 +9,15 @@ import (
 )
 
 func Test_Bool_Format(t *testing.T) {
-	boolv, err := jsonFixture("Bool")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `true`},
 		{`%q`, `"true"`},
-		{`%+v`, boolv},
+		{`%v`, `true`},
+		{`%+v`, `true`},
+		{`%#v`, `true`},
 	}
 
 	for _, tt := range table {

@@ -44,6 +44,25 @@ func (i If) String() string {
 	return bb.String()
 }
 
+func (i If) GoString() string {
+	bb := &bytes.Buffer{}
+
+	bb.WriteString("if ")
+	if i.PreCondition != nil {
+		bb.WriteString(strings.TrimSpace(fmt.Sprintf("%#v;", i.PreCondition)))
+	}
+	bb.WriteString(strings.TrimSpace(fmt.Sprintf("%#v", i.Expression)))
+	bb.WriteString(" ")
+	if i.Block != nil {
+		bb.WriteString(fmt.Sprintf("%#v", i.Block))
+	}
+	if i.Clause != nil {
+		bb.WriteString(fmt.Sprintf("%#v", i.Clause))
+	}
+
+	return bb.String()
+}
+
 func (i If) Format(st fmt.State, verb rune) {
 	format(i, st, verb)
 }

@@ -102,16 +102,15 @@ func Test_If_PreCondition(t *testing.T) {
 }
 
 func Test_If_Format(t *testing.T) {
-	stringv, err := jsonFixture("If")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, "if true {\n\tfoo = 42\n\n\tfoo := 42\n}"},
-		{`%+v`, stringv},
+		{`%q`, "\"if true {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
+		{`%v`, "if true {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%+v`, "if true {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "if true {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 	}
 
 	for _, tt := range table {

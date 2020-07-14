@@ -42,17 +42,15 @@ func Test_Import(t *testing.T) {
 }
 
 func Test_Import_Format(t *testing.T) {
-	blv, err := jsonFixture("Import")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `import "fmt"`},
 		{`%q`, `"import \"fmt\""`},
-		{`%+v`, blv},
+		{`%v`, `import "fmt"`},
+		{`%+v`, `import "fmt"`},
+		{`%#v`, `import "fmt"`},
 	}
 
 	for _, tt := range table {

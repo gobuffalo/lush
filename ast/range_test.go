@@ -137,17 +137,15 @@ func Test_Range_Array_String(t *testing.T) {
 }
 
 func Test_Range_Format(t *testing.T) {
-	blv, err := jsonFixture("Range")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, "for i, n := range [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%v`, "for i, n := range [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%+v`, "for i, n := range [1, 2, 3] {\n\tfoo = 42\n\n\tfoo := 42\n}"},
+		{`%#v`, "for i, n := range []interface {}{1, 2, \"3\"}  {\n\tfoo = 42\n\n\tfoo := 42\n}"},
 		{`%q`, "\"for i, n := range [1, 2, 3] {\\n\\tfoo = 42\\n\\n\\tfoo := 42\\n}\""},
-		{`%+v`, blv},
 	}
 
 	for _, tt := range table {

@@ -55,16 +55,15 @@ func Test_NewString(t *testing.T) {
 }
 
 func Test_String_Format(t *testing.T) {
-	stringv, err := jsonFixture("String")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `"hi"`},
-		{`%+v`, stringv},
+		{`%v`, `"hi"`},
+		{`%+v`, `"hi"`},
+		{`%#v`, `"hi"`},
+		{`%q`, "\"\\\"hi\\\"\""},
 	}
 
 	for _, tt := range table {

@@ -49,17 +49,15 @@ func Test_Integer(t *testing.T) {
 }
 
 func Test_Integer_Format(t *testing.T) {
-	intv, err := jsonFixture("Integer")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, `42`},
 		{`%q`, `"42"`},
-		{`%+v`, intv},
+		{`%v`, `42`},
+		{`%+v`, `42`},
+		{`%#v`, `42`},
 	}
 
 	for _, tt := range table {

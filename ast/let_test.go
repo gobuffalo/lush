@@ -37,16 +37,15 @@ func Test_Let(t *testing.T) {
 }
 
 func Test_Let_Format(t *testing.T) {
-	stringv, err := jsonFixture("Let")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, "let foo = 42"},
-		{`%+v`, stringv},
+		{`%q`, `"let foo = 42"`},
+		{`%v`, "let foo = 42"},
+		{`%+v`, "let foo = 42"},
+		{`%#v`, "\nfoo := 42\n_ = foo\n"},
 	}
 
 	for _, tt := range table {

@@ -3,12 +3,16 @@ package ast
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 )
 
 type ASTMarshaler interface {
 	MarshalJSON() ([]byte, error)
 }
+
+// %#v - GoStringer
+// %+v - LushStringer
+// %v - Value
+// %s - Stringer
 
 func format(i fmt.Stringer, st fmt.State, verb rune) {
 	switch verb {
@@ -20,20 +24,16 @@ func format(i fmt.Stringer, st fmt.State, verb rune) {
 			}
 		}
 		if st.Flag('+') {
-			b, err := json.MarshalIndent(i, "", "  ")
-			if err != nil {
-				fmt.Fprint(os.Stderr, err)
+			if gs, ok := i.(LushStringer); ok {
+				fmt.Fprint(st, gs.LushString())
 				return
 			}
-			fmt.Fprint(st, string(b))
-			return
 		}
-		fmt.Fprint(st, i.String())
 	case 'q':
 		fmt.Fprintf(st, "%q", i.String())
-	default:
-		fmt.Fprint(st, i.String())
+		return
 	}
+	fmt.Fprint(st, i.String())
 }
 
 func genericJSON(i interface{}) map[string]interface{} {

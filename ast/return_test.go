@@ -43,17 +43,15 @@ func Test_Return(t *testing.T) {
 }
 
 func Test_Return_Format(t *testing.T) {
-	blv, err := jsonFixture("Return")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{`%s`, "return 42"},
+		{`%v`, "return 42"},
+		{`%+v`, "return 42"},
+		{`%#v`, "return 42"},
 		{`%q`, "\"return 42\""},
-		{`%+v`, blv},
 	}
 
 	for _, tt := range table {

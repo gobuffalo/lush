@@ -21,6 +21,17 @@ func (i Else) String() string {
 	return bb.String()
 }
 
+func (i Else) GoString() string {
+	bb := &bytes.Buffer{}
+
+	bb.WriteString(" else ")
+	if i.Block != nil {
+		bb.WriteString(fmt.Sprintf("%#v", i.Block))
+	}
+
+	return bb.String()
+}
+
 func (i Else) Bool(c *Context) (bool, error) {
 	return true, nil
 }

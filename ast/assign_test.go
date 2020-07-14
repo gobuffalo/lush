@@ -68,17 +68,15 @@ return x`
 }
 
 func Test_Assign_Format(t *testing.T) {
-	assignv, err := jsonFixture("Assign")
-	if err != nil {
-		t.Fatal(err)
-	}
 	table := []struct {
 		format string
 		out    string
 	}{
 		{"%s", `foo = 42`},
 		{"%q", `"foo = 42"`},
-		{"%+v", assignv},
+		{"%v", `foo = 42`},
+		{"%+v", `foo = 42`},
+		{"%#v", `foo = 42`},
 	}
 
 	for _, tt := range table {
